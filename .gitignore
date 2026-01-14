@@ -1,0 +1,74 @@
+# See https://help.github.com/articles/ignoring-files for more about ignoring files.
+
+# Ignore bundler config.
+/.bundle
+
+# Ignore all logfiles and tempfiles.
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+
+# Ignore pidfiles, but keep the directory.
+/tmp/pids/*
+!/tmp/pids/
+!/tmp/pids/.keep
+
+# Ignore storage (uploaded files in development and any SQLite databases).
+/storage/*
+!/storage/.keep
+/tmp/storage/*
+!/tmp/storage/
+!/tmp/storage/.keep
+
+/public/assets
+
+# Ignore CI config from the application generator.
+/.github/ci.yml
+
+# Ignore master key for decrypting credentials and more.
+/config/master.key
+
+# Ignore bundler-audit vulnerability database.
+/tmp/bundler-audit
+
+# Environment variables.
+.env
+.env.*
+!.env.example
+
+# Node modules (Tailwind / import maps dependencies).
+/node_modules
+/yarn-error.log
+yarn-debug.log*
+.yarn-integrity
+
+# Rubocop cache.
+/.rubocop_cache
+
+# Coverage reports.
+/coverage
+
+# Spring.
+/spring.log
+
+# macOS.
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Linux.
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+
+# Editors / IDEs.
+.idea/
+.vscode/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+.tool-versions.local

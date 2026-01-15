@@ -1,0 +1,15 @@
+es:
+  app:
+    name: Open Bible
+    tagline: Lee, anota y comparte las Escrituras.
+  layout:
+    theme_toggle: Cambiar tema
+    theme_toggle_light: Cambiar a claro
+    theme_toggle_dark: Cambiar a oscuro
+    language_switcher: Idioma
+    language_en: English
+    language_es: Español
+    skip_to_content: Saltar al contenido
+  home:
+    welcome: Bienvenido a Open Bible.
+    placeholder: Esta es una página de inicio provisional. Pronto llegará el lector.

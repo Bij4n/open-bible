@@ -1,30 +1,61 @@
 <!DOCTYPE html>
-<html>
+<html lang="<%= I18n.locale %>" data-theme="light" data-controller="theme">
   <head>
-    <title><%= content_for(:title) || "Open Bible" %></title>
+    <title><%= content_for(:title) || t("app.name") %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="Open Bible">
+    <meta name="application-name" content="<%= t("app.name") %>">
     <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
     <%= yield :head %>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap">
 
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <main class="container mx-auto mt-28 px-5 flex">
+  <body class="min-h-screen antialiased">
+    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:rounded focus:bg-walnut-900 focus:px-3 focus:py-1 focus:text-parchment-100">
+      <%= t("layout.skip_to_content") %>
+    </a>
+
+    <header class="border-b border-walnut-900/20 dark:border-gilt-500/30">
+      <div class="mx-auto flex max-w-5xl items-center justify-between px-6 py-5">
+        <%= link_to root_path, class: "font-display text-2xl font-semibold uppercase tracking-[0.18em] text-walnut-900 dark:text-amber-200" do %>
+          <%= t("app.name") %>
+        <% end %>
+
+        <nav class="flex items-center gap-5 text-sm" aria-label="<%= t("layout.language_switcher") %>">
+          <div class="flex items-center gap-2">
+            <span class="sr-only"><%= t("layout.language_switcher") %>:</span>
+            <%= link_to t("layout.language_en"), url_for(locale: :en), class: "hover:text-rubric-500 dark:hover:text-gilt-400 #{"underline underline-offset-4" if I18n.locale == :en}" %>
+            <span aria-hidden="true" class="text-walnut-900/40 dark:text-amber-200/40">·</span>
+            <%= link_to t("layout.language_es"), url_for(locale: :es), class: "hover:text-rubric-500 dark:hover:text-gilt-400 #{"underline underline-offset-4" if I18n.locale == :es}" %>
+          </div>
+
+          <button type="button"
+                  data-action="theme#toggle"
+                  class="rounded border border-walnut-900/30 px-3 py-1 text-xs uppercase tracking-wider hover:bg-walnut-900 hover:text-parchment-100 dark:border-gilt-500/40 dark:hover:bg-amber-200 dark:hover:text-walnut-900">
+            <span data-theme-target="label"
+                  data-label-light="<%= t("layout.theme_toggle_light") %>"
+                  data-label-dark="<%= t("layout.theme_toggle_dark") %>">
+              <%= t("layout.theme_toggle") %>
+            </span>
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main" class="mx-auto max-w-5xl px-6 py-12">
       <%= yield %>
     </main>
   </body>

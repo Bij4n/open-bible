@@ -1,1 +1,54 @@
 @import "tailwindcss";
+
+/* Dark mode driven by a `data-theme="dark"` attribute on <html> (set by the
+   theme Stimulus controller from localStorage / prefers-color-scheme). This
+   overrides Tailwind's default media-query based dark variant. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+@theme {
+  --font-sans: "EB Garamond", ui-serif, Georgia, serif;
+  --font-serif: "EB Garamond", ui-serif, Georgia, serif;
+  --font-display: "Cinzel", "EB Garamond", ui-serif, Georgia, serif;
+
+  /* Parchment + walnut palette (light). */
+  --color-parchment-50:  #faf4e4;
+  --color-parchment-100: #f4ecd8;
+  --color-parchment-200: #ecdfbf;
+  --color-parchment-300: #e0cda1;
+
+  /* Walnut ink (dark). */
+  --color-walnut-900: #2a1f14;
+  --color-walnut-800: #3a2c1d;
+  --color-walnut-700: #4a3a28;
+
+  /* Candlelit amber (dark-mode text). */
+  --color-amber-100: #f5e4c0;
+  --color-amber-200: #e8d5a8;
+  --color-amber-300: #d4a574;
+
+  /* Rubric red (Jesus's words, illuminated initials). */
+  --color-rubric-500: #8b2e2e;
+  --color-rubric-600: #7a2525;
+
+  /* Gilt (accents, dividers in dark mode). */
+  --color-gilt-400: #d4a574;
+  --color-gilt-500: #b88a4a;
+}
+
+@layer base {
+  html {
+    background-color: var(--color-parchment-100);
+    color: var(--color-walnut-900);
+    font-family: var(--font-serif);
+  }
+
+  html[data-theme="dark"] {
+    background-color: var(--color-walnut-900);
+    color: var(--color-amber-200);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    letter-spacing: 0.02em;
+  }
+}

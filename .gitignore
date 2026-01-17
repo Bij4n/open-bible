@@ -1,7 +1,11 @@
 # See https://help.github.com/articles/ignoring-files for more about ignoring files.
 
-# Ignore bundler config.
-/.bundle
+# Ignore bundler state, but keep the pinned path config.
+/.bundle/*
+!/.bundle/config
+
+# Gems installed into the project-local bundler path.
+/vendor/bundle
 
 # Ignore all logfiles and tempfiles.
 /log/*

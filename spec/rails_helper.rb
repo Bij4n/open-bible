@@ -81,8 +81,22 @@ RSpec.configure do |config|
   end
 
   config.before(:each, type: :system, js: true) do
-    driven_by :selenium, using: :headless_chrome
+    driven_by :headless_chrome_ci
   end
+end
+
+# Register a Chrome driver that plays nicely in sandboxed Linux CI / container
+# environments. --no-sandbox is required when running as root or without a
+# user namespace; --disable-dev-shm-usage prevents /dev/shm exhaustion.
+Capybara.register_driver(:headless_chrome_ci) do |app|
+  options = Selenium::WebDriver::Chrome::Options.new
+  options.add_argument("--headless=new")
+  options.add_argument("--no-sandbox")
+  options.add_argument("--disable-dev-shm-usage")
+  options.add_argument("--disable-gpu")
+  options.add_argument("--window-size=1400,1400")
+
+  Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
 end
 
 Shoulda::Matchers.configure do |config|

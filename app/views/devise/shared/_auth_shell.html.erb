@@ -1,0 +1,23 @@
+<% content_for :title, local_assigns[:heading] %>
+
+<div class="mx-auto w-full max-w-md">
+  <div class="mb-10 text-center">
+    <%= link_to root_path, class: "font-display text-xl font-semibold uppercase tracking-[0.3em] text-walnut-900 dark:text-amber-200" do %>
+      <%= t("app.name") %>
+    <% end %>
+  </div>
+
+  <div class="rounded border border-walnut-900/15 bg-parchment-50 p-8 shadow-sm dark:border-gilt-500/30 dark:bg-walnut-800">
+    <h1 class="text-center font-display text-2xl font-semibold uppercase tracking-[0.14em] text-walnut-900 dark:text-amber-200">
+      <%= local_assigns[:heading] %>
+    </h1>
+
+    <div aria-hidden="true" class="my-6 flex items-center gap-3">
+      <span class="h-px flex-1 bg-gilt-400/50"></span>
+      <span class="text-gilt-500 dark:text-gilt-400">&#9670;</span>
+      <span class="h-px flex-1 bg-gilt-400/50"></span>
+    </div>
+
+    <%= yield %>
+  </div>
+</div>

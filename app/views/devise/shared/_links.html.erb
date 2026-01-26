@@ -1,0 +1,13 @@
+<div class="mt-6 space-y-2 text-center font-serif text-sm text-walnut-700 dark:text-amber-300">
+  <% if controller_name != "sessions" %>
+    <p><%= link_to t(".sign_in"), new_session_path(resource_name), class: "hover:text-rubric-500 dark:hover:text-gilt-400" %></p>
+  <% end %>
+
+  <% if devise_mapping.registerable? && controller_name != "registrations" %>
+    <p><%= link_to t(".sign_up"), new_registration_path(resource_name), class: "hover:text-rubric-500 dark:hover:text-gilt-400" %></p>
+  <% end %>
+
+  <% if devise_mapping.recoverable? && controller_name != "passwords" && controller_name != "registrations" %>
+    <p><%= link_to t(".forgot_your_password"), new_password_path(resource_name), class: "hover:text-rubric-500 dark:hover:text-gilt-400" %></p>
+  <% end %>
+</div>

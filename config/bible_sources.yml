@@ -1,6 +1,9 @@
 # Maps a translation code to its upstream OSIS source. Consumed by the
 # bible:import rake task.
 #
+# Test-only entries live in spec/fixtures/bible_sources.yml; they are
+# merged in when Rails.env.test? and never loaded in production.
+#
 # Provenance for KJV:
 #   eBible.org publishes the KJV as USFX only. seven1m/open-bibles
 #   re-encodes that source as OSIS via the Haiola tool. The chain is:
@@ -21,18 +24,4 @@ kjv:
     url: https://raw.githubusercontent.com/seven1m/open-bibles/master/eng-kjv.osis.xml
     sha256: eeeae647fc28360ce47f9c0d5cc3b397b7fdd9913fe53dc9f44eb6deee50e253
     filename: eng-kjv.osis.xml
-    archive: false
-
-# Test fixture target for the rake task spec. Points at the hand-crafted
-# mini OSIS document in spec/fixtures; the spec mounts the file into the
-# expected download location before invoking the task.
-kjv_mini:
-  name: KJV Mini (test fixture)
-  language: en
-  public_domain: true
-  license_notes: Test fixture only.
-  source:
-    url: file://spec/fixtures/osis/kjv_mini.xml
-    sha256: 3fbf21ab9f3516ce2fe0e4b78178a04126d64a4693a48acddd565de67147668d
-    filename: kjv_mini.xml
     archive: false

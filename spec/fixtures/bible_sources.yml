@@ -1,0 +1,13 @@
+# Test-only bible-source entries. Merged into the main bible_sources
+# config when Rails.env.test?. Never loaded in dev/prod.
+
+kjv_mini:
+  name: KJV Mini (test fixture)
+  language: en
+  public_domain: true
+  license_notes: Test fixture only.
+  source:
+    url: file://spec/fixtures/osis/kjv_mini.xml
+    sha256: 3fbf21ab9f3516ce2fe0e4b78178a04126d64a4693a48acddd565de67147668d
+    filename: kjv_mini.xml
+    archive: false

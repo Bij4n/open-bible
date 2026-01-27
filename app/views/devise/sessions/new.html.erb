@@ -1,4 +1,6 @@
-<%= render "devise/shared/auth_shell", heading: t(".sign_in") do %>
+<% heading = t(".sign_in") %>
+
+<%= render "devise/shared/auth_shell", heading: heading do %>
   <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "space-y-5" }) do |f| %>
     <div>
       <%= f.label :email, class: "mb-1 block font-serif text-sm font-medium uppercase tracking-wider text-walnut-900/80 dark:text-amber-200/80" %>
@@ -19,7 +21,7 @@
       </label>
     <% end %>
 
-    <%= f.submit t(".sign_in"), class: "w-full rounded bg-walnut-900 px-4 py-2 font-display text-sm font-medium uppercase tracking-wider text-parchment-100 hover:bg-walnut-800 dark:bg-amber-200 dark:text-walnut-900 dark:hover:bg-amber-100" %>
+    <%= f.submit heading, class: "w-full rounded bg-walnut-900 px-4 py-2 font-display text-sm font-medium uppercase tracking-wider text-parchment-100 hover:bg-walnut-800 dark:bg-amber-200 dark:text-walnut-900 dark:hover:bg-amber-100" %>
   <% end %>
 
   <%= render "devise/shared/links" %>

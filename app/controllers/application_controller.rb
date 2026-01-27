@@ -7,23 +7,43 @@ class ApplicationController < ActionController::Base
 
   before_action :set_locale
 
-  private
+  helper_method :resolved_theme
 
-  # TODO (Sprint 2): once users exist, prefer current_user.locale over the
-  # session fallback so the choice follows the account across devices.
-  def set_locale
-    I18n.locale = requested_locale || I18n.default_locale
+  # Returns "light" / "dark" when the signed-in user has a concrete
+  # preference, nil otherwise. Used by the layout to set data-theme on the
+  # server so first paint doesn't flash the wrong palette. When nil, the
+  # theme Stimulus controller falls back to localStorage / system scheme.
+  def resolved_theme
+    return nil unless user_signed_in?
+
+    theme = current_user.theme
+    %w[light dark].include?(theme) ? theme : nil
   end
 
-  def requested_locale
-    candidate = params[:locale].presence || session[:locale]
-    return unless candidate
+  private
 
-    candidate = candidate.to_sym
-    return unless I18n.available_locales.include?(candidate)
+  # Locale precedence: signed-in user's preference > session > params > default.
+  # For signed-out users, params[:locale] from the header language switcher
+  # writes through to the session so the choice survives across requests.
+  def set_locale
+    I18n.locale = resolved_locale
+  end
 
-    session[:locale] = candidate.to_s
-    candidate
+  def resolved_locale
+    if user_signed_in? && User::UI_LOCALES.include?(current_user.ui_locale)
+      return current_user.ui_locale.to_sym
+    end
+
+    if (candidate = params[:locale].presence) && available_locale?(candidate)
+      session[:locale] = candidate
+    end
+
+    stored = session[:locale]
+    available_locale?(stored) ? stored.to_sym : I18n.default_locale
+  end
+
+  def available_locale?(code)
+    code.present? && I18n.available_locales.map(&:to_s).include?(code.to_s)
   end
 
   def default_url_options

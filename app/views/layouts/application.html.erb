@@ -1,5 +1,9 @@
 <!DOCTYPE html>
-<html lang="<%= I18n.locale %>" data-theme="light" data-controller="theme">
+<%# resolved_theme is "light"/"dark" only when the signed-in user pinned
+    it; otherwise the Stimulus controller decides on connect and we leave
+    data-theme unset. That avoids a flash of the wrong palette for users
+    who've saved a preference. %>
+<html lang="<%= I18n.locale %>"<%= " data-theme=\"#{resolved_theme}\"".html_safe if resolved_theme %> data-controller="theme">
   <head>
     <title><%= content_for(:title) || t("app.name") %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">

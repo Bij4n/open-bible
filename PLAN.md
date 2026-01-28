@@ -38,6 +38,31 @@ Append-only. Each entry: date-ish, decision, rationale.
 - **2026-04-17 Sprint 1** — **Red-letter color #8a1c1c is intentionally distinct from the UI rubric red #8b2e2e.** The in-text red is slightly darker and more saturated for body-copy legibility. A CSS comment calls this out so future work doesn't unify them by accident.
 - **2026-04-17 Sprint 1** — **Ruby 3.4.9 via asdf.** Dropped 3.2.3 (EOL 2026-03-31), deleted `config/brakeman.ignore`. Bundler path pinned to `vendor/bundle` via `.bundle/config` to keep gems inside the repo.
 
+- **2026-04-17 Sprint 2** — **Devise 5.0.3 with modules `database_authenticatable, registerable, recoverable, rememberable, validatable`.** `:confirmable` / `:lockable` / `:trackable` / `:omniauthable` explicitly off per the plan. Turbo integration needs no `responders` gem — 5.x handles the 422-on-invalid / turbo_stream formats natively.
+- **2026-04-17 Sprint 2** — **Preference columns live on `users` via the same Devise migration.** `ui_locale` and `theme` carry Postgres check constraints as belt-and-suspenders against application-code bypass; `display_name` uses a partial unique index (`where display_name IS NOT NULL`) so many users can leave it blank.
+- **2026-04-17 Sprint 2** — **Locale precedence: `current_user.ui_locale` > session > params > default.** Params still writes-through to session for signed-out visitors so the header language switcher keeps working. Signed-in users get a `button_to` that PATCHes `/settings` and redirects back.
+- **2026-04-17 Sprint 2** — **Theme resolution server-side when the user pinned `light`/`dark`.** `resolved_theme` sets `<html data-theme>` on first paint, which the Stimulus controller respects before falling back to localStorage / prefers-color-scheme. `system` (and signed-out) leaves the attribute unset so the client decides.
+- **2026-04-17 Sprint 2** — **Test fixture bible-source config isolated to `spec/fixtures/bible_sources.yml`.** Merged only when `Rails.env.test?`. Dev/prod attempting to import `kjv_mini` fails loudly — test data can't leak into real runs.
+- **2026-04-17 Sprint 2** — **i18n inside `render do...end` blocks resolves against the partial's virtual path, not the caller's.** A Rails quirk that bit the Devise views; the fix is to precompute `t(".key")` before opening the block and pass the value through.
+
+---
+
+## Retrospectives
+
+### Sprint 1
+
+- What worked: fixture-first TDD caught my own bad assertion (`body_text.index("lifted up")` finding the wrong occurrence) before I shipped a wrong parser; SAX-based importer handled the full KJV in 12.7s at ~31k verses on first try; splitting the rake-task download/verify/unzip helpers out of the task body made them testable.
+- What didn't: assumed ebible.org published OSIS (it doesn't — only USFX), lost ~20 min finding the seven1m redistribution; assumed the housekeeping step (Ruby 3.4, bundler path) was already done and had to stop and flag that; spent real time on Chrome-for-Testing + `--no-sandbox` to get system specs running in this container.
+- Change next sprint: verify environment claims against the actual filesystem before trusting them, even (especially) for "already done" items; when a brief lists an external resource, WebFetch it before writing code.
+- Size vs actual: estimated load-bearing sprint; actual 13 commits, roughly on target.
+
+### Sprint 2
+
+- What worked: Devise 5 + Turbo + devise-i18n was genuinely friction-free in 2026 — none of the older "Devise + Turbo needs responders" pain appeared; the `resolved_theme` + server-rendered `data-theme` pattern eliminated the flash-of-wrong-palette cleanly; pre-sprint cleanup as its own commit kept it tidy; the `update` responds-to-format split (JSON / Turbo-Frame / HTML) let theme toggle, settings frames, and the header switcher all share one action.
+- What didn't: `rails generate devise User` clobbered a not-yet-committed factory + spec — lost ~5 min rewriting; t(".key") inside a `render do...end` block resolving against the partial's virtual path was a genuine surprise that showed up only in the system spec (fine at the unit level); text-transform: uppercase on headings kept biting Capybara `have_content`/`click_on` matchers — ended up sprinkling `/regex/i` and explicit selectors.
+- Change next sprint: commit factories + specs before running any destructive generator; for any shared partial that yields, either pass translated strings in as locals or document the virtual-path quirk at the top; consider a RSpec matcher or shared helper for uppercase-text assertions.
+- Size vs actual: estimated M (6-8 commits); actual 9 commits including pre-sprint cleanup + retro.
+
 ---
 
 ## Sprint roadmap

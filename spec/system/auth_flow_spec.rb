@@ -21,7 +21,7 @@ RSpec.describe "Auth flows", type: :system, js: true do
     visit "/users/sign_in"
     fill_in "Email", with: user.email
     fill_in "Password", with: "correct horse battery staple"
-    find('input[type="submit"][value*="Log in"]').click
+    find('input[type="submit"][value*="Sign in"]').click
 
     expect(page).to have_content("Signed in successfully.")
     expect(page).to have_button(text: /sign out/i)

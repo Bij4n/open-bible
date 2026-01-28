@@ -1,0 +1,12 @@
+# App-level overrides for devise-i18n's English view copy. devise-i18n
+# ships "Log in"; we want "Sign in" for consistency with the sign-up /
+# sign-out / settings vocabulary in the rest of the UI.
+
+en:
+  devise:
+    sessions:
+      new:
+        sign_in: Sign in
+    shared:
+      links:
+        sign_in: Sign in

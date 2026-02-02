@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_18_215656) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_18_231857) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -76,6 +76,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_18_215656) do
     t.index ["book_id"], name: "index_chapters_on_book_id"
   end
 
+  create_table "groups", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.string "invitation_code"
+    t.string "name", null: false
+    t.bigint "owner_id", null: false
+    t.integer "privacy", default: 0, null: false
+    t.datetime "updated_at", null: false
+    t.index ["invitation_code"], name: "index_groups_on_invitation_code", unique: true, where: "(invitation_code IS NOT NULL)"
+    t.index ["owner_id"], name: "index_groups_on_owner_id"
+  end
+
   create_table "highlight_notes", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.bigint "highlight_id", null: false
@@ -97,6 +109,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_18_215656) do
     t.index ["translation_id"], name: "index_highlights_on_translation_id"
     t.index ["user_id", "osis_ref", "color"], name: "index_highlights_on_user_osis_ref_color", unique: true
     t.index ["user_id"], name: "index_highlights_on_user_id"
+  end
+
+  create_table "memberships", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "group_id", null: false
+    t.integer "role", default: 1, null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["group_id", "role"], name: "index_memberships_on_group_id_and_role"
+    t.index ["group_id"], name: "index_memberships_on_group_id"
+    t.index ["user_id", "group_id"], name: "index_memberships_on_user_id_and_group_id", unique: true
+    t.index ["user_id"], name: "index_memberships_on_user_id"
   end
 
   create_table "notes", force: :cascade do |t|
@@ -157,10 +181,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_18_215656) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "books", "translations"
   add_foreign_key "chapters", "books"
+  add_foreign_key "groups", "users", column: "owner_id"
   add_foreign_key "highlight_notes", "highlights"
   add_foreign_key "highlight_notes", "notes"
   add_foreign_key "highlights", "translations"
   add_foreign_key "highlights", "users"
+  add_foreign_key "memberships", "groups"
+  add_foreign_key "memberships", "users"
   add_foreign_key "notes", "users"
   add_foreign_key "users", "translations", column: "default_translation_id"
   add_foreign_key "verses", "chapters"

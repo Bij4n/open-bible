@@ -15,6 +15,10 @@ class Group < ApplicationRecord
             format: { with: INVITATION_CODE_FORMAT },
             allow_blank: true
 
+  # Every group has an owner Membership so `user.groups` transparently
+  # spans both owned and joined groups in a single association.
+  after_create :ensure_owner_membership
+
   def member?(user)
     return false unless user
 
@@ -25,5 +29,13 @@ class Group < ApplicationRecord
     alphabet = ("A".."Z").to_a + ("0".."9").to_a
     length   = 6 + rand(3) # 6..8
     Array.new(length) { alphabet.sample }.join
+  end
+
+  private
+
+  def ensure_owner_membership
+    memberships.find_or_create_by!(user: owner) do |m|
+      m.role = :owner
+    end
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_18_231857) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_18_233100) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -123,6 +123,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_18_231857) do
     t.index ["user_id"], name: "index_memberships_on_user_id"
   end
 
+  create_table "note_shares", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "note_id", null: false
+    t.bigint "shareable_id", null: false
+    t.string "shareable_type", null: false
+    t.datetime "updated_at", null: false
+    t.index ["note_id", "shareable_type", "shareable_id"], name: "index_note_shares_on_note_and_shareable", unique: true
+    t.index ["note_id"], name: "index_note_shares_on_note_id"
+    t.index ["shareable_type", "shareable_id"], name: "index_note_shares_on_shareable"
+  end
+
   create_table "notes", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -188,6 +199,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_18_231857) do
   add_foreign_key "highlights", "users"
   add_foreign_key "memberships", "groups"
   add_foreign_key "memberships", "users"
+  add_foreign_key "note_shares", "notes"
   add_foreign_key "notes", "users"
   add_foreign_key "users", "translations", column: "default_translation_id"
   add_foreign_key "verses", "chapters"

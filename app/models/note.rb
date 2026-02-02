@@ -18,5 +18,40 @@ class Note < ApplicationRecord
   has_many :highlight_notes, dependent: :destroy
   has_many :highlights, through: :highlight_notes
 
+  has_many :note_shares, dependent: :destroy
+  has_many :shared_users,  through: :note_shares, source: :shareable, source_type: "User"
+  has_many :shared_groups, through: :note_shares, source: :shareable, source_type: "Group"
+
   validates :body, presence: true
+
+  # Notes the user is allowed to see:
+  #   - their own notes, any visibility
+  #   - notes shared directly with them via NoteShare (shareable: user)
+  #   - notes shared with any group they belong to (shareable: group)
+  #   - public notes (Sprint 7 will expose these; the clause is active
+  #     now so the public-bible reader can query the same scope)
+  scope :visible_to, ->(user) {
+    next where("1=0") unless user # anonymous visitors see nothing private-bucket-ish
+
+    group_ids = user.groups.ids
+    where(<<~SQL.squish, uid: user.id, gids: group_ids.presence || [ 0 ], public_visibility: visibilities[:public_note])
+      notes.user_id = :uid
+      OR notes.id IN (
+        SELECT note_id FROM note_shares
+        WHERE shareable_type = 'User' AND shareable_id = :uid
+      )
+      OR notes.id IN (
+        SELECT note_id FROM note_shares
+        WHERE shareable_type = 'Group' AND shareable_id IN (:gids)
+      )
+      OR notes.visibility = :public_visibility
+    SQL
+  }
+
+  # Notes shared with a specific Group (not a full visibility check —
+  # use this in the group Bible reader where membership has already been
+  # confirmed upstream).
+  scope :shared_with_group, ->(group) {
+    joins(:note_shares).where(note_shares: { shareable_type: "Group", shareable_id: group.id })
+  }
 end

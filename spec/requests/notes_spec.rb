@@ -27,9 +27,38 @@ RSpec.describe "Notes", type: :request do
         expect(note.body.to_s).to include("A thought")
       end
 
-      it "defaults visibility to private_note even if something else is submitted (Sprint 3 scope)" do
-        post "/notes", params: { note: { body: "A thought", highlight_ids: [ highlight.id ], visibility: "public_note" } }
+      it "accepts a visibility from the form and falls back to private_note for unknown values" do
+        post "/notes",
+             params: { note: { body: "A thought", highlight_ids: [ highlight.id ], visibility: "shared_users" } }
+        expect(Note.last.visibility).to eq("shared_users")
+
+        post "/notes",
+             params: { note: { body: "Another", highlight_ids: [ highlight.id ], visibility: "confetti" } }
         expect(Note.last.visibility).to eq("private_note")
+      end
+
+      it "creates shares for submitted user_ids and member-group_ids" do
+        friend = create(:user)
+        group = create(:group, owner: user)
+        post "/notes",
+             params: { note: { body: "Shared", highlight_ids: [ highlight.id ],
+                               visibility: "shared_users",
+                               user_ids: [ friend.id ],
+                               group_ids: [ group.id ] } }
+        note = Note.last
+        expect(note.shared_users).to include(friend)
+        expect(note.shared_groups).to include(group)
+      end
+
+      it "silently drops group_ids the user isn't a member of" do
+        other_owner = create(:user)
+        stranger_group = create(:group, owner: other_owner)
+        post "/notes",
+             params: { note: { body: "Attempt", highlight_ids: [ highlight.id ],
+                               visibility: "shared_groups",
+                               group_ids: [ stranger_group.id ] } }
+        note = Note.last
+        expect(note.shared_groups).not_to include(stranger_group)
       end
 
       it "rejects creation when body is blank" do

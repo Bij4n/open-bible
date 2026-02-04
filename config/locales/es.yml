@@ -85,3 +85,16 @@ es:
     add_member: Añadir miembro
     remove: Eliminar
     email_placeholder: miembro@ejemplo.com
+  notes:
+    save: Guardar nota
+    delete: Eliminar nota
+    confirm_delete: ¿Eliminar esta nota?
+    share_with_users: Compartir con personas específicas
+    share_with_groups: Compartir con grupos
+    emails_placeholder: amigo@ejemplo.com, otro@ejemplo.com
+    public_coming_soon: Disponible en el Sprint 7
+    visibility:
+      private_note: Privada
+      shared_users: Compartir con personas
+      shared_groups: Compartir con grupos
+      public_note: Pública

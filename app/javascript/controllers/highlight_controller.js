@@ -172,6 +172,55 @@ export default class extends Controller {
     }
   }
 
+  async note(event) {
+    // If the user has a selection, first create a gold highlight
+    // (default color), then open the note panel for that new highlight.
+    // If no selection (they clicked an existing highlight first), fall
+    // through and the note panel loads for the existing highlight ids.
+    const existingIds = this.highlightIdsUnderCursor()
+
+    if (existingIds.length > 0) {
+      this.loadNotePanelFor(existingIds)
+      return
+    }
+
+    if (!this.currentRef) return
+
+    const csrfMeta = document.querySelector('meta[name="csrf-token"]')
+    const csrf = csrfMeta ? csrfMeta.content : ""
+    const response = await fetch("/highlights", {
+      method: "POST",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": csrf,
+        "Accept": "application/json"
+      },
+      body: JSON.stringify({ highlight: { osis_ref: this.currentRef, color: "gold" } })
+    })
+    if (!response.ok) return
+    const body = await response.json()
+    this.loadNotePanelFor([ body.id ])
+  }
+
+  loadNotePanelFor(highlightIds) {
+    const params = new URLSearchParams()
+    highlightIds.forEach((id) => params.append("highlight_ids[]", id))
+    const url = `/notes/new?${params.toString()}`
+
+    const frame = document.getElementById("note_panel")
+    if (!frame) return
+    frame.src = url
+    document.body.dataset.notePanelOpen = "true"
+  }
+
+  highlightIdsUnderCursor() {
+    const sel = window.getSelection()
+    const anchor = sel?.anchorNode?.parentElement?.closest("[data-highlight-ids]")
+    if (!anchor) return []
+    return (anchor.dataset.highlightIds || "").split(",").filter(Boolean).map(Number)
+  }
+
   async remove(event) {
     // Look up the highlight id on a span under the current selection,
     // if any; otherwise silently bail.

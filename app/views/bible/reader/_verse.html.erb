@@ -1,0 +1,8 @@
+<%# Shared verse span used by both the private reader and the group bible
+    reader. The dom_id ("verse_<id>") is stable across renders so real-time
+    broadcasts can target it via turbo_stream.replace. %>
+<span class="verse"
+      id="<%= dom_id(verse) %>"
+      data-verse-id="<%= verse.id %>"
+      data-osis-ref="<%= verse.osis_ref %>"
+      data-verse-text="<%= verse.body_text %>"><sup class="verse-number" data-ignore-selection><%= verse.number %></sup><%= render_verse_with_highlights(verse, Array(highlights)) %></span>

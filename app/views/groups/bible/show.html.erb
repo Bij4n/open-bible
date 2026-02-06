@@ -8,6 +8,9 @@
          data-highlight-chapter-value="<%= @chapter.number %>"
          data-highlight-debug-value="<%= debug_selection %>">
 
+  <%= turbo_stream_from @group, "bible", @translation.code, @book.osis_code, @chapter.number,
+                        channel: "GroupBibleChannel" %>
+
   <nav aria-label="breadcrumb" class="flex items-center gap-2 text-xs uppercase tracking-wider text-walnut-700 dark:text-amber-300">
     <%= link_to t("bible.reader.breadcrumb_home"), root_path, class: "hover:text-rubric-500 dark:hover:text-gilt-400" %>
     <span aria-hidden="true">&rsaquo;</span>
@@ -27,32 +30,18 @@
 
   <div class="chapter-body font-serif text-lg leading-loose text-walnut-900 dark:text-amber-200"
        data-highlight-target="chapter">
-    <% @verses.each_with_index do |verse, i| %><span class="verse"
-           data-verse-id="<%= verse.id %>"
-           data-osis-ref="<%= verse.osis_ref %>"
-           data-verse-text="<%= verse.body_text %>"><sup class="verse-number" data-ignore-selection><%= verse.number %></sup><%= render_verse_with_highlights(verse, @highlights) %></span><%= " " unless i == @verses.size - 1 %><% end %>
+    <% @verses.each_with_index do |verse, i| %><%= render partial: "bible/reader/verse", locals: { verse: verse, highlights: @highlights } %><%= " " unless i == @verses.size - 1 %><% end %>
   </div>
 
-  <% if @group_notes.any? %>
-    <aside class="rounded border border-walnut-900/15 bg-parchment-50 p-5 dark:border-gilt-500/30 dark:bg-walnut-800">
-      <h2 class="font-display text-lg uppercase tracking-wider text-walnut-900 dark:text-amber-200">
-        <%= t("bible.reader.group_notes") %>
-      </h2>
-      <ul class="mt-3 space-y-4">
-        <% @group_notes.each do |note| %>
-          <li class="border-b border-walnut-900/10 pb-3 last:border-0 last:pb-0 dark:border-gilt-500/20">
-            <p class="text-xs uppercase tracking-[0.18em] text-walnut-700/70 dark:text-amber-200/60">
-              <%= note.highlights.map(&:osis_ref).join(", ") %>
-              <span class="ml-2 italic normal-case tracking-normal">
-                <%= t("bible.reader.by_author", name: note.user.display_name.presence || note.user.email) %>
-              </span>
-            </p>
-            <div class="trix-content mt-1 font-serif text-walnut-900 dark:text-amber-200">
-              <%= note.body %>
-            </div>
-          </li>
-        <% end %>
-      </ul>
-    </aside>
-  <% end %>
+  <aside id="group_notes_aside"
+         class="rounded border border-walnut-900/15 bg-parchment-50 p-5 dark:border-gilt-500/30 dark:bg-walnut-800 <%= "hidden" if @group_notes.empty? %>">
+    <h2 class="font-display text-lg uppercase tracking-wider text-walnut-900 dark:text-amber-200">
+      <%= t("bible.reader.group_notes") %>
+    </h2>
+    <ul id="group_notes_list" class="mt-3 space-y-4">
+      <% @group_notes.each do |note| %>
+        <%= render partial: "groups/bible/note", locals: { note: note } %>
+      <% end %>
+    </ul>
+  </aside>
 </article>

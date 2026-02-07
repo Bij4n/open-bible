@@ -37,6 +37,13 @@ RSpec.describe "Groups::Bible", type: :request do
       expect(response.body).to include("For God so loved the world")
     end
 
+    it "subscribes the page to the group bible cable channel" do
+      sign_in owner
+      get "/groups/#{group.id}/bible/kjv/john/3"
+      expect(response.body).to include(%(channel="GroupBibleChannel"))
+      expect(response.body).to match(%r{<turbo-cable-stream-source[^>]*signed-stream-name})
+    end
+
     it "renders for member with breadcrumb" do
       sign_in member
       get "/groups/#{group.id}/bible/kjv/john/3"

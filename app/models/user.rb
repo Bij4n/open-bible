@@ -23,4 +23,13 @@ class User < ApplicationRecord
   validates :display_name,
             length: { maximum: DISPLAY_NAME_MAX },
             uniqueness: { case_sensitive: false, allow_blank: true }
+
+  # Public-facing author label for notes, comments, and group-bible
+  # attributions. Prefers display_name; falls back to the email
+  # local-part so we never expose the full email address to groupmates.
+  def author_name
+    return display_name if display_name.present?
+
+    email.to_s.split("@").first.presence || email
+  end
 end

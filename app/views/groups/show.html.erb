@@ -58,7 +58,7 @@
       <% @memberships.each do |m| %>
         <li class="flex items-center justify-between rounded border border-walnut-900/10 bg-parchment-50 px-4 py-2 dark:border-gilt-500/20 dark:bg-walnut-800">
           <span class="font-serif text-walnut-900 dark:text-amber-200">
-            <%= m.user.display_name.presence || m.user.email %>
+            <%= m.user.author_name %>
           </span>
           <div class="flex items-center gap-3">
             <span class="text-xs uppercase tracking-wider text-walnut-700/70 dark:text-amber-200/60">

@@ -91,4 +91,21 @@ RSpec.describe User, type: :model do
       expect(user.theme).to eq("system")
     end
   end
+
+  describe "#author_name" do
+    it "returns the display_name when set" do
+      user = build(:user, display_name: "Scribe", email: "bookish@open-bible.test")
+      expect(user.author_name).to eq("Scribe")
+    end
+
+    it "falls back to the email local-part when display_name is blank" do
+      user = build(:user, display_name: nil, email: "scribe@open-bible.test")
+      expect(user.author_name).to eq("scribe")
+    end
+
+    it "handles emails without an @ by returning the full string" do
+      user = build(:user, display_name: nil, email: "plain")
+      expect(user.author_name).to eq("plain")
+    end
+  end
 end

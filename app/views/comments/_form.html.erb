@@ -1,0 +1,16 @@
+<% placeholder = parent ? t("comments.reply_placeholder") : t("comments.add_placeholder") %>
+<% submit_label = parent ? t("comments.reply") : t("comments.post") %>
+
+<%= form_with model: Comment.new, url: comments_path, data: { turbo_frame: "_top" }, class: "space-y-2" do |f| %>
+  <%= f.hidden_field :note_id, value: note.id %>
+  <%= f.hidden_field :parent_id, value: parent&.id %>
+  <%= f.text_area :body,
+                  placeholder: placeholder,
+                  rows: parent ? 2 : 3,
+                  maxlength: Comment::BODY_MAX,
+                  class: "w-full rounded border border-walnut-900/25 bg-parchment-50 px-3 py-2 font-serif text-sm text-walnut-900 focus:border-walnut-900 focus:outline-none dark:border-gilt-500/40 dark:bg-walnut-900 dark:text-amber-200" %>
+  <div class="flex items-center justify-end">
+    <%= f.submit submit_label,
+                 class: "rounded bg-walnut-900 px-3 py-1 font-display text-xs font-medium uppercase tracking-wider text-parchment-100 hover:bg-walnut-800 dark:bg-amber-200 dark:text-walnut-900" %>
+  </div>
+<% end %>

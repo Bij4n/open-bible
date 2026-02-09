@@ -26,6 +26,24 @@ class Note < ApplicationRecord
 
   has_many :comments, dependent: :destroy
 
+  # Flat list of comments in display order: top-level oldest first,
+  # each top-level's replies oldest first, depth-first. Siblingized
+  # replies (depth-cap overflow) naturally land alongside their depth-
+  # MAX siblings.
+  def comments_in_thread_order
+    loaded = comments.order(:created_at).to_a
+    by_parent = loaded.group_by(&:parent_id)
+    order = []
+    walker = lambda do |parent_id|
+      (by_parent[parent_id] || []).each do |c|
+        order << c
+        walker.call(c.id)
+      end
+    end
+    walker.call(nil)
+    order
+  end
+
   validates :body, presence: true
 
   # Notes the user is allowed to see:

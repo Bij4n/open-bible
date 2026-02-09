@@ -98,3 +98,12 @@ es:
       shared_users: Compartir con personas
       shared_groups: Compartir con grupos
       public_note: Pública
+  comments:
+    title: Discusión
+    post: Comentar
+    reply: Responder
+    delete: Eliminar
+    confirm_delete: ¿Eliminar este comentario?
+    add_placeholder: Añade un comentario…
+    reply_placeholder: Escribe una respuesta…
+    timestamp: "hace %{ago}"

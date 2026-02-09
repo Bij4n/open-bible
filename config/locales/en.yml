@@ -98,3 +98,12 @@ en:
       shared_users: Share with people
       shared_groups: Share with groups
       public_note: Public
+  comments:
+    title: Discussion
+    post: Comment
+    reply: Reply
+    delete: Delete
+    confirm_delete: Delete this comment?
+    add_placeholder: Add a comment…
+    reply_placeholder: Write a reply…
+    timestamp: "%{ago} ago"

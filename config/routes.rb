@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   resources :notes,      only: [ :new, :create, :update, :destroy, :show, :edit ]
 
   resources :note_shares, only: [ :create, :destroy ]
+  resources :comments,    only: [ :create, :update, :destroy ]
 
   resources :groups do
     collection do

@@ -9,4 +9,5 @@
   <div class="trix-content mt-1 font-serif text-walnut-900 dark:text-amber-200">
     <%= note.body %>
   </div>
+  <%= render partial: "comments/thread", locals: { note: note } %>
 </li>

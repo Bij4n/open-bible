@@ -1,0 +1,18 @@
+<section class="space-y-0.5 border-t border-walnut-900/10 pt-3 dark:border-gilt-500/20">
+  <h3 class="font-display text-xs uppercase tracking-[0.18em] text-walnut-900/70 dark:text-amber-200/70">
+    <%= t("comments.title") %>
+    <span class="ml-2 normal-case tracking-normal text-walnut-700/70 dark:text-amber-200/60">
+      (<%= note.comments.count %>)
+    </span>
+  </h3>
+
+  <div id="comments_thread_<%= note.id %>" class="space-y-1">
+    <% note.comments_in_thread_order.each do |comment| %>
+      <%= render partial: "comments/comment", locals: { comment: comment } %>
+    <% end %>
+  </div>
+
+  <div id="comment_form_<%= note.id %>" class="mt-3">
+    <%= render partial: "comments/form", locals: { note: note, parent: nil } %>
+  </div>
+</section>

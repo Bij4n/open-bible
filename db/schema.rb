@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_18_233100) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_19_031008) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -74,6 +74,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_18_233100) do
     t.integer "verse_count", default: 0, null: false
     t.index ["book_id", "number"], name: "index_chapters_on_book_id_and_number", unique: true
     t.index ["book_id"], name: "index_chapters_on_book_id"
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.text "body", null: false
+    t.datetime "created_at", null: false
+    t.integer "depth", default: 0, null: false
+    t.bigint "note_id", null: false
+    t.bigint "parent_id"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["note_id", "parent_id", "created_at"], name: "index_comments_on_note_id_and_parent_id_and_created_at"
+    t.index ["note_id"], name: "index_comments_on_note_id"
+    t.index ["parent_id"], name: "index_comments_on_parent_id"
+    t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
   create_table "groups", force: :cascade do |t|
@@ -192,6 +206,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_18_233100) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "books", "translations"
   add_foreign_key "chapters", "books"
+  add_foreign_key "comments", "comments", column: "parent_id"
+  add_foreign_key "comments", "notes"
+  add_foreign_key "comments", "users"
   add_foreign_key "groups", "users", column: "owner_id"
   add_foreign_key "highlight_notes", "highlights"
   add_foreign_key "highlight_notes", "notes"

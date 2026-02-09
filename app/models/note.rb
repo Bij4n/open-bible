@@ -24,6 +24,8 @@ class Note < ApplicationRecord
   has_many :shared_users,  through: :note_shares, source: :shareable, source_type: "User"
   has_many :shared_groups, through: :note_shares, source: :shareable, source_type: "Group"
 
+  has_many :comments, dependent: :destroy
+
   validates :body, presence: true
 
   # Notes the user is allowed to see:

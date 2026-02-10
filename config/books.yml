@@ -1,0 +1,338 @@
+# Canonical 66-book reference. Consumed by Bible::OsisImporter and the
+# reader view. Any book whose osis_code is absent here is skipped during
+# import (this is how we exclude the Apocrypha that ships in KJV OSIS).
+#
+# Spanish names follow standard Reina-Valera spellings (RV1909). Review
+# before shipping Spanish UI — Ester vs Esther and Cantares vs Cántico de
+# los Cánticos vary by edition.
+
+- osis_code: Gen
+  name_en: Genesis
+  name_es: Génesis
+  position: 1
+  testament: old
+- osis_code: Exod
+  name_en: Exodus
+  name_es: Éxodo
+  position: 2
+  testament: old
+- osis_code: Lev
+  name_en: Leviticus
+  name_es: Levítico
+  position: 3
+  testament: old
+- osis_code: Num
+  name_en: Numbers
+  name_es: Números
+  position: 4
+  testament: old
+- osis_code: Deut
+  name_en: Deuteronomy
+  name_es: Deuteronomio
+  position: 5
+  testament: old
+- osis_code: Josh
+  name_en: Joshua
+  name_es: Josué
+  position: 6
+  testament: old
+- osis_code: Judg
+  name_en: Judges
+  name_es: Jueces
+  position: 7
+  testament: old
+- osis_code: Ruth
+  name_en: Ruth
+  name_es: Rut
+  position: 8
+  testament: old
+- osis_code: 1Sam
+  name_en: 1 Samuel
+  name_es: 1 Samuel
+  position: 9
+  testament: old
+- osis_code: 2Sam
+  name_en: 2 Samuel
+  name_es: 2 Samuel
+  position: 10
+  testament: old
+- osis_code: 1Kgs
+  name_en: 1 Kings
+  name_es: 1 Reyes
+  position: 11
+  testament: old
+- osis_code: 2Kgs
+  name_en: 2 Kings
+  name_es: 2 Reyes
+  position: 12
+  testament: old
+- osis_code: 1Chr
+  name_en: 1 Chronicles
+  name_es: 1 Crónicas
+  position: 13
+  testament: old
+- osis_code: 2Chr
+  name_en: 2 Chronicles
+  name_es: 2 Crónicas
+  position: 14
+  testament: old
+- osis_code: Ezra
+  name_en: Ezra
+  name_es: Esdras
+  position: 15
+  testament: old
+- osis_code: Neh
+  name_en: Nehemiah
+  name_es: Nehemías
+  position: 16
+  testament: old
+- osis_code: Esth
+  name_en: Esther
+  name_es: Ester
+  position: 17
+  testament: old
+- osis_code: Job
+  name_en: Job
+  name_es: Job
+  position: 18
+  testament: old
+- osis_code: Ps
+  name_en: Psalms
+  name_es: Salmos
+  position: 19
+  testament: old
+- osis_code: Prov
+  name_en: Proverbs
+  name_es: Proverbios
+  position: 20
+  testament: old
+- osis_code: Eccl
+  name_en: Ecclesiastes
+  name_es: Eclesiastés
+  position: 21
+  testament: old
+- osis_code: Song
+  name_en: Song of Solomon
+  name_es: Cantares
+  position: 22
+  testament: old
+- osis_code: Isa
+  name_en: Isaiah
+  name_es: Isaías
+  position: 23
+  testament: old
+- osis_code: Jer
+  name_en: Jeremiah
+  name_es: Jeremías
+  position: 24
+  testament: old
+- osis_code: Lam
+  name_en: Lamentations
+  name_es: Lamentaciones
+  position: 25
+  testament: old
+- osis_code: Ezek
+  name_en: Ezekiel
+  name_es: Ezequiel
+  position: 26
+  testament: old
+- osis_code: Dan
+  name_en: Daniel
+  name_es: Daniel
+  position: 27
+  testament: old
+- osis_code: Hos
+  name_en: Hosea
+  name_es: Oseas
+  position: 28
+  testament: old
+- osis_code: Joel
+  name_en: Joel
+  name_es: Joel
+  position: 29
+  testament: old
+- osis_code: Amos
+  name_en: Amos
+  name_es: Amós
+  position: 30
+  testament: old
+- osis_code: Obad
+  name_en: Obadiah
+  name_es: Abdías
+  position: 31
+  testament: old
+- osis_code: Jonah
+  name_en: Jonah
+  name_es: Jonás
+  position: 32
+  testament: old
+- osis_code: Mic
+  name_en: Micah
+  name_es: Miqueas
+  position: 33
+  testament: old
+- osis_code: Nah
+  name_en: Nahum
+  name_es: Nahúm
+  position: 34
+  testament: old
+- osis_code: Hab
+  name_en: Habakkuk
+  name_es: Habacuc
+  position: 35
+  testament: old
+- osis_code: Zeph
+  name_en: Zephaniah
+  name_es: Sofonías
+  position: 36
+  testament: old
+- osis_code: Hag
+  name_en: Haggai
+  name_es: Hageo
+  position: 37
+  testament: old
+- osis_code: Zech
+  name_en: Zechariah
+  name_es: Zacarías
+  position: 38
+  testament: old
+- osis_code: Mal
+  name_en: Malachi
+  name_es: Malaquías
+  position: 39
+  testament: old
+- osis_code: Matt
+  name_en: Matthew
+  name_es: Mateo
+  position: 40
+  testament: new
+- osis_code: Mark
+  name_en: Mark
+  name_es: Marcos
+  position: 41
+  testament: new
+- osis_code: Luke
+  name_en: Luke
+  name_es: Lucas
+  position: 42
+  testament: new
+- osis_code: John
+  name_en: John
+  name_es: Juan
+  position: 43
+  testament: new
+- osis_code: Acts
+  name_en: Acts
+  name_es: Hechos
+  position: 44
+  testament: new
+- osis_code: Rom
+  name_en: Romans
+  name_es: Romanos
+  position: 45
+  testament: new
+- osis_code: 1Cor
+  name_en: 1 Corinthians
+  name_es: 1 Corintios
+  position: 46
+  testament: new
+- osis_code: 2Cor
+  name_en: 2 Corinthians
+  name_es: 2 Corintios
+  position: 47
+  testament: new
+- osis_code: Gal
+  name_en: Galatians
+  name_es: Gálatas
+  position: 48
+  testament: new
+- osis_code: Eph
+  name_en: Ephesians
+  name_es: Efesios
+  position: 49
+  testament: new
+- osis_code: Phil
+  name_en: Philippians
+  name_es: Filipenses
+  position: 50
+  testament: new
+- osis_code: Col
+  name_en: Colossians
+  name_es: Colosenses
+  position: 51
+  testament: new
+- osis_code: 1Thess
+  name_en: 1 Thessalonians
+  name_es: 1 Tesalonicenses
+  position: 52
+  testament: new
+- osis_code: 2Thess
+  name_en: 2 Thessalonians
+  name_es: 2 Tesalonicenses
+  position: 53
+  testament: new
+- osis_code: 1Tim
+  name_en: 1 Timothy
+  name_es: 1 Timoteo
+  position: 54
+  testament: new
+- osis_code: 2Tim
+  name_en: 2 Timothy
+  name_es: 2 Timoteo
+  position: 55
+  testament: new
+- osis_code: Titus
+  name_en: Titus
+  name_es: Tito
+  position: 56
+  testament: new
+- osis_code: Phlm
+  name_en: Philemon
+  name_es: Filemón
+  position: 57
+  testament: new
+- osis_code: Heb
+  name_en: Hebrews
+  name_es: Hebreos
+  position: 58
+  testament: new
+- osis_code: Jas
+  name_en: James
+  name_es: Santiago
+  position: 59
+  testament: new
+- osis_code: 1Pet
+  name_en: 1 Peter
+  name_es: 1 Pedro
+  position: 60
+  testament: new
+- osis_code: 2Pet
+  name_en: 2 Peter
+  name_es: 2 Pedro
+  position: 61
+  testament: new
+- osis_code: 1John
+  name_en: 1 John
+  name_es: 1 Juan
+  position: 62
+  testament: new
+- osis_code: 2John
+  name_en: 2 John
+  name_es: 2 Juan
+  position: 63
+  testament: new
+- osis_code: 3John
+  name_en: 3 John
+  name_es: 3 Juan
+  position: 64
+  testament: new
+- osis_code: Jude
+  name_en: Jude
+  name_es: Judas
+  position: 65
+  testament: new
+- osis_code: Rev
+  name_en: Revelation
+  name_es: Apocalipsis
+  position: 66
+  testament: new

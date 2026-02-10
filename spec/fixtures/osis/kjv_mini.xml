@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Fixture for Bible::OsisImporter spec.
+
+  Designed to exercise every meaningful code path in the parser. Each
+  region below is annotated with what it verifies so future edits know
+  which tests will break if a region is removed.
+
+  REGIONS:
+  - Two canonical books (John, 1Kgs) + one apocryphal book (Tob) that
+    must be filtered out by the canonical-books whitelist.
+  - Milestone verse markers (sID/eID pairs) — matches the real seven1m KJV
+    OSIS source. Container-style verses are not supported this sprint.
+  - Milestone <q who="Jesus"> markers (sID/eID pairs). Opening carries
+    who="Jesus"; closing carries only eID.
+  - John 3:14 — partly red (Jesus span in the middle); has a <note>
+    whose content must NOT appear in body_text.
+  - John 3:15 — fully red (whole verse is Jesus words; range == [0, len]).
+  - John 3:16 — fully red (famous example; main assertion target).
+  - John 3:17 — NO red letters (range == []).
+  - John 4:1-2 — CROSS-VERSE Jesus span. The real KJV OSIS source never
+    exercises this because its <q> is restarted at every verse boundary,
+    but other translations may, so we keep it as a defensive invariant.
+  - 1Kgs 1:1 — contains <divineName>LORD</divineName>; inner text passes
+    through as plain text.
+  - 1Kgs 1:2 — heavy leading/trailing whitespace; exercises normalization.
+  - 1Kgs 1:3-5 — plain verses for count checks.
+-->
+<osis xmlns="http://www.bibletechnologies.net/2003/OSIS/namespace">
+  <osisText osisIDWork="Bible.en.kjv" xml:lang="en">
+    <header><work osisWork="Bible.en.kjv"/></header>
+
+    <div type="book" osisID="John">
+      <chapter osisID="John.3" sID="John.3.sID" n="3"/>
+        <verse osisID="John.3.14" sID="John.3.14.sID" n="14"/>As Moses lifted up the serpent in the wilderness,<note>Num 21:9</note> <q who="Jesus" sID="J14"/>even so must the Son of man be lifted up<q eID="J14"/>: that whosoever believeth in him should not perish<verse eID="John.3.14.sID"/>
+        <verse osisID="John.3.15" sID="John.3.15.sID" n="15"/><q who="Jesus" sID="J15"/>That whosoever believeth in him should not perish, but have eternal life.<q eID="J15"/><verse eID="John.3.15.sID"/>
+        <verse osisID="John.3.16" sID="John.3.16.sID" n="16"/><q who="Jesus" sID="J16"/>For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life.<q eID="J16"/><verse eID="John.3.16.sID"/>
+        <verse osisID="John.3.17" sID="John.3.17.sID" n="17"/>For God sent not his Son into the world to condemn the world; but that the world through him might be saved.<verse eID="John.3.17.sID"/>
+      <chapter eID="John.3.sID"/>
+
+      <chapter osisID="John.4" sID="John.4.sID" n="4"/>
+        <verse osisID="John.4.1" sID="John.4.1.sID" n="1"/>When the Lord knew therefore how the Pharisees had heard <q who="Jesus" sID="JCROSS"/>red words span one<verse eID="John.4.1.sID"/>
+        <verse osisID="John.4.2" sID="John.4.2.sID" n="2"/>red words span two<q eID="JCROSS"/> and then normal text follows<verse eID="John.4.2.sID"/>
+        <verse osisID="John.4.3" sID="John.4.3.sID" n="3"/>He left Judaea and departed again into Galilee.<verse eID="John.4.3.sID"/>
+        <verse osisID="John.4.4" sID="John.4.4.sID" n="4"/>And he must needs go through Samaria.<verse eID="John.4.4.sID"/>
+        <verse osisID="John.4.5" sID="John.4.5.sID" n="5"/>Then cometh he to a city of Samaria, which is called Sychar.<verse eID="John.4.5.sID"/>
+      <chapter eID="John.4.sID"/>
+    </div>
+
+    <div type="book" osisID="1Kgs">
+      <chapter osisID="1Kgs.1" sID="1Kgs.1.sID" n="1"/>
+        <verse osisID="1Kgs.1.1" sID="1Kgs.1.1.sID" n="1"/>Now king David was old and stricken in years; and the <divineName>LORD</divineName> was with him.<verse eID="1Kgs.1.1.sID"/>
+        <verse osisID="1Kgs.1.2" sID="1Kgs.1.2.sID" n="2"/>   Wherefore his servants said unto him,    Let there be sought a young virgin.   <verse eID="1Kgs.1.2.sID"/>
+        <verse osisID="1Kgs.1.3" sID="1Kgs.1.3.sID" n="3"/>So they sought for a fair damsel throughout all the coasts of Israel.<verse eID="1Kgs.1.3.sID"/>
+        <verse osisID="1Kgs.1.4" sID="1Kgs.1.4.sID" n="4"/>And the damsel was very fair.<verse eID="1Kgs.1.4.sID"/>
+        <verse osisID="1Kgs.1.5" sID="1Kgs.1.5.sID" n="5"/>Then Adonijah the son of Haggith exalted himself.<verse eID="1Kgs.1.5.sID"/>
+      <chapter eID="1Kgs.1.sID"/>
+    </div>
+
+    <!-- Apocryphal. Must be filtered out by the canonical-books whitelist. -->
+    <div type="book" osisID="Tob">
+      <chapter osisID="Tob.1" sID="Tob.1.sID" n="1"/>
+        <verse osisID="Tob.1.1" sID="Tob.1.1.sID" n="1"/>The book of the words of Tobit.<verse eID="Tob.1.1.sID"/>
+      <chapter eID="Tob.1.sID"/>
+    </div>
+  </osisText>
+</osis>

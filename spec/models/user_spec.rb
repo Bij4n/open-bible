@@ -108,4 +108,16 @@ RSpec.describe User, type: :model do
       expect(user.author_name).to eq("plain")
     end
   end
+
+  describe "#admin?" do
+    it "defaults to false" do
+      user = create(:user)
+      expect(user.admin?).to be false
+    end
+
+    it "is true when the admin flag is set" do
+      user = create(:user, admin: true)
+      expect(user.admin?).to be true
+    end
+  end
 end

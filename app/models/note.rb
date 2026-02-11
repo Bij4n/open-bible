@@ -25,6 +25,8 @@ class Note < ApplicationRecord
   has_many :shared_groups, through: :note_shares, source: :shareable, source_type: "Group"
 
   has_many :comments, dependent: :destroy
+  has_many :upvotes, dependent: :destroy
+  has_many :upvoters, through: :upvotes, source: :user
 
   # Flat list of comments in display order: top-level oldest first,
   # each top-level's replies oldest first, depth-first. Siblingized
@@ -76,6 +78,16 @@ class Note < ApplicationRecord
   scope :shared_with_group, ->(group) {
     joins(:note_shares).where(note_shares: { shareable_type: "Group", shareable_id: group.id })
   }
+
+  def upvote_count
+    upvotes.size
+  end
+
+  def upvoted_by?(user)
+    return false unless user
+
+    upvotes.exists?(user_id: user.id)
+  end
 
   # Body edits re-render the list entry on every group this note is
   # shared with. Destroy cascades via note_shares' callbacks.

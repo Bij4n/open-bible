@@ -29,6 +29,22 @@ class Note < ApplicationRecord
   has_many :upvoters, through: :upvotes, source: :user
   has_many :flags, as: :flaggable, dependent: :destroy
 
+  belongs_to :hidden_by,   class_name: "User", optional: true
+  belongs_to :featured_by, class_name: "User", optional: true
+
+  scope :public_visible, -> { where(visibility: visibilities[:public_note], hidden_at: nil) }
+  scope :featured,       -> { where(featured: true) }
+  # For the public bible ordering: featured first, then most-upvoted,
+  # then newest. The upvote count is a subquery so featured/non-featured
+  # ties break by popularity without a full outer join.
+  scope :sorted_for_public, -> {
+    select(<<~SQL.squish)
+      notes.*,
+      (SELECT COUNT(*) FROM upvotes WHERE upvotes.note_id = notes.id) AS upvotes_count
+    SQL
+      .order(Arel.sql("featured DESC, upvotes_count DESC, created_at DESC"))
+  }
+
   # Flat list of comments in display order: top-level oldest first,
   # each top-level's replies oldest first, depth-first. Siblingized
   # replies (depth-cap overflow) naturally land alongside their depth-
@@ -88,6 +104,26 @@ class Note < ApplicationRecord
     return false unless user
 
     upvotes.exists?(user_id: user.id)
+  end
+
+  def hidden?
+    hidden_at.present?
+  end
+
+  def hide!(admin)
+    update!(hidden_at: Time.current, hidden_by: admin)
+  end
+
+  def unhide!
+    update!(hidden_at: nil, hidden_by: nil)
+  end
+
+  def feature!(admin)
+    update!(featured: true, featured_at: Time.current, featured_by: admin)
+  end
+
+  def unfeature!
+    update!(featured: false, featured_at: nil, featured_by: nil)
   end
 
   # Body edits re-render the list entry on every group this note is

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_19_051036) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_19_052844) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -167,9 +167,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_19_051036) do
 
   create_table "notes", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.boolean "featured", default: false, null: false
+    t.datetime "featured_at"
+    t.bigint "featured_by_id"
+    t.datetime "hidden_at"
+    t.bigint "hidden_by_id"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.integer "visibility", default: 0, null: false
+    t.index ["featured"], name: "index_notes_on_featured_where_true", where: "(featured = true)"
+    t.index ["featured_by_id"], name: "index_notes_on_featured_by_id"
+    t.index ["hidden_at"], name: "index_notes_on_hidden_at"
+    t.index ["hidden_by_id"], name: "index_notes_on_hidden_by_id"
     t.index ["user_id"], name: "index_notes_on_user_id"
   end
 

@@ -30,6 +30,14 @@ Append-only. Each entry: date-ish, decision, rationale.
 - **Sprint 0 setup** — **Ancient manuscript aesthetic specifics:** Cinzel for display headings, EB Garamond for body, parchment `#f4ecd8` light mode, walnut `#2a1f14` dark mode. Dark mode treated as "candlelit manuscript" — warm amber text on deep brown, not cold grey-on-black.
 - **Sprint 0 setup** — **Real-time scope limited to group Bibles.** Public Bible view and private reading do not get live updates; they'd add load with little UX benefit.
 
+- **2026-04-17 Sprint 1** — **OSIS source: `seven1m/open-bibles` (GitHub).** eBible.org doesn't publish OSIS for KJV; they publish USFX only. seven1m re-encodes that USFX as OSIS via the Haiola tool. Provenance documented in `config/bible_sources.yml`. SHA256 pinned.
+- **2026-04-17 Sprint 1** — **Canonical `osis_ref` format: `Bible.KJV.Book.Chapter.Verse`.** Source uses bare form (`John.3.16`); importer normalizes to the full form at import time. This is Sprint 3's highlight-anchoring contract and must not change.
+- **2026-04-17 Sprint 1** — **Apocrypha intentionally excluded for v1.** The KJV OSIS source ships 81 books (39 OT + 15 Apocrypha + 27 NT); `config/books.yml` lists only the 66 canonical books, and any book whose OSIS code isn't listed is logged at INFO and skipped during import. Deuterocanonical support is possible later as a feature with a per-user toggle.
+- **2026-04-17 Sprint 1** — **`<transChange type="added">` markup stripped; inner text preserved.** KJV renders translator-supplied words in italic; we keep the text, drop the formatting for Sprint 1. `# TODO(post-v1): render <transChange type="added"> as italics per KJV convention` left at the handler.
+- **2026-04-17 Sprint 1** — **Red-letter spans treated as cross-verse-capable in the parser even though the KJV source restarts `<q>` at every verse boundary.** The real source never exercises the carry-over code path, but other translations may; fixture has an explicit cross-verse Jesus span as a defensive invariant.
+- **2026-04-17 Sprint 1** — **Red-letter color #8a1c1c is intentionally distinct from the UI rubric red #8b2e2e.** The in-text red is slightly darker and more saturated for body-copy legibility. A CSS comment calls this out so future work doesn't unify them by accident.
+- **2026-04-17 Sprint 1** — **Ruby 3.4.9 via asdf.** Dropped 3.2.3 (EOL 2026-03-31), deleted `config/brakeman.ignore`. Bundler path pinned to `vendor/bundle` via `.bundle/config` to keep gems inside the repo.
+
 ---
 
 ## Sprint roadmap

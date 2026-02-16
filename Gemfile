@@ -50,8 +50,8 @@ gem "devise-i18n"
 # adding an index without CONCURRENTLY on a large table, etc.
 gem "strong_migrations"
 
-# Keyword search over verses / notes. Added in Sprint 8.
-# gem "pg_search"
+# Keyword search over verses and notes.
+gem "pg_search"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

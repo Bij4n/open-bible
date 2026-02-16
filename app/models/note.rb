@@ -1,5 +1,16 @@
 class Note < ApplicationRecord
   include GroupBibleBroadcastable
+  include PgSearch::Model
+
+  # Action Text bodies live in action_text_rich_texts; pg_search joins
+  # through Rails' auto-generated rich_text_body association. Caveat:
+  # body is HTML, so a search for "strong" would match <strong> tags
+  # alongside real text. Acceptable for Sprint 8 (unlikely search
+  # term for a Bible-study app); a plain_body column kept in sync via
+  # a callback is the robust long-term move.
+  pg_search_scope :search_body,
+                  associated_against: { rich_text_body: [ :body ] },
+                  using: { tsearch: { prefix: true } }
 
   # :private and :public clash with Ruby keywords and Rails generated
   # enum methods (note.private? etc). Keeping the stored values as

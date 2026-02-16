@@ -122,6 +122,30 @@ en:
     flag_reason_prompt: "Why are you flagging this? (brief reason)"
     flag_submitted: "Flag submitted. Thank you for helping keep the community constructive."
     flag_failed: Couldn't submit the flag. Try again later.
+  search:
+    title: Search the Bible
+    subtitle: Find verses and community insights
+    input_placeholder: Search for verses, topics, or keywords…
+    submit: Search
+    filters:
+      all: Everything
+      verses: Verses only
+      notes: Notes only
+    empty_hint: Enter a search term above to explore verses and community notes.
+    no_results_html: "No results for <strong>%{query}</strong>. Try different keywords or check your spelling."
+    results_for_html: "Results for <strong>%{query}</strong>"
+    verses_heading: Verses
+    notes_heading: Community notes
+    showing_top: "Showing top %{limit} matches. Refine your search for more."
+    by_author: "by %{name}"
+    upvotes: "▲ %{count}"
+    suggestions_heading: "Try searching for:"
+    suggestions:
+      - love
+      - faith
+      - hope
+      - forgiveness
+      - peace
   admin:
     title: Admin
     nav:

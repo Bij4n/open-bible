@@ -1,0 +1,56 @@
+<% content_for :title, t("search.title") %>
+
+<article class="mx-auto max-w-3xl space-y-8">
+  <header class="space-y-1">
+    <h1 class="font-display text-4xl font-semibold uppercase tracking-[0.1em] text-walnut-900 dark:text-amber-200">
+      <%= t("search.title") %>
+    </h1>
+    <p class="font-serif italic text-walnut-700 dark:text-amber-300">
+      <%= t("search.subtitle") %>
+    </p>
+  </header>
+
+  <%= form_with url: search_path, method: :get, class: "space-y-3" do |f| %>
+    <div class="flex gap-2">
+      <%= f.text_field :q,
+                       value: @query,
+                       placeholder: t("search.input_placeholder"),
+                       autofocus: true,
+                       autocomplete: "off",
+                       class: "flex-1 rounded border border-walnut-900/25 bg-parchment-50 px-3 py-2 font-serif text-walnut-900 focus:border-walnut-900 focus:outline-none dark:border-gilt-500/40 dark:bg-walnut-900 dark:text-amber-200" %>
+      <%= f.submit t("search.submit"),
+                   class: "rounded bg-walnut-900 px-4 py-2 font-display text-sm font-medium uppercase tracking-wider text-parchment-100 hover:bg-walnut-800 dark:bg-amber-200 dark:text-walnut-900" %>
+    </div>
+
+    <fieldset class="flex items-center gap-4 font-serif text-sm">
+      <legend class="sr-only"><%= t("search.filters.all") %></legend>
+      <% SearchService::VALID_SCOPES.each do |scope| %>
+        <label class="flex items-center gap-1">
+          <%= f.radio_button :scope, scope, checked: @scope == scope %>
+          <%= t("search.filters.#{scope}") %>
+        </label>
+      <% end %>
+    </fieldset>
+  <% end %>
+
+  <% if @query.present? %>
+    <%= render partial: "results", locals: { results: @results, query: @query, scope: @scope } %>
+  <% else %>
+    <section class="space-y-3">
+      <p class="font-serif italic text-walnut-700 dark:text-amber-300">
+        <%= t("search.empty_hint") %>
+      </p>
+      <div>
+        <h2 class="font-display text-sm uppercase tracking-wider text-walnut-900/70 dark:text-amber-200/70">
+          <%= t("search.suggestions_heading") %>
+        </h2>
+        <div class="mt-2 flex flex-wrap gap-2">
+          <% t("search.suggestions").each do |term| %>
+            <%= link_to term, search_path(q: term),
+                        class: "rounded border border-walnut-900/25 px-3 py-1 text-sm font-serif text-walnut-900 hover:bg-walnut-900 hover:text-parchment-100 dark:border-gilt-500/40 dark:text-amber-200" %>
+          <% end %>
+        </div>
+      </div>
+    </section>
+  <% end %>
+</article>

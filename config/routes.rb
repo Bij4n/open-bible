@@ -49,6 +49,8 @@ Rails.application.routes.draw do
       as: :public_bible_chapter,
       constraints: { chapter: /\d+/ }
 
+  get "/search", to: "search#index", as: :search
+
   namespace :admin do
     resources :notes, only: [ :index, :show ] do
       member do

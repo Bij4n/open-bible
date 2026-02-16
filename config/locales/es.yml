@@ -122,6 +122,30 @@ es:
     flag_reason_prompt: "¿Por qué reportas esto? (motivo breve)"
     flag_submitted: "Reporte enviado. Gracias por ayudar a mantener una comunidad constructiva."
     flag_failed: No se pudo enviar el reporte. Inténtalo más tarde.
+  search:
+    title: Busca en la Biblia
+    subtitle: Encuentra versículos y comentarios de la comunidad
+    input_placeholder: Busca versículos, temas o palabras clave…
+    submit: Buscar
+    filters:
+      all: Todo
+      verses: Solo versículos
+      notes: Solo notas
+    empty_hint: Escribe un término de búsqueda para explorar versículos y notas.
+    no_results_html: "Sin resultados para <strong>%{query}</strong>. Prueba otras palabras o revisa la ortografía."
+    results_for_html: "Resultados para <strong>%{query}</strong>"
+    verses_heading: Versículos
+    notes_heading: Notas de la comunidad
+    showing_top: "Mostrando los %{limit} mejores resultados. Refina tu búsqueda para ver más."
+    by_author: "por %{name}"
+    upvotes: "▲ %{count}"
+    suggestions_heading: "Prueba buscar:"
+    suggestions:
+      - amor
+      - fe
+      - esperanza
+      - perdón
+      - paz
   admin:
     title: Admin
     nav:

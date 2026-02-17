@@ -1,0 +1,9 @@
+<% if flash.now[:notice].present? %>
+  <p class="font-serif text-xs italic text-walnut-700 dark:text-amber-300">
+    <%= flash.now[:notice] %>
+  </p>
+<% elsif flash.now[:alert].present? %>
+  <p class="font-serif text-xs text-rubric-600 dark:text-amber-100">
+    <%= flash.now[:alert] %>
+  </p>
+<% end %>

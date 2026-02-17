@@ -18,3 +18,30 @@ es:
       prev_chapter: Anterior
       next_chapter: Siguiente
       chapter_label: Capítulo
+  settings:
+    title: Ajustes
+    updated: Preferencias guardadas.
+    save: Guardar
+    sections:
+      language:
+        title: Idioma
+        description: El idioma de la interfaz. Independiente de la traducción de la Biblia que lees.
+      theme:
+        title: Tema
+        description: Pergamino claro, nogal oscuro, o seguir el ajuste del dispositivo.
+        light: Claro
+        dark: Oscuro
+        system: Predeterminado del sistema
+      default_translation:
+        title: Traducción predeterminada
+        description: Se abre cuando navegas al lector sin especificar ninguna.
+        none: Sin predeterminada
+      display_name:
+        title: Nombre visible
+        description: Se muestra en tus notas públicas. Déjalo en blanco para mantenerte anónimo.
+  auth:
+    sign_in: Iniciar sesión
+    sign_up: Registrarse
+    sign_out: Cerrar sesión
+    settings: Ajustes
+    signed_in_as: Conectado como %{email}

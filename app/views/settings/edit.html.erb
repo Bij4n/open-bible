@@ -1,0 +1,98 @@
+<% content_for :title, t("settings.title") %>
+
+<article class="mx-auto max-w-2xl space-y-10">
+  <header class="space-y-1 border-b border-walnut-900/15 pb-6 dark:border-gilt-500/30">
+    <p class="text-sm uppercase tracking-[0.3em] text-walnut-700/70 dark:text-amber-200/60">
+      <%= current_user.email %>
+    </p>
+    <h1 class="font-display text-4xl font-semibold uppercase tracking-[0.1em] text-walnut-900 dark:text-amber-200">
+      <%= t("settings.title") %>
+    </h1>
+  </header>
+
+  <%# ----------  Language  ---------- %>
+  <%= turbo_frame_tag "settings_language", class: "block space-y-3" do %>
+    <h2 class="font-display text-xl font-semibold uppercase tracking-wider text-walnut-900 dark:text-amber-200">
+      <%= t("settings.sections.language.title") %>
+    </h2>
+    <p class="font-serif text-sm text-walnut-700 dark:text-amber-300">
+      <%= t("settings.sections.language.description") %>
+    </p>
+    <%= form_with model: current_user, url: settings_path, method: :patch, data: { turbo_frame: "settings_language", controller: "preference-form" }, class: "space-y-3" do |f| %>
+      <div class="flex flex-col gap-2 font-serif text-sm">
+        <% User::UI_LOCALES.each do |code| %>
+          <label class="flex items-center gap-2">
+            <%= f.radio_button :ui_locale, code, data: { action: "change->preference-form#submit" }, class: "text-walnut-900 focus:ring-walnut-900 dark:text-gilt-400 dark:focus:ring-gilt-400" %>
+            <%= t("layout.language_#{code}") %>
+          </label>
+        <% end %>
+      </div>
+      <noscript>
+        <%= f.submit t("settings.save"), class: "rounded bg-walnut-900 px-3 py-1 font-display text-xs font-medium uppercase tracking-wider text-parchment-100 dark:bg-amber-200 dark:text-walnut-900" %>
+      </noscript>
+    <% end %>
+    <%= render "shared/settings_flash" %>
+  <% end %>
+
+  <%# ----------  Theme  ---------- %>
+  <%= turbo_frame_tag "settings_theme", class: "block space-y-3" do %>
+    <h2 class="font-display text-xl font-semibold uppercase tracking-wider text-walnut-900 dark:text-amber-200">
+      <%= t("settings.sections.theme.title") %>
+    </h2>
+    <p class="font-serif text-sm text-walnut-700 dark:text-amber-300">
+      <%= t("settings.sections.theme.description") %>
+    </p>
+    <%= form_with model: current_user, url: settings_path, method: :patch, data: { turbo_frame: "settings_theme", controller: "preference-form" }, class: "space-y-3" do |f| %>
+      <div class="flex flex-col gap-2 font-serif text-sm">
+        <% User::THEMES.each do |theme| %>
+          <label class="flex items-center gap-2">
+            <%= f.radio_button :theme, theme, data: { action: "change->preference-form#submit" }, class: "text-walnut-900 focus:ring-walnut-900 dark:text-gilt-400 dark:focus:ring-gilt-400" %>
+            <%= t("settings.sections.theme.#{theme}") %>
+          </label>
+        <% end %>
+      </div>
+      <noscript>
+        <%= f.submit t("settings.save"), class: "rounded bg-walnut-900 px-3 py-1 font-display text-xs font-medium uppercase tracking-wider text-parchment-100 dark:bg-amber-200 dark:text-walnut-900" %>
+      </noscript>
+    <% end %>
+    <%= render "shared/settings_flash" %>
+  <% end %>
+
+  <%# ----------  Default translation  ---------- %>
+  <%= turbo_frame_tag "settings_default_translation", class: "block space-y-3" do %>
+    <h2 class="font-display text-xl font-semibold uppercase tracking-wider text-walnut-900 dark:text-amber-200">
+      <%= t("settings.sections.default_translation.title") %>
+    </h2>
+    <p class="font-serif text-sm text-walnut-700 dark:text-amber-300">
+      <%= t("settings.sections.default_translation.description") %>
+    </p>
+    <%= form_with model: current_user, url: settings_path, method: :patch, data: { turbo_frame: "settings_default_translation", controller: "preference-form" }, class: "space-y-3" do |f| %>
+      <%= f.select :default_translation_id,
+                   Translation.order(:name).pluck(:name, :id),
+                   { include_blank: t("settings.sections.default_translation.none") },
+                   data: { action: "change->preference-form#submit" },
+                   class: "w-full rounded border border-walnut-900/25 bg-parchment-50 px-3 py-2 font-serif text-walnut-900 focus:border-walnut-900 focus:outline-none focus:ring-1 focus:ring-walnut-900 dark:border-gilt-500/40 dark:bg-walnut-900 dark:text-amber-200" %>
+      <noscript>
+        <%= f.submit t("settings.save"), class: "rounded bg-walnut-900 px-3 py-1 font-display text-xs font-medium uppercase tracking-wider text-parchment-100 dark:bg-amber-200 dark:text-walnut-900" %>
+      </noscript>
+    <% end %>
+    <%= render "shared/settings_flash" %>
+  <% end %>
+
+  <%# ----------  Display name  ---------- %>
+  <%= turbo_frame_tag "settings_display_name", class: "block space-y-3" do %>
+    <h2 class="font-display text-xl font-semibold uppercase tracking-wider text-walnut-900 dark:text-amber-200">
+      <%= t("settings.sections.display_name.title") %>
+    </h2>
+    <p class="font-serif text-sm text-walnut-700 dark:text-amber-300">
+      <%= t("settings.sections.display_name.description") %>
+    </p>
+    <%= form_with model: current_user, url: settings_path, method: :patch, data: { turbo_frame: "settings_display_name" }, class: "space-y-3" do |f| %>
+      <%= f.text_field :display_name,
+                       maxlength: User::DISPLAY_NAME_MAX,
+                       class: "w-full rounded border border-walnut-900/25 bg-parchment-50 px-3 py-2 font-serif text-walnut-900 focus:border-walnut-900 focus:outline-none focus:ring-1 focus:ring-walnut-900 dark:border-gilt-500/40 dark:bg-walnut-900 dark:text-amber-200" %>
+      <%= f.submit t("settings.save"), class: "rounded bg-walnut-900 px-3 py-1 font-display text-xs font-medium uppercase tracking-wider text-parchment-100 dark:bg-amber-200 dark:text-walnut-900" %>
+    <% end %>
+    <%= render "shared/settings_flash" %>
+  <% end %>
+</article>

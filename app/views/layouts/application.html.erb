@@ -51,6 +51,14 @@
               <%= t("layout.theme_toggle") %>
             </span>
           </button>
+
+          <% if user_signed_in? %>
+            <%= link_to t("auth.settings"), settings_path, class: "hover:text-rubric-500 dark:hover:text-gilt-400" %>
+            <%= button_to t("auth.sign_out"), destroy_user_session_path, method: :delete, class: "hover:text-rubric-500 dark:hover:text-gilt-400" %>
+          <% else %>
+            <%= link_to t("auth.sign_in"), new_user_session_path, class: "hover:text-rubric-500 dark:hover:text-gilt-400" %>
+            <%= link_to t("auth.sign_up"), new_user_registration_path, class: "hover:text-rubric-500 dark:hover:text-gilt-400" %>
+          <% end %>
         </nav>
       </div>
     </header>

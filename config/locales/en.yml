@@ -18,3 +18,30 @@ en:
       prev_chapter: Previous
       next_chapter: Next
       chapter_label: Chapter
+  settings:
+    title: Settings
+    updated: Preferences saved.
+    save: Save
+    sections:
+      language:
+        title: Language
+        description: The language of the interface. Independent of the Bible translation you read.
+      theme:
+        title: Theme
+        description: Light parchment, dark walnut, or follow your device setting.
+        light: Light
+        dark: Dark
+        system: System default
+      default_translation:
+        title: Default translation
+        description: Opens when you navigate to the reader without specifying one.
+        none: No default
+      display_name:
+        title: Display name
+        description: Shown on your public notes. Leave blank to remain anonymous.
+  auth:
+    sign_in: Sign in
+    sign_up: Sign up
+    sign_out: Sign out
+    settings: Settings
+    signed_in_as: Signed in as %{email}

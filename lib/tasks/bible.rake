@@ -40,13 +40,28 @@ end
 # Helpers extracted to a module for testability and to keep the task body
 # focused on orchestration.
 module BibleImportTask
-  CONFIG_PATH  = Rails.root.join("config/bible_sources.yml")
   DOWNLOAD_DIR = Rails.root.join("tmp/bible_sources")
 
   class << self
+    # Production lookups only see config/bible_sources.yml. Tests also see
+    # spec/fixtures/bible_sources.yml so test-only entries never leak into
+    # dev/prod config.
+    def config_paths
+      paths = [ Rails.root.join("config/bible_sources.yml") ]
+      paths << Rails.root.join("spec/fixtures/bible_sources.yml") if Rails.env.test?
+      paths
+    end
+
     def load_entry(code)
-      sources = YAML.safe_load_file(CONFIG_PATH)
-      sources[code.to_s.downcase]
+      key = code.to_s.downcase
+      config_paths.each do |path|
+        next unless path.exist?
+
+        sources = YAML.safe_load_file(path) || {}
+        entry = sources[key]
+        return entry if entry
+      end
+      nil
     end
 
     def fetch_source(entry)

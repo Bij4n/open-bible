@@ -77,6 +77,10 @@ group :development, :test do
   gem "selenium-webdriver"
   gem "faker"
   gem "rails-controller-testing"
+
+  # Stubs outgoing HTTP so service-client specs don't depend on the
+  # Python embedding service running.
+  gem "webmock", require: false
 end
 
 group :development do

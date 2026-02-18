@@ -20,10 +20,26 @@ RSpec.describe "Settings", type: :request do
   describe "PATCH /settings" do
     before { sign_in user }
 
-    it "updates ui_locale" do
+    it "updates ui_locale and redirects back for plain submissions" do
       patch "/settings", params: { user: { ui_locale: "es" } }
-      expect(response).to have_http_status(:ok)
+      expect(response).to redirect_to(settings_path)
       expect(user.reload.ui_locale).to eq("es")
+    end
+
+    it "renders the edit page for Turbo Frame submissions" do
+      patch "/settings",
+            params: { user: { theme: "dark" } },
+            headers: { "Turbo-Frame" => "settings_theme" }
+      expect(response).to have_http_status(:ok)
+      expect(user.reload.theme).to eq("dark")
+    end
+
+    it "returns no content for JSON submissions" do
+      patch "/settings",
+            params: { user: { theme: "dark" } },
+            as: :json
+      expect(response).to have_http_status(:no_content)
+      expect(user.reload.theme).to eq("dark")
     end
 
     it "updates theme" do

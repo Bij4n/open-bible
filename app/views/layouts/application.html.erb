@@ -39,12 +39,7 @@
         <% end %>
 
         <nav class="flex items-center gap-5 text-sm" aria-label="<%= t("layout.language_switcher") %>">
-          <div class="flex items-center gap-2">
-            <span class="sr-only"><%= t("layout.language_switcher") %>:</span>
-            <%= link_to t("layout.language_en"), url_for(locale: :en), class: "hover:text-rubric-500 dark:hover:text-gilt-400 #{"underline underline-offset-4" if I18n.locale == :en}" %>
-            <span aria-hidden="true" class="text-walnut-900/40 dark:text-amber-200/40">·</span>
-            <%= link_to t("layout.language_es"), url_for(locale: :es), class: "hover:text-rubric-500 dark:hover:text-gilt-400 #{"underline underline-offset-4" if I18n.locale == :es}" %>
-          </div>
+          <%= render "shared/language_switcher" %>
 
           <button type="button"
                   data-action="theme#toggle"

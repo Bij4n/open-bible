@@ -11,3 +11,14 @@ kjv_mini:
     sha256: 3fbf21ab9f3516ce2fe0e4b78178a04126d64a4693a48acddd565de67147668d
     filename: kjv_mini.xml
     archive: false
+
+rv1909_mini:
+  name: RV1909 Mini (test fixture)
+  language: es
+  public_domain: true
+  license_notes: Test fixture only.
+  source:
+    url: file://spec/fixtures/osis/rv1909_mini.xml
+    sha256: 22e149bc99b3cbaee9f2b207f255149d4cb5f2f835f3171ae2d2943f92f9993f
+    filename: rv1909_mini.xml
+    archive: false

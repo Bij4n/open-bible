@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Fixture exercising container-style OSIS elements — <chapter>...</chapter>
+  wrapping <verse>...</verse> with textual content inline — matching the
+  dialect produced by ZefToOsis (gratis-bible/bible) and used for RV1909.
+
+  Contrast with kjv_mini.xml, which is milestone-style (sID/eID pairs).
+  Both dialects must round-trip through Bible::OsisImporter.
+
+  Verifies:
+  - Container <verse> with osisID and no sID/eID captures inner text.
+  - Container <chapter> with osisID scopes its children.
+  - verse_count and osis_ref shape remain identical to milestone flow.
+  - Non-canonical books are still filtered out.
+-->
+<osis xmlns="http://www.bibletechnologies.net/2003/OSIS/namespace">
+  <osisText osisIDWork="Bible.en.container" xml:lang="en">
+    <header><work osisWork="Bible.en.container"/></header>
+
+    <div type="book" osisID="John">
+      <chapter osisID="John.3">
+        <verse osisID="John.3.14">Alpha verse, fourteenth.</verse>
+        <verse osisID="John.3.15">Beta verse, fifteenth.</verse>
+        <verse osisID="John.3.16">For God so loved the world — container style.</verse>
+        <verse osisID="John.3.17">Gamma verse, seventeenth.</verse>
+      </chapter>
+      <chapter osisID="John.4">
+        <verse osisID="John.4.1">First of chapter four.</verse>
+        <verse osisID="John.4.2">Second of chapter four.</verse>
+      </chapter>
+    </div>
+
+    <!-- Apocryphal: must be filtered by the canonical-books whitelist. -->
+    <div type="book" osisID="Tob">
+      <chapter osisID="Tob.1">
+        <verse osisID="Tob.1.1">Should not appear.</verse>
+      </chapter>
+    </div>
+  </osisText>
+</osis>

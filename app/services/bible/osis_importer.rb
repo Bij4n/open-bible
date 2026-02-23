@@ -5,12 +5,25 @@ module Bible
   # Parses an OSIS XML file into Translation / Book / Chapter / Verse rows
   # using a Nokogiri SAX parser (DOM would blow up the heap on a 10 MB Bible).
   #
-  # Milestone-style markers throughout:
-  #   <verse sID="..."/>text<verse eID="..."/>
-  #   <q who="Jesus" sID="..."/>red words<q eID="..."/>
+  # Supports both OSIS 2.1.1 dialects that show up in public-domain sources:
+  #
+  #   Milestone-style (seven1m/open-bibles Haiola flavor — KJV):
+  #     <chapter sID="..."/>
+  #       <verse sID="..."/>text<verse eID="..."/>
+  #       <q who="Jesus" sID="..."/>red words<q eID="..."/>
+  #     <chapter eID="..."/>
+  #
+  #   Container-style (gratis-bible ZefToOsis flavor — RV1909):
+  #     <chapter osisID="Gen.1">
+  #       <verse osisID="Gen.1.1">text</verse>
+  #     </chapter>
+  #
+  # Red-letter tagging via <q who="Jesus"> is only honored in milestone
+  # form; the container-style sources we support don't tag Jesus's words,
+  # so RV1909 red letters come from Bible::RedLetterMirror instead.
   #
   # The importer is idempotent: re-running against the same source updates
-  # existing rows keyed by osis_ref (Bible.KJV.Book.Chapter.Verse).
+  # existing rows keyed by osis_ref (Bible.<TRANS>.Book.Chapter.Verse).
   class OsisImporter
     BATCH_SIZE = 500
 
@@ -62,12 +75,18 @@ module Bible
             @div_stack.push(:other)
           end
         when "chapter"
-          handle_chapter_start(a) if a["sID"]
+          if a["sID"]
+            handle_chapter_start_milestone(a)
+          elsif a["osisID"]
+            handle_chapter_start_container(a)
+          end
         when "verse"
           if a["sID"]
             handle_verse_start(a)
           elsif a["eID"]
             handle_verse_end(a)
+          elsif a["osisID"]
+            handle_verse_start_container(a)
           end
         when "q"
           if a["sID"] && a["who"] == "Jesus"
@@ -84,12 +103,21 @@ module Bible
         case name
         when "note"
           @in_note = false
+        when "verse"
+          # Only container-style verses close on end_element. Milestone
+          # verses close on the separate <verse eID=.../> marker.
+          handle_verse_end_container if @current_verse && @current_verse[:style] == :container
+        when "chapter"
+          # Container <chapter> close. Milestone chapters close on <chapter eID=.../>,
+          # which arrives as a start_element (self-closing), not end_element.
+          @current_chapter = nil if @current_chapter && @current_chapter_style == :container
         when "div"
           closing = @div_stack.pop
           if closing == :book
             @current_book = nil
             @current_book_is_canonical = false
             @current_chapter = nil
+            @current_chapter_style = nil
           end
         end
       end
@@ -128,11 +156,25 @@ module Bible
         end
       end
 
-      def handle_chapter_start(attrs)
+      def handle_chapter_start_milestone(attrs)
         return unless @current_book_is_canonical
 
         number = attrs["n"].to_i
         @current_chapter = Chapter.find_or_create_by!(book: @current_book, number: number)
+        @current_chapter_style = :milestone
+        key = [ @current_book.id, number ]
+        @stats[:chapters] += 1 if @seen_chapters.add?(key)
+        @chapter_verse_counts[@current_chapter.id] = 0
+      end
+
+      def handle_chapter_start_container(attrs)
+        return unless @current_book_is_canonical
+
+        # Container <chapter osisID="Gen.1"> has no `n` attr; derive the
+        # chapter number from the last dotted segment.
+        number = attrs["osisID"].to_s.split(".").last.to_i
+        @current_chapter = Chapter.find_or_create_by!(book: @current_book, number: number)
+        @current_chapter_style = :container
         key = [ @current_book.id, number ]
         @stats[:chapters] += 1 if @seen_chapters.add?(key)
         @chapter_verse_counts[@current_chapter.id] = 0
@@ -144,12 +186,26 @@ module Bible
         @current_verse = {
           osis_id: attrs["osisID"],
           sID:     attrs["sID"],
+          style:   :milestone,
           buffer:  String.new,
           raw_ranges: []
         }
         # Carry-over: if a Jesus span stayed open across the previous verse
         # boundary, start this verse already inside it.
         @jesus_open_offset = 0 if @jesus_open_sid
+      end
+
+      def handle_verse_start_container(attrs)
+        return unless @current_book_is_canonical
+        return unless @current_chapter
+
+        @current_verse = {
+          osis_id: attrs["osisID"],
+          sID:     nil,
+          style:   :container,
+          buffer:  String.new,
+          raw_ranges: []
+        }
       end
 
       def handle_verse_end(attrs)
@@ -164,6 +220,11 @@ module Bible
         persist_verse(@current_verse)
         @current_verse = nil
         @jesus_open_offset = nil
+      end
+
+      def handle_verse_end_container
+        persist_verse(@current_verse)
+        @current_verse = nil
       end
 
       def handle_jesus_start(attrs)

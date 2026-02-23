@@ -27,6 +27,15 @@ namespace :bible do
     puts "Imported #{stats[:books]} books, #{stats[:chapters]} chapters, " \
          "#{stats[:verses]} verses, #{stats[:red_letter_ranges]} red-letter ranges " \
          "in #{duration.round(1)}s"
+
+    # Sources that don't encode <q who="Jesus"> (container-style OSIS
+    # from gratis-bible, including RV1909) arrive with zero red-letter
+    # ranges. Mirror from KJV when available; skipped for KJV itself
+    # and anything that already has red coverage.
+    if stats[:red_letter_ranges].zero? && translation.code != "KJV" && Translation.exists?(code: "KJV")
+      result = Bible::RedLetterMirror.call(target_translation_code: translation.code)
+      puts "Red-letter mirror: #{result}"
+    end
   end
 
   namespace :import do

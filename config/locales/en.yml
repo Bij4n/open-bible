@@ -23,6 +23,7 @@ en:
       group_notes: Notes in this chapter
       by_author: "by %{name}"
       breadcrumb_home: Open Bible
+      translation_picker: Translation
   settings:
     title: Settings
     updated: Preferences saved.

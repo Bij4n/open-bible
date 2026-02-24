@@ -1,5 +1,17 @@
 module Bible
   class ReaderController < ApplicationController
+    # /bible -> the user's default translation if they've set one, else
+    # KJV Genesis 1. Signed-out visitors fall through to the public
+    # bible at the same default.
+    def entry
+      code = resolved_default_translation_code
+      if user_signed_in?
+        redirect_to bible_chapter_path(translation: code.downcase, book: "gen", chapter: 1)
+      else
+        redirect_to public_bible_chapter_path(translation: code.downcase, book: "gen", chapter: 1)
+      end
+    end
+
     def show
       canonical_translation = params[:translation].downcase
       canonical_book        = params[:book].downcase
@@ -39,6 +51,10 @@ module Bible
 
       prefix = "Bible.#{@translation.code}.#{@book.osis_code}.#{@chapter.number}."
       current_user.highlights.for_chapter(prefix).to_a
+    end
+
+    def resolved_default_translation_code
+      user_signed_in? && current_user.default_translation&.code || "KJV"
     end
   end
 end

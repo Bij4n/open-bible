@@ -37,7 +37,7 @@ Rails.application.routes.draw do
 
   root "home#show"
 
-  get "/bible", to: redirect("/bible/kjv/gen/1")
+  get "/bible", to: "bible/reader#entry", as: :bible_entry
   get "/bible/:translation/:book/:chapter",
       to: "bible/reader#show",
       as: :bible_chapter,

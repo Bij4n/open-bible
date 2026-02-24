@@ -46,6 +46,10 @@ gem "image_processing", "~> 1.2"
 gem "devise"
 gem "devise-i18n"
 
+# Catch unsafe migrations at the edit stage — dropping a NOT NULL column,
+# adding an index without CONCURRENTLY on a large table, etc.
+gem "strong_migrations"
+
 # Keyword search over verses / notes. Added in Sprint 8.
 # gem "pg_search"
 

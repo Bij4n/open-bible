@@ -1,8 +1,13 @@
 <%# Shared verse span used by both the private reader and the group bible
     reader. The dom_id ("verse_<id>") is stable across renders so real-time
-    broadcasts can target it via turbo_stream.replace. %>
+    broadcasts can target it via turbo_stream.replace.
+
+    cross_translation_highlighted: verse numbers the current user has
+    annotated in another translation. Surfaced as a small bridge badge
+    so readers switching translations can find their earlier notes. %>
+<% bridged = local_assigns[:cross_translation_highlighted]&.include?(verse.number) %>
 <span class="verse"
       id="<%= dom_id(verse) %>"
       data-verse-id="<%= verse.id %>"
       data-osis-ref="<%= verse.osis_ref %>"
-      data-verse-text="<%= verse.body_text %>"><sup class="verse-number" data-ignore-selection><%= verse.number %></sup><%= render_verse_with_highlights(verse, Array(highlights)) %></span>
+      data-verse-text="<%= verse.body_text %>"><sup class="verse-number" data-ignore-selection><%= verse.number %></sup><% if bridged %><sup class="cross-translation-badge ml-1 text-xs text-walnut-700/60 dark:text-amber-200/60" data-ignore-selection title="<%= t("bible.reader.cross_translation_badge_title") %>">&#9775;</sup><% end %><%= render_verse_with_highlights(verse, Array(highlights)) %></span>

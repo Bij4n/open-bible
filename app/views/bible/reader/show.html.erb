@@ -70,7 +70,7 @@
 
   <div class="chapter-body font-serif text-lg leading-loose text-walnut-900 dark:text-amber-200"
        data-highlight-target="chapter">
-    <% @verses.each_with_index do |verse, i| %><%= render partial: "bible/reader/verse", locals: { verse: verse, highlights: @highlights || [] } %><%= " " unless i == @verses.size - 1 %><% end %>
+    <% @verses.each_with_index do |verse, i| %><%= render partial: "bible/reader/verse", locals: { verse: verse, highlights: @highlights || [], cross_translation_highlighted: @cross_translation_highlighted_verse_numbers } %><%= " " unless i == @verses.size - 1 %><% end %>
   </div>
 
   <% if user_signed_in? %>

@@ -19,6 +19,19 @@ class Highlight < ApplicationRecord
 
   scope :for_chapter, ->(prefix) { where("osis_ref LIKE ?", "#{sanitize_sql_like(prefix)}%") }
 
+  # Highlights from translations OTHER than the current one that touch
+  # this chapter. Sprint 10 surfaces these as a bridge badge so a user
+  # reading RV1909 can see which verses they've annotated in KJV. We
+  # can't render character ranges across translations (offsets differ),
+  # so this scope is intentionally verse-granular — the view uses the
+  # matched refs' affected-verses list to pick which verses to badge.
+  scope :from_other_translations_in_chapter, ->(translation_code:, book:, chapter:) {
+    same_chapter_pattern = "Bible.%.#{sanitize_sql_like(book.to_s)}.#{sanitize_sql_like(chapter.to_s)}.%"
+    current_prefix       = "Bible.#{sanitize_sql_like(translation_code.to_s)}.%"
+    where("osis_ref LIKE ?", same_chapter_pattern)
+      .where.not("osis_ref LIKE ?", current_prefix)
+  }
+
   # If this highlight is anchored to a note shared with one or more
   # groups, members of those groups viewing the same chapter should see
   # the verse re-rendered. Private highlights don't broadcast.

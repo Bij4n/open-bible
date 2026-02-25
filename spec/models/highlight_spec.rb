@@ -89,5 +89,47 @@ RSpec.describe Highlight, type: :model do
       expect(Highlight.for_chapter("Bible.KJV.John.3.")).to include(in_chapter)
       expect(Highlight.for_chapter("Bible.KJV.John.3.")).not_to include(_other_chapter)
     end
+
+    describe ".from_other_translations_in_chapter" do
+      let(:user) { create(:user) }
+      let!(:kjv)    { create(:translation, :kjv) }
+      let!(:rv1909) { create(:translation, code: "RV1909", name: "Reina-Valera 1909", language: "es") }
+
+      let!(:kjv_highlight) do
+        create(:highlight, user: user, translation: kjv,
+                           osis_ref: "Bible.KJV.John.3.16", color: "gold")
+      end
+      let!(:rv_highlight) do
+        create(:highlight, user: user, translation: rv1909,
+                           osis_ref: "Bible.RV1909.John.3.16", color: "rose")
+      end
+      let!(:kjv_other_chapter) do
+        create(:highlight, user: user, translation: kjv,
+                           osis_ref: "Bible.KJV.John.4.1", color: "sage")
+      end
+
+      it "returns highlights from other translations touching the same chapter" do
+        scope = Highlight.from_other_translations_in_chapter(
+          translation_code: "RV1909", book: "John", chapter: 3
+        )
+        expect(scope).to include(kjv_highlight)
+        expect(scope).not_to include(rv_highlight, kjv_other_chapter)
+      end
+
+      it "excludes highlights in the same translation as the viewer" do
+        scope = Highlight.from_other_translations_in_chapter(
+          translation_code: "KJV", book: "John", chapter: 3
+        )
+        expect(scope).not_to include(kjv_highlight)
+        expect(scope).to include(rv_highlight)
+      end
+
+      it "filters out highlights in other chapters of the same book" do
+        scope = Highlight.from_other_translations_in_chapter(
+          translation_code: "RV1909", book: "John", chapter: 3
+        )
+        expect(scope).not_to include(kjv_other_chapter)
+      end
+    end
   end
 end

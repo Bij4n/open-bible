@@ -3,6 +3,9 @@ Rails.application.routes.draw do
 
   get   "/settings", to: "settings#edit",   as: :settings
   patch "/settings", to: "settings#update"
+
+  resources :highlights, only: [ :create, :update, :destroy ]
+  resources :notes,      only: [ :create, :update, :destroy, :show ]
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

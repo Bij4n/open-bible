@@ -71,6 +71,7 @@
                    Translation.order(:name).pluck(:name, :id),
                    { include_blank: t("settings.sections.default_translation.none") },
                    data: { action: "change->preference-form#submit" },
+                   "aria-label": t("settings.sections.default_translation.title"),
                    class: "w-full rounded border border-walnut-900/25 bg-parchment-50 px-3 py-2 font-serif text-walnut-900 focus:border-walnut-900 focus:outline-none focus:ring-1 focus:ring-walnut-900 dark:border-gilt-500/40 dark:bg-walnut-900 dark:text-amber-200" %>
       <noscript>
         <%= f.submit t("settings.save"), class: "rounded bg-walnut-900 px-3 py-1 font-display text-xs font-medium uppercase tracking-wider text-parchment-100 dark:bg-amber-200 dark:text-walnut-900" %>
@@ -90,6 +91,7 @@
     <%= form_with model: current_user, url: settings_path, method: :patch, data: { turbo_frame: "settings_display_name" }, class: "space-y-3" do |f| %>
       <%= f.text_field :display_name,
                        maxlength: User::DISPLAY_NAME_MAX,
+                       "aria-label": t("settings.sections.display_name.title"),
                        class: "w-full rounded border border-walnut-900/25 bg-parchment-50 px-3 py-2 font-serif text-walnut-900 focus:border-walnut-900 focus:outline-none focus:ring-1 focus:ring-walnut-900 dark:border-gilt-500/40 dark:bg-walnut-900 dark:text-amber-200" %>
       <%= f.submit t("settings.save"), class: "rounded bg-walnut-900 px-3 py-1 font-display text-xs font-medium uppercase tracking-wider text-parchment-100 dark:bg-amber-200 dark:text-walnut-900" %>
     <% end %>

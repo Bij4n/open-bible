@@ -81,6 +81,10 @@ group :development, :test do
   # Stubs outgoing HTTP so service-client specs don't depend on the
   # Python embedding service running.
   gem "webmock", require: false
+
+  # Axe-core accessibility auditor wired into Capybara/Selenium so
+  # system specs can assert WCAG compliance.
+  gem "axe-core-rspec", require: false
 end
 
 group :development do

@@ -1,8 +1,14 @@
 <% book_name = I18n.locale == :es ? @book.name_es : @book.name_en %>
 <% prev_chapter = @chapter.previous %>
 <% next_chapter = @chapter.next %>
+<% debug_selection = Rails.env.development? || params[:debug] == "1" %>
 
-<article class="mx-auto max-w-3xl space-y-8">
+<article class="relative mx-auto max-w-3xl space-y-8"
+         data-controller="highlight"
+         data-highlight-translation-code-value="<%= @translation.code %>"
+         data-highlight-book-value="<%= @book.osis_code %>"
+         data-highlight-chapter-value="<%= @chapter.number %>"
+         data-highlight-debug-value="<%= debug_selection %>">
   <nav aria-label="<%= t("bible.reader.chapter_label") %>" class="flex items-center justify-between gap-4 text-sm uppercase tracking-wider">
     <% if prev_chapter %>
       <%= link_to t("bible.reader.prev_chapter"),
@@ -46,9 +52,35 @@
     </h1>
   </header>
 
-  <div class="chapter-body font-serif text-lg leading-loose text-walnut-900 dark:text-amber-200">
-    <% @verses.each_with_index do |verse, i| %><span class="verse" data-verse-id="<%= verse.id %>" data-osis-ref="<%= verse.osis_ref %>"><sup class="verse-number"><%= verse.number %></sup><%= verse.body_html.html_safe %></span><%= " " unless i == @verses.size - 1 %><% end %>
+  <div class="chapter-body font-serif text-lg leading-loose text-walnut-900 dark:text-amber-200"
+       data-highlight-target="chapter">
+    <% @verses.each_with_index do |verse, i| %><span class="verse"
+           data-verse-id="<%= verse.id %>"
+           data-osis-ref="<%= verse.osis_ref %>"
+           data-verse-text="<%= verse.body_text %>"><sup class="verse-number" data-ignore-selection><%= verse.number %></sup><%= render_verse_with_highlights(verse, @highlights || []) %></span><%= " " unless i == @verses.size - 1 %><% end %>
   </div>
+
+  <% if user_signed_in? %>
+    <div data-highlight-target="toolbar"
+         hidden
+         class="absolute z-20 flex items-center gap-1 rounded border border-walnut-900/30 bg-parchment-50 p-1 shadow-md dark:border-gilt-500/40 dark:bg-walnut-800">
+      <% Highlight::COLORS.each do |color| %>
+        <button type="button"
+                data-action="highlight#apply"
+                data-color="<%= color %>"
+                title="<%= color.capitalize %>"
+                class="h-6 w-6 rounded-full border border-walnut-900/30 dark:border-gilt-500/40 highlight-swatch-<%= color %>">
+          <span class="sr-only"><%= color.capitalize %></span>
+        </button>
+      <% end %>
+      <button type="button"
+              data-action="highlight#remove"
+              title="<%= t("bible.reader.remove_highlight", default: "Remove") %>"
+              class="h-6 rounded px-2 text-xs uppercase tracking-wider text-walnut-900 hover:bg-walnut-900 hover:text-parchment-100 dark:text-amber-200 dark:hover:bg-amber-200 dark:hover:text-walnut-900">
+        &times;
+      </button>
+    </div>
+  <% end %>
 
   <nav aria-label="<%= t("bible.reader.chapter_label") %>" class="flex items-center justify-between border-t border-walnut-900/15 pt-6 text-sm uppercase tracking-wider dark:border-gilt-500/30">
     <% if prev_chapter %>

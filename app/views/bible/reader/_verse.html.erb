@@ -6,8 +6,9 @@
     annotated in another translation. Surfaced as a small bridge badge
     so readers switching translations can find their earlier notes. %>
 <% bridged = local_assigns[:cross_translation_highlighted]&.include?(verse.number) %>
+<% chapter_opener = local_assigns[:chapter_opener] %>
 <span class="verse"
       id="<%= dom_id(verse) %>"
       data-verse-id="<%= verse.id %>"
       data-osis-ref="<%= verse.osis_ref %>"
-      data-verse-text="<%= verse.body_text %>"><sup class="verse-number" data-ignore-selection><%= verse.number %></sup><% if bridged %><sup class="cross-translation-badge ml-1 text-xs text-walnut-700/60 dark:text-amber-200/60" data-ignore-selection title="<%= t("bible.reader.cross_translation_badge_title") %>">&#9775;</sup><% end %><%= render_verse_with_highlights(verse, Array(highlights)) %></span>
+      data-verse-text="<%= verse.body_text %>"><sup class="verse-number" data-ignore-selection><%= verse.number %></sup><% if bridged %><sup class="cross-translation-badge ml-1 text-xs text-walnut-700/60 dark:text-amber-200/60" data-ignore-selection title="<%= t("bible.reader.cross_translation_badge_title") %>">&#9775;</sup><% end %><% if chapter_opener %><span class="chapter-opening"><%= render_verse_with_highlights(verse, Array(highlights)) %></span><% else %><%= render_verse_with_highlights(verse, Array(highlights)) %><% end %></span>

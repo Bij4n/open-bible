@@ -24,14 +24,17 @@
       <%= @translation.name %>
     </p>
     <h1 class="font-display text-5xl font-semibold uppercase tracking-[0.1em] text-walnut-900 dark:text-amber-200">
-      <%= book_name %> <%= @chapter.number %>
+      <span class="book-ornament" aria-hidden="true">&#10086;</span>
+      <span class="book-title-text"><%= book_name %> <%= @chapter.number %></span>
     </h1>
   </header>
 
   <div class="chapter-body font-serif text-lg leading-loose text-walnut-900 dark:text-amber-200"
        data-highlight-target="chapter">
-    <% @verses.each_with_index do |verse, i| %><%= render partial: "bible/reader/verse", locals: { verse: verse, highlights: @highlights } %><%= " " unless i == @verses.size - 1 %><% end %>
+    <% @verses.each_with_index do |verse, i| %><%= render partial: "bible/reader/verse", locals: { verse: verse, highlights: @highlights, chapter_opener: i == 0 } %><%= " " unless i == @verses.size - 1 %><% end %>
   </div>
+
+  <div class="chapter-fleuron" aria-hidden="true">&#10086;</div>
 
   <aside id="group_notes_aside"
          class="rounded border border-walnut-900/15 bg-parchment-50 p-5 dark:border-gilt-500/30 dark:bg-walnut-800 <%= "hidden" if @group_notes.empty? %>">

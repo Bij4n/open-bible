@@ -195,4 +195,22 @@
   html[data-theme="dark"] .chapter-fleuron {
     color: var(--color-gilt-400);
   }
+
+  /*
+   * Reader-only typography polish: kerning + standard ligatures (EB
+   * Garamond ships beautiful fi/fl/ff glyphs we weren't using),
+   * optimizeLegibility for browsers that gate kerning on it, slightly
+   * tighter leading than Tailwind's leading-loose (2.0 felt sparse for
+   * a serif at this size), and a max-width in `ch` so the line length
+   * stays inside the 50-75ch reading-comfort band regardless of
+   * viewport width.
+   */
+  .chapter-body {
+    font-feature-settings: "kern" 1, "liga" 1;
+    text-rendering: optimizeLegibility;
+    line-height: 1.8;
+    max-width: 70ch;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }

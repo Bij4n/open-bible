@@ -11,6 +11,10 @@ class User < ApplicationRecord
   has_many :highlights, dependent: :destroy
   has_many :notes, dependent: :destroy
 
+  has_many :memberships, dependent: :destroy
+  has_many :groups, through: :memberships
+  has_many :owned_groups, class_name: "Group", foreign_key: :owner_id, dependent: :destroy, inverse_of: :owner
+
   validates :ui_locale, inclusion: { in: UI_LOCALES }
   validates :theme,     inclusion: { in: THEMES }
   validates :display_name,

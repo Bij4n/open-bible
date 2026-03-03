@@ -45,3 +45,32 @@ en:
     sign_out: Sign out
     settings: Settings
     signed_in_as: Signed in as %{email}
+  groups:
+    title: Groups
+    mine: Your groups
+    new: New group
+    edit: Edit group
+    create: Create group
+    save: Save
+    cancel: Cancel
+    destroy: Delete group
+    created: Group created.
+    updated: Group updated.
+    destroyed: Group deleted.
+    joined: You've joined the group.
+    left: You've left the group.
+    invalid_code: No group matches that invitation code.
+    last_owner_cant_leave: You're the last owner. Hand off ownership first.
+    invitation_code: Invitation code
+    enter_code: Enter an invitation code
+    join: Join
+    leave: Leave group
+    bible: Group Bible
+    members: Members
+    role:
+      owner: Owner
+      member: Member
+    privacy:
+      private_group: Private
+      invite_only: Invite-only
+    empty: You aren't in any groups yet.

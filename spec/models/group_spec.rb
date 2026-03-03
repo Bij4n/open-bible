@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Group, type: :model do
   describe "associations" do
     it { is_expected.to belong_to(:owner).class_name("User") }
-    it { is_expected.to have_many(:memberships).dependent(:destroy) }
+    it { is_expected.to have_many(:memberships).dependent(:delete_all) }
     it { is_expected.to have_many(:members).through(:memberships).source(:user) }
   end
 

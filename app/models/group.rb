@@ -5,8 +5,13 @@ class Group < ApplicationRecord
   enum :privacy, PRIVACIES
 
   belongs_to :owner, class_name: "User"
-  has_many :memberships, dependent: :destroy
+  # delete_all (not :destroy) bypasses the at-least-one-owner callback on
+  # Membership — if the whole group is going away, there's nothing to
+  # preserve. Individual membership destroys still hit the callback.
+  has_many :memberships, dependent: :delete_all
   has_many :members, through: :memberships, source: :user
+
+  has_many :note_shares, as: :shareable, dependent: :destroy
 
   validates :name, presence: true, length: { maximum: 100 }
   validates :description, length: { maximum: 500 }, allow_blank: true

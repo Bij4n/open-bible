@@ -1,0 +1,70 @@
+<% content_for :title, @group.name %>
+<% is_owner = @group.owner_id == current_user.id %>
+
+<article class="mx-auto max-w-3xl space-y-8">
+  <header class="space-y-2 border-b border-walnut-900/15 pb-6 dark:border-gilt-500/30">
+    <p class="text-sm uppercase tracking-[0.3em] text-walnut-700/70 dark:text-amber-200/60">
+      <%= t("groups.privacy.#{@group.privacy}") %>
+    </p>
+    <h1 class="font-display text-4xl font-semibold uppercase tracking-[0.1em] text-walnut-900 dark:text-amber-200">
+      <%= @group.name %>
+    </h1>
+    <% if @group.description.present? %>
+      <p class="font-serif text-walnut-700 dark:text-amber-300">
+        <%= @group.description %>
+      </p>
+    <% end %>
+  </header>
+
+  <div class="flex flex-wrap items-center gap-3">
+    <%= link_to t("groups.bible"),
+                group_bible_chapter_path(@group, translation: "kjv", book: "gen", chapter: 1),
+                class: "rounded bg-walnut-900 px-4 py-2 font-display text-sm font-medium uppercase tracking-wider text-parchment-100 hover:bg-walnut-800 dark:bg-amber-200 dark:text-walnut-900 dark:hover:bg-amber-100" %>
+    <% if is_owner %>
+      <%= link_to t("groups.edit"), edit_group_path(@group),
+                  class: "rounded border border-walnut-900/30 px-4 py-2 font-display text-sm uppercase tracking-wider text-walnut-900 hover:bg-walnut-900 hover:text-parchment-100 dark:border-gilt-500/40 dark:text-amber-200" %>
+      <%= button_to t("groups.destroy"),
+                    group_path(@group),
+                    method: :delete,
+                    form_class: "inline",
+                    data: { turbo_confirm: t("groups.destroy") + "?" },
+                    class: "rounded border border-rubric-500/50 px-4 py-2 font-display text-sm uppercase tracking-wider text-rubric-600 hover:bg-rubric-500 hover:text-parchment-100" %>
+    <% else %>
+      <%= button_to t("groups.leave"),
+                    leave_group_path(@group),
+                    method: :delete,
+                    form_class: "inline",
+                    data: { turbo_confirm: t("groups.leave") + "?" },
+                    class: "rounded border border-walnut-900/30 px-4 py-2 font-display text-sm uppercase tracking-wider text-walnut-900 dark:border-gilt-500/40 dark:text-amber-200" %>
+    <% end %>
+  </div>
+
+  <% if is_owner && @group.invitation_code.present? %>
+    <section class="rounded border border-walnut-900/15 bg-parchment-50 p-5 dark:border-gilt-500/30 dark:bg-walnut-800">
+      <h2 class="font-display text-sm uppercase tracking-wider text-walnut-900 dark:text-amber-200">
+        <%= t("groups.invitation_code") %>
+      </h2>
+      <p class="mt-2 font-mono text-2xl text-walnut-900 dark:text-amber-200">
+        <%= @group.invitation_code %>
+      </p>
+    </section>
+  <% end %>
+
+  <section>
+    <h2 class="font-display text-lg uppercase tracking-wider text-walnut-900 dark:text-amber-200">
+      <%= t("groups.members") %>
+    </h2>
+    <ul class="mt-3 space-y-2">
+      <% @memberships.each do |m| %>
+        <li class="flex items-center justify-between rounded border border-walnut-900/10 bg-parchment-50 px-4 py-2 dark:border-gilt-500/20 dark:bg-walnut-800">
+          <span class="font-serif text-walnut-900 dark:text-amber-200">
+            <%= m.user.display_name.presence || m.user.email %>
+          </span>
+          <span class="text-xs uppercase tracking-wider text-walnut-700/70 dark:text-amber-200/60">
+            <%= t("groups.role.#{m.role}") %>
+          </span>
+        </li>
+      <% end %>
+    </ul>
+  </section>
+</article>

@@ -5,7 +5,23 @@ Rails.application.routes.draw do
   patch "/settings", to: "settings#update"
 
   resources :highlights, only: [ :create, :update, :destroy ]
-  resources :notes,      only: [ :create, :update, :destroy, :show ]
+  resources :notes,      only: [ :create, :update, :destroy, :show, :edit ]
+
+  resources :note_shares, only: [ :create, :destroy ]
+
+  resources :groups do
+    collection do
+      post :join
+    end
+    member do
+      delete :leave
+    end
+    resources :memberships, only: [ :create, :destroy ]
+    get "bible/:translation/:book/:chapter",
+        to: "groups/bible#show",
+        as: :bible_chapter,
+        constraints: { chapter: /\d+/ }
+  end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

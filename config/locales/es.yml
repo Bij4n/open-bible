@@ -45,3 +45,32 @@ es:
     sign_out: Cerrar sesión
     settings: Ajustes
     signed_in_as: Conectado como %{email}
+  groups:
+    title: Grupos
+    mine: Tus grupos
+    new: Nuevo grupo
+    edit: Editar grupo
+    create: Crear grupo
+    save: Guardar
+    cancel: Cancelar
+    destroy: Eliminar grupo
+    created: Grupo creado.
+    updated: Grupo actualizado.
+    destroyed: Grupo eliminado.
+    joined: Te has unido al grupo.
+    left: Has salido del grupo.
+    invalid_code: Ningún grupo coincide con ese código de invitación.
+    last_owner_cant_leave: Eres el último propietario. Transfiere la propiedad antes de salir.
+    invitation_code: Código de invitación
+    enter_code: Introduce un código de invitación
+    join: Unirse
+    leave: Salir del grupo
+    bible: Biblia del grupo
+    members: Miembros
+    role:
+      owner: Propietario
+      member: Miembro
+    privacy:
+      private_group: Privado
+      invite_only: Solo por invitación
+    empty: Aún no estás en ningún grupo.

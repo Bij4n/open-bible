@@ -15,6 +15,9 @@ class User < ApplicationRecord
   has_many :groups, through: :memberships
   has_many :owned_groups, class_name: "Group", foreign_key: :owner_id, dependent: :destroy, inverse_of: :owner
 
+  # Polymorphic note shares keyed on this user (shareable).
+  has_many :note_shares, as: :shareable, dependent: :destroy
+
   validates :ui_locale, inclusion: { in: UI_LOCALES }
   validates :theme,     inclusion: { in: THEMES }
   validates :display_name,

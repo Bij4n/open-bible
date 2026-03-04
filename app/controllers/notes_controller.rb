@@ -1,6 +1,8 @@
 class NotesController < ApplicationController
   before_action :authenticate_user!
-  before_action :load_note, only: %i[show update destroy]
+  before_action :load_note, only: %i[show edit update destroy]
+
+  ACTIVE_VISIBILITIES = %w[private_note shared_users shared_groups].freeze
 
   def show
     respond_to do |format|
@@ -9,48 +11,36 @@ class NotesController < ApplicationController
     end
   end
 
+  def edit
+    respond_to do |format|
+      format.html         { render :form }
+      format.turbo_stream { render :form }
+    end
+  end
+
   def create
     highlight_ids = Array(params.dig(:note, :highlight_ids)).map(&:to_i).reject(&:zero?)
-
-    # Scope highlight lookup to the current user so cross-user references
-    # 404 instead of silently attaching a note to someone else's record.
     highlights = current_user.highlights.where(id: highlight_ids)
-    if highlights.size != highlight_ids.size
-      return head :not_found
-    end
+    return head :not_found unless highlights.size == highlight_ids.size
 
-    note = current_user.notes.build(note_params)
-    note.visibility = :private_note # Sprint 3 scope — other values stubbed
+    note = current_user.notes.build(body_param)
+    note.visibility = resolved_visibility
 
     if note.save
       highlights.each { |h| note.highlight_notes.create!(highlight: h) }
-      respond_to do |format|
-        format.turbo_stream { render turbo_stream: "", status: :created }
-        format.html         { head :created }
-        format.json         { render json: note_payload(note), status: :created }
-      end
+      sync_shares(note)
+      respond_to_change(note, :created)
     else
-      respond_to do |format|
-        format.turbo_stream { render turbo_stream: "", status: :unprocessable_content }
-        format.html         { head :unprocessable_content }
-        format.json         { render json: { errors: note.errors }, status: :unprocessable_content }
-      end
+      respond_to_failure(note)
     end
   end
 
   def update
-    if @note.update(note_params)
-      respond_to do |format|
-        format.turbo_stream { render turbo_stream: "", status: :ok }
-        format.html         { head :ok }
-        format.json         { render json: note_payload(@note) }
-      end
+    if @note.update(body_param.merge(visibility: resolved_visibility))
+      sync_shares(@note)
+      respond_to_change(@note, :ok)
     else
-      respond_to do |format|
-        format.turbo_stream { render turbo_stream: "", status: :unprocessable_content }
-        format.html         { head :unprocessable_content }
-        format.json         { render json: { errors: @note.errors }, status: :unprocessable_content }
-      end
+      respond_to_failure(@note)
     end
   end
 
@@ -71,13 +61,69 @@ class NotesController < ApplicationController
     head :not_found
   end
 
-  def note_params
-    # Visibility is stripped in Sprint 3 — always private. Sprint 4 will
-    # move this into permit once sharing UX lands.
+  def body_param
     params.require(:note).permit(:body)
   end
 
+  # public_note is accepted in the form (Sprint 7 makes it real), but
+  # the Sprint 4 UI labels it "Coming in Sprint 7". If the client sends
+  # an unknown visibility, fall back to private_note.
+  def resolved_visibility
+    v = params.dig(:note, :visibility).to_s
+    Note.visibilities.key?(v) ? v : "private_note"
+  end
+
+  # Reconcile note_shares to match the submitted user_ids / group_ids.
+  # Empty arrays mean "unshare from that target type."
+  def sync_shares(note)
+    user_ids  = sanitized_ids(params.dig(:note, :user_ids))
+    group_ids = sanitized_ids(params.dig(:note, :group_ids))
+
+    # Only keep shares the current user has standing to share with.
+    # Sharing with a group requires the author to be a member; sharing
+    # with a user is unrestricted (it's a private-to-you invitation).
+    allowed_group_ids = current_user.groups.where(id: group_ids).ids
+
+    desired = user_ids.map { |id| [ "User",  id ] } +
+              allowed_group_ids.map { |id| [ "Group", id ] }
+
+    existing = note.note_shares.pluck(:shareable_type, :shareable_id)
+
+    (desired - existing).each do |type, id|
+      note.note_shares.create!(shareable_type: type, shareable_id: id)
+    end
+    (existing - desired).each do |type, id|
+      note.note_shares.where(shareable_type: type, shareable_id: id).destroy_all
+    end
+  end
+
+  def sanitized_ids(raw)
+    Array(raw).map(&:to_i).reject(&:zero?)
+  end
+
+  def respond_to_change(note, status)
+    respond_to do |format|
+      format.turbo_stream { render turbo_stream: "", status: status }
+      format.html         { head status }
+      format.json         { render json: note_payload(note), status: status }
+    end
+  end
+
+  def respond_to_failure(note)
+    respond_to do |format|
+      format.turbo_stream { render turbo_stream: "", status: :unprocessable_content }
+      format.html         { head :unprocessable_content }
+      format.json         { render json: { errors: note.errors }, status: :unprocessable_content }
+    end
+  end
+
   def note_payload(note)
-    { id: note.id, body: note.body.to_s, visibility: note.visibility }
+    {
+      id: note.id,
+      body: note.body.to_s,
+      visibility: note.visibility,
+      user_ids: note.shared_users.ids,
+      group_ids: note.shared_groups.ids
+    }
   end
 end

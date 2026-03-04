@@ -60,11 +60,32 @@
           <span class="font-serif text-walnut-900 dark:text-amber-200">
             <%= m.user.display_name.presence || m.user.email %>
           </span>
-          <span class="text-xs uppercase tracking-wider text-walnut-700/70 dark:text-amber-200/60">
-            <%= t("groups.role.#{m.role}") %>
-          </span>
+          <div class="flex items-center gap-3">
+            <span class="text-xs uppercase tracking-wider text-walnut-700/70 dark:text-amber-200/60">
+              <%= t("groups.role.#{m.role}") %>
+            </span>
+            <% if is_owner && m.user_id != current_user.id %>
+              <%= button_to t("memberships.remove"),
+                            group_membership_path(@group, m),
+                            method: :delete,
+                            form_class: "inline",
+                            data: { turbo_confirm: t("memberships.remove") + "?" },
+                            class: "rounded border border-rubric-500/40 px-2 py-0.5 text-xs uppercase tracking-wider text-rubric-600 hover:bg-rubric-500 hover:text-parchment-100" %>
+            <% end %>
+          </div>
         </li>
       <% end %>
     </ul>
+
+    <% if is_owner %>
+      <%= form_with url: group_memberships_path(@group), method: :post, class: "mt-4 flex gap-2" do |f| %>
+        <%= f.email_field :email,
+                          required: true,
+                          placeholder: t("memberships.email_placeholder"),
+                          class: "flex-1 rounded border border-walnut-900/25 bg-parchment-50 px-3 py-2 font-serif text-walnut-900 focus:border-walnut-900 focus:outline-none dark:border-gilt-500/40 dark:bg-walnut-900 dark:text-amber-200" %>
+        <%= f.submit t("memberships.add_member"),
+                     class: "rounded bg-walnut-900 px-4 py-2 font-display text-sm font-medium uppercase tracking-wider text-parchment-100 hover:bg-walnut-800 dark:bg-amber-200 dark:text-walnut-900 dark:hover:bg-amber-100" %>
+      <% end %>
+    <% end %>
   </section>
 </article>

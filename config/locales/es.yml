@@ -74,3 +74,11 @@ es:
       private_group: Privado
       invite_only: Solo por invitación
     empty: Aún no estás en ningún grupo.
+  memberships:
+    added: "Se añadió %{email} al grupo."
+    removed: Miembro eliminado.
+    user_not_found: "No hay cuenta de Open Bible para %{email}."
+    cannot_remove_last_owner: No se puede eliminar al último propietario.
+    add_member: Añadir miembro
+    remove: Eliminar
+    email_placeholder: miembro@ejemplo.com

@@ -74,3 +74,11 @@ en:
       private_group: Private
       invite_only: Invite-only
     empty: You aren't in any groups yet.
+  memberships:
+    added: "Added %{email} to the group."
+    removed: Member removed.
+    user_not_found: "No Open Bible account for %{email}."
+    cannot_remove_last_owner: Can't remove the last owner.
+    add_member: Add member
+    remove: Remove
+    email_placeholder: member@example.com

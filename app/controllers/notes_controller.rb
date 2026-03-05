@@ -14,8 +14,8 @@ class NotesController < ApplicationController
   def edit
     @highlight_ids = @note.highlights.ids
     respond_to do |format|
-      format.html         { render :form, locals: { note: @note, highlight_ids: @highlight_ids } }
-      format.turbo_stream { render :form, locals: { note: @note, highlight_ids: @highlight_ids } }
+      format.html         { render partial: "form", locals: { note: @note, highlight_ids: @highlight_ids } }
+      format.turbo_stream { render partial: "form", locals: { note: @note, highlight_ids: @highlight_ids } }
     end
   end
 
@@ -28,7 +28,7 @@ class NotesController < ApplicationController
 
     note = existing || current_user.notes.build(visibility: "private_note")
     ids  = existing ? existing.highlights.ids : current_user.highlights.where(id: highlight_ids).ids
-    render :form, locals: { note: note, highlight_ids: ids }
+    render partial: "form", locals: { note: note, highlight_ids: ids }
   end
 
   def create

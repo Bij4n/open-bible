@@ -103,4 +103,17 @@
   .highlight-swatch-sage     { background-color: #b9d4b1; }
   .highlight-swatch-lavender { background-color: #c6bfe0; }
   .highlight-swatch-sky      { background-color: #a7c6d4; }
+
+  /*
+   * Slide-in note panel. Body gains a data-note-panel-open flag when a
+   * panel is mounted; CSS handles the transform. Mobile-first —
+   * full-width up to the sm breakpoint (sm:max-w-md in the markup).
+   */
+  body[data-note-panel-open="true"] #note-panel-container {
+    transform: translateX(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #note-panel-container { transition: none; }
+  }
 }

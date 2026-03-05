@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   patch "/settings", to: "settings#update"
 
   resources :highlights, only: [ :create, :update, :destroy ]
-  resources :notes,      only: [ :create, :update, :destroy, :show, :edit ]
+  resources :notes,      only: [ :new, :create, :update, :destroy, :show, :edit ]
 
   resources :note_shares, only: [ :create, :destroy ]
 

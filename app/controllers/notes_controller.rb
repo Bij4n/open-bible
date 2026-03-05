@@ -12,10 +12,23 @@ class NotesController < ApplicationController
   end
 
   def edit
+    @highlight_ids = @note.highlights.ids
     respond_to do |format|
-      format.html         { render :form }
-      format.turbo_stream { render :form }
+      format.html         { render :form, locals: { note: @note, highlight_ids: @highlight_ids } }
+      format.turbo_stream { render :form, locals: { note: @note, highlight_ids: @highlight_ids } }
     end
+  end
+
+  def new
+    highlight_ids = Array(params[:highlight_ids]).map(&:to_i).reject(&:zero?)
+    existing = Note.joins(:highlights)
+                   .where(user_id: current_user.id, highlights: { id: highlight_ids })
+                   .distinct
+                   .first
+
+    note = existing || current_user.notes.build(visibility: "private_note")
+    ids  = existing ? existing.highlights.ids : current_user.highlights.where(id: highlight_ids).ids
+    render :form, locals: { note: note, highlight_ids: ids }
   end
 
   def create
@@ -76,7 +89,8 @@ class NotesController < ApplicationController
   # Reconcile note_shares to match the submitted user_ids / group_ids.
   # Empty arrays mean "unshare from that target type."
   def sync_shares(note)
-    user_ids  = sanitized_ids(params.dig(:note, :user_ids))
+    user_ids  = sanitized_ids(params.dig(:note, :user_ids)) +
+                ids_from_emails(params.dig(:note, :user_emails))
     group_ids = sanitized_ids(params.dig(:note, :group_ids))
 
     # Only keep shares the current user has standing to share with.
@@ -99,6 +113,18 @@ class NotesController < ApplicationController
 
   def sanitized_ids(raw)
     Array(raw).map(&:to_i).reject(&:zero?)
+  end
+
+  # Accepts a comma- or whitespace-separated list of emails and returns
+  # matching User ids. Unknown emails are silently dropped — the UI can
+  # surface "not found" hints in a later sprint once we have autocomplete.
+  def ids_from_emails(raw)
+    return [] if raw.blank?
+
+    emails = raw.to_s.downcase.split(/[\s,]+/).reject(&:blank?)
+    return [] if emails.empty?
+
+    User.where("lower(email) IN (?)", emails).ids
   end
 
   def respond_to_change(note, status)

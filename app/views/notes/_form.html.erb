@@ -1,0 +1,97 @@
+<% note = local_assigns.fetch(:note) %>
+<% highlight_ids = local_assigns.fetch(:highlight_ids, []) %>
+<% existing = note.persisted? %>
+
+<%= turbo_frame_tag "note_panel" do %>
+  <section class="note-panel"
+           data-controller="note-panel"
+           data-note-panel-open-value="true">
+    <header class="flex items-center justify-between border-b border-walnut-900/15 pb-3 dark:border-gilt-500/30">
+      <h2 class="font-display text-lg uppercase tracking-[0.12em] text-walnut-900 dark:text-amber-200">
+        <% citation = note.highlights.map(&:osis_ref).first || "New note" %>
+        <%= existing ? citation : (highlight_ids.any? ? "Note" : "New note") %>
+      </h2>
+      <button type="button"
+              data-action="note-panel#close"
+              aria-label="Close"
+              class="text-xl text-walnut-700 hover:text-rubric-500 dark:text-amber-300 dark:hover:text-gilt-400">
+        &times;
+      </button>
+    </header>
+
+    <%= form_with model: note,
+                  url: existing ? note_path(note) : notes_path,
+                  method: existing ? :patch : :post,
+                  data: { turbo_frame: "note_panel", action: "keydown->note-panel#keydown" },
+                  class: "mt-4 space-y-4" do |f| %>
+
+      <% highlight_ids.each do |id| %>
+        <%= hidden_field_tag "note[highlight_ids][]", id %>
+      <% end %>
+
+      <div>
+        <%= f.rich_text_area :body,
+            class: "w-full min-h-40 rounded border border-walnut-900/25 bg-parchment-50 p-2 font-serif text-walnut-900 focus:border-walnut-900 focus:outline-none dark:border-gilt-500/40 dark:bg-walnut-900 dark:text-amber-200",
+            autofocus: true %>
+      </div>
+
+      <fieldset class="space-y-2 font-serif text-sm">
+        <legend class="font-display text-xs uppercase tracking-wider text-walnut-900/80 dark:text-amber-200/80">
+          <%= t("settings.sections.theme.title", default: "Visibility") %>
+        </legend>
+
+        <% NotesController::ACTIVE_VISIBILITIES.each do |v| %>
+          <label class="flex items-center gap-2">
+            <%= f.radio_button :visibility, v, checked: (note.visibility || "private_note") == v %>
+            <%= t("notes.visibility.#{v}", default: v.humanize) %>
+          </label>
+        <% end %>
+        <label class="flex items-center gap-2 opacity-50" title="<%= t("notes.public_coming_soon") %>">
+          <%= f.radio_button :visibility, "public_note", disabled: true %>
+          <%= t("notes.visibility.public_note") %>
+          <span class="ml-1 text-xs italic">(<%= t("notes.public_coming_soon") %>)</span>
+        </label>
+      </fieldset>
+
+      <div data-note-panel-target="shareSection" data-visibility-dependent="shared_users">
+        <label class="mb-1 block font-display text-xs uppercase tracking-wider text-walnut-900/80 dark:text-amber-200/80">
+          <%= t("notes.share_with_users") %>
+        </label>
+        <%# Sprint 4 uses a simple comma-separated email list. Sprint 5 will upgrade to an autocomplete. %>
+        <input type="text"
+               name="note[user_emails]"
+               value="<%= note.shared_users.map(&:email).join(", ") %>"
+               placeholder="<%= t("notes.emails_placeholder") %>"
+               autocomplete="off"
+               class="w-full rounded border border-walnut-900/25 bg-parchment-50 px-3 py-2 font-serif text-walnut-900 dark:border-gilt-500/40 dark:bg-walnut-900 dark:text-amber-200">
+      </div>
+
+      <div data-note-panel-target="shareSection" data-visibility-dependent="shared_groups">
+        <label class="mb-1 block font-display text-xs uppercase tracking-wider text-walnut-900/80 dark:text-amber-200/80">
+          <%= t("notes.share_with_groups") %>
+        </label>
+        <div class="space-y-1 font-serif text-sm">
+          <% current_user.groups.distinct.order(:name).each do |g| %>
+            <label class="flex items-center gap-2">
+              <%= check_box_tag "note[group_ids][]", g.id, note.shared_groups.include?(g) %>
+              <%= g.name %>
+            </label>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-3 pt-2">
+        <% if existing %>
+          <%= button_to t("notes.delete"),
+                        note_path(note),
+                        method: :delete,
+                        form_class: "inline",
+                        data: { turbo_confirm: t("notes.confirm_delete"), turbo_frame: "note_panel" },
+                        class: "rounded border border-rubric-500/50 px-3 py-1 font-display text-xs uppercase tracking-wider text-rubric-600 hover:bg-rubric-500 hover:text-parchment-100" %>
+        <% end %>
+        <%= f.submit t("notes.save"),
+                     class: "rounded bg-walnut-900 px-4 py-2 font-display text-sm font-medium uppercase tracking-wider text-parchment-100 hover:bg-walnut-800 dark:bg-amber-200 dark:text-walnut-900 dark:hover:bg-amber-100" %>
+      </div>
+    <% end %>
+  </section>
+<% end %>

@@ -74,6 +74,12 @@
         </button>
       <% end %>
       <button type="button"
+              data-action="highlight#note"
+              title="<%= t("notes.save", default: "Note") %>"
+              class="h-6 rounded px-2 text-xs uppercase tracking-wider text-walnut-900 hover:bg-walnut-900 hover:text-parchment-100 dark:text-amber-200 dark:hover:bg-amber-200 dark:hover:text-walnut-900">
+        &#9998;
+      </button>
+      <button type="button"
               data-action="highlight#remove"
               title="<%= t("bible.reader.remove_highlight", default: "Remove") %>"
               class="h-6 rounded px-2 text-xs uppercase tracking-wider text-walnut-900 hover:bg-walnut-900 hover:text-parchment-100 dark:text-amber-200 dark:hover:bg-amber-200 dark:hover:text-walnut-900">

@@ -54,10 +54,7 @@
 
   <div class="chapter-body font-serif text-lg leading-loose text-walnut-900 dark:text-amber-200"
        data-highlight-target="chapter">
-    <% @verses.each_with_index do |verse, i| %><span class="verse"
-           data-verse-id="<%= verse.id %>"
-           data-osis-ref="<%= verse.osis_ref %>"
-           data-verse-text="<%= verse.body_text %>"><sup class="verse-number" data-ignore-selection><%= verse.number %></sup><%= render_verse_with_highlights(verse, @highlights || []) %></span><%= " " unless i == @verses.size - 1 %><% end %>
+    <% @verses.each_with_index do |verse, i| %><%= render partial: "bible/reader/verse", locals: { verse: verse, highlights: @highlights || [] } %><%= " " unless i == @verses.size - 1 %><% end %>
   </div>
 
   <% if user_signed_in? %>

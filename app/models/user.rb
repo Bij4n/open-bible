@@ -11,6 +11,7 @@ class User < ApplicationRecord
   has_many :highlights, dependent: :destroy
   has_many :notes, dependent: :destroy
   has_many :comments, dependent: :destroy
+  has_many :upvotes, dependent: :destroy
 
   has_many :memberships, dependent: :destroy
   has_many :groups, through: :memberships

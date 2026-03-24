@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_19_045321) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_19_045840) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -167,6 +167,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_19_045321) do
     t.index "lower((code)::text)", name: "index_translations_on_lower_code", unique: true
   end
 
+  create_table "upvotes", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "note_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["note_id"], name: "index_upvotes_on_note_id"
+    t.index ["user_id", "note_id"], name: "index_upvotes_on_user_id_and_note_id", unique: true
+    t.index ["user_id"], name: "index_upvotes_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.boolean "admin", default: false, null: false
     t.datetime "created_at", null: false
@@ -219,6 +229,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_19_045321) do
   add_foreign_key "memberships", "users"
   add_foreign_key "note_shares", "notes"
   add_foreign_key "notes", "users"
+  add_foreign_key "upvotes", "notes"
+  add_foreign_key "upvotes", "users"
   add_foreign_key "users", "translations", column: "default_translation_id"
   add_foreign_key "verses", "chapters"
 end

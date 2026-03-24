@@ -9,6 +9,12 @@ class ApplicationController < ActionController::Base
 
   helper_method :resolved_theme
 
+  # Admin gate for /admin/* controllers. Non-admins get 404 rather than
+  # 403 so the existence of admin routes isn't advertised.
+  def ensure_admin
+    head :not_found unless current_user&.admin?
+  end
+
   # Returns "light" / "dark" when the signed-in user has a concrete
   # preference, nil otherwise. Used by the layout to set data-theme on the
   # server so first paint doesn't flash the wrong palette. When nil, the

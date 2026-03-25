@@ -48,4 +48,20 @@ Rails.application.routes.draw do
       to: "public/bible#show",
       as: :public_bible_chapter,
       constraints: { chapter: /\d+/ }
+
+  namespace :admin do
+    resources :notes, only: [ :index, :show ] do
+      member do
+        patch :feature
+        patch :unfeature
+        patch :hide
+        patch :unhide
+      end
+    end
+    resources :flags, only: [ :index ] do
+      member do
+        patch :resolve
+      end
+    end
+  end
 end

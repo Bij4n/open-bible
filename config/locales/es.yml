@@ -122,3 +122,40 @@ es:
     flag_reason_prompt: "¿Por qué reportas esto? (motivo breve)"
     flag_submitted: "Reporte enviado. Gracias por ayudar a mantener una comunidad constructiva."
     flag_failed: No se pudo enviar el reporte. Inténtalo más tarde.
+  admin:
+    title: Admin
+    nav:
+      notes: Notas
+      flags: Reportes
+    filters:
+      all: Todas
+      flagged: Reportadas
+      featured: Destacadas
+      hidden: Ocultas
+    notes:
+      title: Moderación de notas
+      header_author: Autor
+      header_preview: Vista previa
+      header_upvotes: Votos
+      header_flags: Reportes
+      header_status: Estado
+      header_actions: Acciones
+      feature: Destacar
+      unfeature: Quitar destacado
+      hide: Ocultar
+      unhide: Restaurar
+      featured_flash: Nota destacada.
+      unfeatured_flash: Nota sin destacar.
+      hidden_flash: Nota oculta de la vista pública.
+      unhidden_flash: Nota restaurada a la vista pública.
+      empty: No hay notas con ese filtro.
+    flags:
+      title: Revisión de reportes
+      header_reporter: Reportante
+      header_target: Objetivo
+      header_reason: Motivo
+      header_details: Detalles
+      header_created: Cuándo
+      resolve: Resolver
+      resolved_flash: Reporte resuelto.
+      empty: No hay reportes pendientes.

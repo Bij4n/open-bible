@@ -52,6 +52,9 @@
           </button>
 
           <% if user_signed_in? %>
+            <% if current_user.admin? %>
+              <%= link_to t("admin.title"), admin_notes_path, class: "hover:text-rubric-500 dark:hover:text-gilt-400" %>
+            <% end %>
             <%= link_to t("auth.settings"), settings_path, class: "hover:text-rubric-500 dark:hover:text-gilt-400" %>
             <%= button_to t("auth.sign_out"), destroy_user_session_path, method: :delete, class: "hover:text-rubric-500 dark:hover:text-gilt-400" %>
           <% else %>

@@ -122,3 +122,40 @@ en:
     flag_reason_prompt: "Why are you flagging this? (brief reason)"
     flag_submitted: "Flag submitted. Thank you for helping keep the community constructive."
     flag_failed: Couldn't submit the flag. Try again later.
+  admin:
+    title: Admin
+    nav:
+      notes: Notes
+      flags: Flags
+    filters:
+      all: All
+      flagged: Flagged
+      featured: Featured
+      hidden: Hidden
+    notes:
+      title: Note moderation
+      header_author: Author
+      header_preview: Preview
+      header_upvotes: Upvotes
+      header_flags: Flags
+      header_status: Status
+      header_actions: Actions
+      feature: Feature
+      unfeature: Unfeature
+      hide: Hide
+      unhide: Unhide
+      featured_flash: Note featured.
+      unfeatured_flash: Note unfeatured.
+      hidden_flash: Note hidden from public view.
+      unhidden_flash: Note restored to public view.
+      empty: No notes matching this filter.
+    flags:
+      title: Flag review
+      header_reporter: Reporter
+      header_target: Target
+      header_reason: Reason
+      header_details: Details
+      header_created: When
+      resolve: Resolve
+      resolved_flash: Flag resolved.
+      empty: No unresolved flags.

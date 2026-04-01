@@ -51,6 +51,8 @@
             </span>
           </button>
 
+          <%= link_to t("search.submit"), search_path, class: "hover:text-rubric-500 dark:hover:text-gilt-400" %>
+
           <% if user_signed_in? %>
             <% if current_user.admin? %>
               <%= link_to t("admin.title"), admin_notes_path, class: "hover:text-rubric-500 dark:hover:text-gilt-400" %>

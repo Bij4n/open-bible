@@ -1,0 +1,15 @@
+<li class="rounded border border-walnut-900/15 bg-parchment-50 p-3 dark:border-gilt-500/30 dark:bg-walnut-800">
+  <p class="text-xs uppercase tracking-[0.18em] text-walnut-700/70 dark:text-amber-200/60">
+    <%= link_to verse_citation(verse),
+                public_bible_chapter_path(translation: verse.chapter.book.translation.code.downcase,
+                                          book: verse.chapter.book.osis_code.downcase,
+                                          chapter: verse.chapter.number),
+                class: "hover:text-rubric-500 dark:hover:text-gilt-400" %>
+  </p>
+  <p class="mt-1 font-serif text-walnut-900 dark:text-amber-200">
+    <%# pg_search_highlight is safe here — body_text is plain, ts_headline
+        wraps matched terms in <mark>. Anywhere we concat HTML we'd
+        want to escape; here we opt into the pre-wrapped output. %>
+    <%= verse.pg_search_highlight.html_safe %>
+  </p>
+</li>

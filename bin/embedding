@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# Launch the Python embedding service. Creates a local venv and
+# installs requirements on first run; subsequent runs are fast.
+# Set EMBEDDING_SERVICE_SKIP=1 to no-op (useful when working on
+# non-search features and the sentence-transformers model weights
+# aren't downloaded yet).
+set -eu
+
+if [ "${EMBEDDING_SERVICE_SKIP:-0}" = "1" ]; then
+  echo "embedding: EMBEDDING_SERVICE_SKIP=1, not starting"
+  exec sleep infinity
+fi
+
+SERVICE_DIR="$(cd "$(dirname "$0")/../services/embedding-service" && pwd)"
+cd "$SERVICE_DIR"
+
+if [ ! -d .venv ]; then
+  echo "embedding: creating virtualenv in $SERVICE_DIR/.venv"
+  python3 -m venv .venv
+fi
+
+# shellcheck source=/dev/null
+. .venv/bin/activate
+
+if [ ! -f .venv/.deps-installed ] || [ requirements.txt -nt .venv/.deps-installed ]; then
+  echo "embedding: installing requirements"
+  pip install --quiet --upgrade pip
+  pip install --quiet -r requirements.txt
+  touch .venv/.deps-installed
+fi
+
+export EMBEDDING_SERVICE_RELOAD="${EMBEDDING_SERVICE_RELOAD:-true}"
+exec python run.py

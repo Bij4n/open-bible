@@ -83,6 +83,23 @@ RSpec.describe "bible:import rake task for RV1909" do
     expect(john3.verse_count).to eq(4)
   end
 
+  it "mirrors red-letter ranges from KJV when KJV is already imported" do
+    # Seed a fully-red KJV John 3:16 so the import hook can mirror it.
+    kjv = create(:translation, :kjv)
+    kjv_john = create(:book, :john, translation: kjv)
+    kjv_chapter = create(:chapter, book: kjv_john, number: 3)
+    en_body = "For God so loved the world."
+    create(:verse, chapter: kjv_chapter, number: 16,
+                   body_text: en_body, body_html: en_body,
+                   red_letter_ranges: [ [ 0, en_body.length ] ],
+                   osis_ref: "Bible.KJV.John.3.16")
+
+    Rake::Task["bible:import"].invoke("rv1909_mini")
+
+    es_verse = Verse.find_by!(osis_ref: "Bible.RV1909_MINI.John.3.16")
+    expect(es_verse.red_letter_ranges).to eq([ [ 0, es_verse.body_text.length ] ])
+  end
+
   it "is idempotent on re-run" do
     Rake::Task["bible:import"].invoke("rv1909_mini")
     expect(Verse.where("osis_ref LIKE 'Bible.RV1909_MINI.%'").count).to eq(9)

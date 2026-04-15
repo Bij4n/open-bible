@@ -110,4 +110,33 @@ RSpec.describe "Bible::Reader", type: :request do
       expect(response.body).to include(%(value="/bible/rv1909/john/3"))
     end
   end
+
+  describe "cross-translation highlight badge" do
+    let!(:rv1909) { create(:translation, code: "RV1909", name: "Reina-Valera 1909", language: "es") }
+    let!(:rv_book) do
+      create(:book, osis_code: "John", translation: rv1909,
+                    name_en: "John", name_es: "Juan", position: 43, testament: :new)
+    end
+    let!(:rv_chapter) { create(:chapter, book: rv_book, number: 3) }
+    let!(:rv_verse) do
+      create(:verse, chapter: rv_chapter, number: 16,
+                     body_text: "Porque de tal manera amó Dios al mundo",
+                     body_html: "Porque de tal manera amó Dios al mundo",
+                     osis_ref: "Bible.RV1909.John.3.16")
+    end
+
+    it "badges verses the current user highlighted in another translation" do
+      current = User.last
+      current.highlights.create!(translation: translation,
+                                 osis_ref: "Bible.KJV.John.3.16", color: "gold")
+
+      get "/bible/rv1909/john/3"
+      expect(response.body).to include("cross-translation-badge")
+    end
+
+    it "does not badge verses with no cross-translation highlights" do
+      get "/bible/rv1909/john/3"
+      expect(response.body).not_to include("cross-translation-badge")
+    end
+  end
 end

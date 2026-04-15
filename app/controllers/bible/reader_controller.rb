@@ -38,6 +38,7 @@ module Bible
       @chapter     = @book.chapters.find_by!(number: params[:chapter].to_i)
       @verses      = @chapter.verses.order(:number)
       @highlights  = load_highlights_for_chapter
+      @cross_translation_highlighted_verse_numbers = load_cross_translation_highlight_verse_numbers
     end
 
     private
@@ -55,6 +56,31 @@ module Bible
 
     def resolved_default_translation_code
       user_signed_in? && current_user.default_translation&.code || "KJV"
+    end
+
+    # Returns the Set of verse numbers in the current chapter that have
+    # at least one highlight from a different translation. Used by the
+    # verse partial to render a bridge badge.
+    def load_cross_translation_highlight_verse_numbers
+      return Set.new unless user_signed_in?
+
+      cross = current_user.highlights.from_other_translations_in_chapter(
+        translation_code: @translation.code,
+        book:             @book.osis_code,
+        chapter:          @chapter.number
+      )
+
+      numbers = Set.new
+      cross.each do |h|
+        h.parsed_ref.verse_osis_refs.each do |ref|
+          numbers << ref.split(".").last.to_i
+        end
+      rescue OsisRef::ParseError
+        # Shouldn't happen — validators gate on parse — but a stale row
+        # with a malformed ref shouldn't break the reader.
+        next
+      end
+      numbers
     end
   end
 end

@@ -24,6 +24,7 @@ es:
       by_author: "por %{name}"
       breadcrumb_home: Open Bible
       translation_picker: Traducción
+      cross_translation_badge_title: Has anotado este versículo en otra traducción.
   settings:
     title: Ajustes
     updated: Preferencias guardadas.

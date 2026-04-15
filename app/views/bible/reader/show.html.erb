@@ -43,10 +43,26 @@
     <% end %>
   </nav>
 
-  <header class="space-y-1 border-b border-walnut-900/15 pb-6 dark:border-gilt-500/30">
-    <p class="text-sm uppercase tracking-[0.3em] text-walnut-700/70 dark:text-amber-200/60">
-      <%= @translation.name %>
-    </p>
+  <header class="space-y-2 border-b border-walnut-900/15 pb-6 dark:border-gilt-500/30">
+    <div class="flex items-center justify-between gap-3">
+      <p class="text-sm uppercase tracking-[0.3em] text-walnut-700/70 dark:text-amber-200/60">
+        <%= @translation.name %>
+      </p>
+      <% translations = Translation.order(:name) %>
+      <% if translations.size > 1 %>
+        <select data-controller="translation-picker"
+                data-action="change->translation-picker#navigate"
+                aria-label="<%= t("bible.reader.translation_picker") %>"
+                class="rounded border border-walnut-900/30 bg-transparent px-3 py-1 font-serif text-sm normal-case tracking-normal dark:border-gilt-500/40">
+          <% translations.each do |t| %>
+            <option value="<%= bible_chapter_path(translation: t.code.downcase, book: @book.osis_code.downcase, chapter: @chapter.number) %>"
+                    <%= "selected" if t.id == @translation.id %>>
+              <%= t.name %>
+            </option>
+          <% end %>
+        </select>
+      <% end %>
+    </div>
     <h1 class="font-display text-5xl font-semibold uppercase tracking-[0.1em] text-walnut-900 dark:text-amber-200">
       <%= book_name %> <%= @chapter.number %>
     </h1>

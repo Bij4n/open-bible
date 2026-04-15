@@ -68,9 +68,46 @@ RSpec.describe "Bible::Reader", type: :request do
   end
 
   describe "GET /bible" do
-    it "redirects to the KJV Genesis chapter 1 placeholder" do
+    it "redirects a signed-in user with no default to KJV Gen 1" do
       get "/bible"
       expect(response).to redirect_to("/bible/kjv/gen/1")
+    end
+
+    it "honors the user's default_translation on entry" do
+      rv = create(:translation, code: "RV1909", name: "Reina-Valera 1909", language: "es")
+      user = create(:user, default_translation: rv)
+      sign_in user
+
+      get "/bible"
+      expect(response).to redirect_to("/bible/rv1909/gen/1")
+    end
+
+    it "redirects signed-out visitors to the public bible at KJV Gen 1" do
+      sign_out :user
+      get "/bible"
+      expect(response).to redirect_to("/public/bible/kjv/gen/1")
+    end
+  end
+
+  describe "translation picker in the reader" do
+    it "shows the picker when more than one translation exists" do
+      create(:translation, code: "RV1909", name: "Reina-Valera 1909", language: "es")
+      get "/bible/kjv/john/3"
+      expect(response.body).to include("translation-picker")
+      expect(response.body).to include("Reina-Valera 1909")
+    end
+
+    it "omits the picker when only one translation exists" do
+      get "/bible/kjv/john/3"
+      expect(response.body).not_to include("translation-picker")
+    end
+
+    it "picker options preserve book and chapter across translations" do
+      rv = create(:translation, code: "RV1909", name: "Reina-Valera 1909", language: "es")
+      create(:book, osis_code: "John", translation: rv, name_en: "John", name_es: "Juan", position: 43, testament: :new)
+
+      get "/bible/kjv/john/3"
+      expect(response.body).to include(%(value="/bible/rv1909/john/3"))
     end
   end
 end

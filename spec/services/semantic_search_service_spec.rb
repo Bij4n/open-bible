@@ -69,4 +69,66 @@ RSpec.describe SemanticSearchService do
       expect(result).to eq(verses: [], available: false)
     end
   end
+
+  describe "translations scope" do
+    let!(:rv1909) { create(:translation, code: "RV1909", name: "Reina-Valera 1909", language: "es") }
+    let!(:rv_john) { create(:book, osis_code: "John", translation: rv1909, name_en: "John", name_es: "Juan", position: 43, testament: :new) }
+    let!(:rv_chapter) { create(:chapter, book: rv_john, number: 3) }
+
+    def rv_verse_with_embedding(number:, vector:)
+      verse = create(:verse, chapter: rv_chapter, number: number,
+                             body_text: "es sample #{number}",
+                             body_html: "es sample #{number}",
+                             osis_ref: "Bible.RV1909.John.3.#{number}")
+      create(:verse_embedding, verse: verse, embedding: vector)
+      verse
+    end
+
+    let(:query_vector) { [ 1.0, 0.0 ] + Array.new(382, 0.0) }
+
+    before do
+      allow(EmbeddingService).to receive_messages(
+        healthy?: true,
+        embed_texts: { "embeddings" => [ query_vector ], "model_version" => "all-MiniLM-L6-v2" }
+      )
+    end
+
+    it "defaults to current translation (KJV) when translations is unset" do
+      kjv = verse_with_embedding(number: 16, vector: query_vector)
+      rv  = rv_verse_with_embedding(number: 16, vector: query_vector)
+
+      result = described_class.new(query: "divine love").call
+      expect(result[:verses]).to include(kjv)
+      expect(result[:verses]).not_to include(rv)
+    end
+
+    it "scopes to the passed translation_code when translations: 'current'" do
+      kjv = verse_with_embedding(number: 16, vector: query_vector)
+      rv  = rv_verse_with_embedding(number: 16, vector: query_vector)
+
+      result = described_class.new(query: "divine love",
+                                   translations: "current",
+                                   translation_code: "RV1909").call
+      expect(result[:verses]).to include(rv)
+      expect(result[:verses]).not_to include(kjv)
+    end
+
+    it "spans every translation when translations: 'all'" do
+      kjv = verse_with_embedding(number: 16, vector: query_vector)
+      rv  = rv_verse_with_embedding(number: 16, vector: query_vector)
+
+      result = described_class.new(query: "divine love", translations: "all").call
+      expect(result[:verses]).to include(kjv, rv)
+    end
+
+    it "ignores unknown translations values and treats them as 'current'" do
+      kjv = verse_with_embedding(number: 16, vector: query_vector)
+      rv_verse_with_embedding(number: 16, vector: query_vector)
+
+      result = described_class.new(query: "divine love",
+                                   translations: "cross-sprite",
+                                   translation_code: "KJV").call
+      expect(result[:verses]).to contain_exactly(kjv)
+    end
+  end
 end

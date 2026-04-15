@@ -35,13 +35,15 @@ class VerseEmbedding < ApplicationRecord
     dot / (Math.sqrt(mag_a) * Math.sqrt(mag_b))
   end
 
-  # Loads every KJV embedding and scores it against the query vector.
-  # Acceptable at 31k rows (sub-3s on warm cache); if it gets slow the
-  # next step is either a boot-time memo on a class variable or a move
-  # to pgvector with an HNSW index.
-  def self.search_by_similarity(query_embedding, limit: 20, threshold: 0.3)
+  # Loads embeddings for the given translation codes and scores each
+  # against the query vector. Acceptable at 31k rows per translation
+  # (sub-3s on warm cache); if it gets slow the next step is either a
+  # boot-time memo on a class variable or a move to pgvector with an
+  # HNSW index.
+  def self.search_by_similarity(query_embedding, limit: 20, threshold: 0.3, translation_codes: [ "KJV" ])
+    codes = Array(translation_codes).map(&:to_s).map(&:upcase)
     includes(verse: { chapter: { book: :translation } })
-      .where(verses: { chapters: { books: { translations: { code: "KJV" } } } })
+      .where(verses: { chapters: { books: { translations: { code: codes } } } })
       .filter_map { |ve|
         score = ve.similarity_to(query_embedding)
         next if score < threshold

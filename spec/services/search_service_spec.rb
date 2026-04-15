@@ -90,4 +90,39 @@ RSpec.describe SearchService do
       expect(results[:verses].size).to be <= 1
     end
   end
+
+  describe "translations scope" do
+    let!(:rv1909)     { create(:translation, code: "RV1909", name: "Reina-Valera 1909", language: "es") }
+    let!(:rv_john)    { create(:book, osis_code: "John", translation: rv1909, name_en: "John", name_es: "Juan", position: 43, testament: :new) }
+    let!(:rv_chapter) { create(:chapter, book: rv_john, number: 3) }
+    let!(:rv_love_verse) do
+      create(:verse, chapter: rv_chapter, number: 16,
+                     body_text: "Porque de tal manera amó love",
+                     body_html: "Porque de tal manera amó love",
+                     osis_ref: "Bible.RV1909.John.3.16")
+    end
+
+    it "defaults to the current translation only (KJV)" do
+      results = described_class.new(query: "love", translations: "current", translation_code: "KJV").call
+      expect(results[:verses]).to include(love_verse)
+      expect(results[:verses]).not_to include(rv_love_verse)
+    end
+
+    it "scopes to the passed translation_code when translations: 'current'" do
+      results = described_class.new(query: "love", translations: "current", translation_code: "RV1909").call
+      expect(results[:verses]).to include(rv_love_verse)
+      expect(results[:verses]).not_to include(love_verse)
+    end
+
+    it "searches every translation when translations: 'all'" do
+      results = described_class.new(query: "love", translations: "all").call
+      expect(results[:verses]).to include(love_verse, rv_love_verse)
+    end
+
+    it "treats unknown translations values as 'current'" do
+      results = described_class.new(query: "love", translations: "banana", translation_code: "KJV").call
+      expect(results[:verses]).to include(love_verse)
+      expect(results[:verses]).not_to include(rv_love_verse)
+    end
+  end
 end

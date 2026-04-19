@@ -51,6 +51,33 @@
     font-family: var(--font-display);
     letter-spacing: 0.02em;
   }
+
+  /*
+   * Warm focus indicator. Default browser outlines are blue and clash
+   * with the manuscript palette; gilt at 2px keeps the affordance
+   * visible without losing the candle-warm feel. Applied via
+   * :focus-visible so mouse users don't see a ring on click but
+   * keyboard users always do.
+   */
+  :focus-visible {
+    outline: 2px solid var(--color-gilt-500);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  html[data-theme="dark"] :focus-visible {
+    outline-color: var(--color-gilt-400);
+  }
+
+  /*
+   * Selection color: warm gilt-tinted overlay in both themes so
+   * highlighting text feels like swiping a beeswax marker over the
+   * page rather than the default OS blue.
+   */
+  ::selection {
+    background-color: rgba(184, 138, 74, 0.30); /* gilt-500 @ 30% */
+    color: inherit;
+  }
 }
 
 @layer components {

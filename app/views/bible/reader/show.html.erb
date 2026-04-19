@@ -64,14 +64,17 @@
       <% end %>
     </div>
     <h1 class="font-display text-5xl font-semibold uppercase tracking-[0.1em] text-walnut-900 dark:text-amber-200">
-      <%= book_name %> <%= @chapter.number %>
+      <span class="book-ornament" aria-hidden="true">&#10086;</span>
+      <span class="book-title-text"><%= book_name %> <%= @chapter.number %></span>
     </h1>
   </header>
 
   <div class="chapter-body font-serif text-lg leading-loose text-walnut-900 dark:text-amber-200"
        data-highlight-target="chapter">
-    <% @verses.each_with_index do |verse, i| %><%= render partial: "bible/reader/verse", locals: { verse: verse, highlights: @highlights || [], cross_translation_highlighted: @cross_translation_highlighted_verse_numbers } %><%= " " unless i == @verses.size - 1 %><% end %>
+    <% @verses.each_with_index do |verse, i| %><%= render partial: "bible/reader/verse", locals: { verse: verse, highlights: @highlights || [], cross_translation_highlighted: @cross_translation_highlighted_verse_numbers, chapter_opener: i == 0 } %><%= " " unless i == @verses.size - 1 %><% end %>
   </div>
+
+  <div class="chapter-fleuron" aria-hidden="true">&#10086;</div>
 
   <% if user_signed_in? %>
     <div data-highlight-target="toolbar"

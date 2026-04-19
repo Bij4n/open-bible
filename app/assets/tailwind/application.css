@@ -143,4 +143,56 @@
   @media (prefers-reduced-motion: reduce) {
     #note-panel-container { transition: none; }
   }
+
+  /*
+   * Drop cap on the first verse of each chapter. The .chapter-opening
+   * wrapper exists so ::first-letter targets the first body letter
+   * instead of the verse-number superscript that precedes it. Float
+   * left so subsequent prose flows around the ornament.
+   */
+  .chapter-opening::first-letter {
+    float: left;
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 9vw, 4.5rem);
+    line-height: 0.85;
+    margin: 0.05em 0.1em 0 0;
+    color: var(--color-rubric-500);
+    font-weight: 600;
+  }
+
+  html[data-theme="dark"] .chapter-opening::first-letter {
+    color: var(--color-gilt-400);
+  }
+
+  /*
+   * Manuscript ornaments: a small fleuron above each chapter title and
+   * a centered fleuron below the chapter body. Decorative-only, so
+   * marked aria-hidden in the markup; CSS just sizes and tones them.
+   */
+  .book-ornament {
+    display: block;
+    font-size: 1.25rem;
+    color: var(--color-gilt-500);
+    margin-bottom: 0.4rem;
+    letter-spacing: normal;
+    text-transform: none;
+  }
+
+  html[data-theme="dark"] .book-ornament {
+    color: var(--color-gilt-400);
+  }
+
+  .chapter-fleuron {
+    text-align: center;
+    font-size: 1.5rem;
+    color: var(--color-gilt-500);
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.5em;
+    line-height: 1;
+  }
+
+  html[data-theme="dark"] .chapter-fleuron {
+    color: var(--color-gilt-400);
+  }
 }

@@ -95,7 +95,7 @@ jobs:
 
     steps:
       - name: Install Chrome and system packages for system specs
-        uses: browser-actions/setup-chrome@v1
+        uses: browser-actions/setup-chrome@v2
 
       - name: Checkout code
         uses: actions/checkout@v6

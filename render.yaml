@@ -1,0 +1,79 @@
+# Render Blueprint for Open Bible.
+#
+# Three resources: a Rails web service, a private Python embedding
+# service the Rails app calls over HTTP, and a managed Postgres.
+# RAILS_MASTER_KEY must be set in the dashboard before the first
+# deploy (sync: false means "the blueprint does not carry a value").
+#
+# Post-deploy, run from the web service's Render shell:
+#   bundle exec rails bible:import[kjv]
+#   bundle exec rails bible:import[rv1909]
+#   bundle exec rails embeddings:generate
+#
+# The embedding generate task is left manual — it takes 15-20 minutes
+# and would otherwise block every deploy via preDeployCommand.
+
+services:
+  - type: web
+    name: open-bible-web
+    runtime: ruby
+    plan: starter
+    region: oregon
+    branch: main
+    healthCheckPath: /up
+    buildCommand: |
+      bundle install
+      SECRET_KEY_BASE_DUMMY=1 bundle exec rails assets:precompile
+    preDeployCommand: bundle exec rails db:prepare
+    startCommand: bundle exec rails server -b 0.0.0.0 -p $PORT
+    envVars:
+      - key: RAILS_ENV
+        value: production
+      - key: RAILS_LOG_TO_STDOUT
+        value: enabled
+      - key: RAILS_SERVE_STATIC_FILES
+        value: enabled
+      - key: RAILS_MAX_THREADS
+        value: "5"
+      - key: RAILS_MASTER_KEY
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: open-bible-db
+          property: connectionString
+      - key: EMBEDDING_SERVICE_HOST
+        fromService:
+          type: pserv
+          name: open-bible-embedding
+          property: host
+      - key: EMBEDDING_SERVICE_PORT
+        value: "8000"
+
+  - type: pserv
+    name: open-bible-embedding
+    runtime: python
+    # Standard plan (2 GB RAM) — sentence-transformers + torch resident
+    # set is ~600-800 MB, which will OOM on starter (512 MB).
+    plan: standard
+    region: oregon
+    branch: main
+    buildCommand: cd services/embedding-service && pip install -r requirements.txt
+    startCommand: cd services/embedding-service && uvicorn app:app --host 0.0.0.0 --port 8000
+    envVars:
+      # Redirect the HuggingFace model cache onto the attached disk so
+      # the 80 MB all-MiniLM-L6-v2 download survives redeploys.
+      - key: HF_HOME
+        value: /data/huggingface
+      - key: TRANSFORMERS_CACHE
+        value: /data/huggingface
+    disk:
+      name: embedding-cache
+      mountPath: /data
+      sizeGB: 1
+
+databases:
+  - name: open-bible-db
+    plan: basic-256mb
+    region: oregon
+    databaseName: open_bible_production
+    user: open_bible

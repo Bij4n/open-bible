@@ -81,6 +81,30 @@ RSpec.describe "Public::Bible", type: :request do
     end
   end
 
+  describe "translation picker on /public/bible/:translation/:book/:chapter" do
+    it "is not rendered when only one translation is installed" do
+      get "/public/bible/kjv/john/3"
+      expect(response.body).not_to include('data-controller="translation-picker"')
+    end
+
+    it "renders the picker when two translations are installed, with options pointing at the same chapter in each translation and the current one marked selected" do
+      rv1909 = create(:translation, code: "RV1909", name: "Reina-Valera 1909", language: "es")
+      rv_book = create(:book, :john, translation: rv1909)
+      rv_chapter = create(:chapter, book: rv_book, number: 3)
+      create(:verse, chapter: rv_chapter, number: 16,
+                     body_text: "Porque de tal manera amó Dios al mundo",
+                     body_html: "Porque de tal manera amó Dios al mundo",
+                     red_letter_ranges: [],
+                     osis_ref: "Bible.RV1909.John.3.16")
+
+      get "/public/bible/kjv/john/3"
+      expect(response.body).to include('data-controller="translation-picker"')
+      expect(response.body).to include(%(value="/public/bible/kjv/john/3"))
+      expect(response.body).to include(%(value="/public/bible/rv1909/john/3"))
+      expect(response.body).to match(%r{<option[^>]*value="/public/bible/kjv/john/3"[^>]*selected}i)
+    end
+  end
+
   describe "GET / (root) for signed-out users" do
     it "renders the home page with a Read the Bible CTA" do
       get "/"

@@ -141,5 +141,21 @@ RSpec.describe "Bilingual bible (KJV + RV1909)", type: :system do
 
       expect(page).to have_css(".cross-translation-badge")
     end
+
+    it "clicks the bridge badge to jump back to the other translation's reader" do
+      user = create(:user)
+      user.highlights.create!(translation: kjv,
+                              osis_ref: "Bible.KJV.John.3.16",
+                              color: "gold")
+      sign_in user
+
+      visit "/bible/rv1909/john/3"
+      expect(page).to have_content("Porque de tal manera amó")
+
+      find(".cross-translation-badge").click
+
+      expect(page.current_path).to eq("/bible/kjv/john/3")
+      expect(page).to have_content("For God so loved")
+    end
   end
 end

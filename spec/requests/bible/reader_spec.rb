@@ -138,5 +138,28 @@ RSpec.describe "Bible::Reader", type: :request do
       get "/bible/rv1909/john/3"
       expect(response.body).not_to include("cross-translation-badge")
     end
+
+    it "renders the badge as a link to the other translation's chapter" do
+      current = User.last
+      current.highlights.create!(translation: translation,
+                                 osis_ref: "Bible.KJV.John.3.16", color: "gold")
+
+      get "/bible/rv1909/john/3"
+      # Attribute order in Rails link_to output isn't guaranteed, so
+      # match on both pieces separately rather than asserting a full tag.
+      expect(response.body).to include("cross-translation-badge")
+      expect(response.body).to include(%(href="/bible/kjv/john/3"))
+    end
+
+    it "interpolates the source translation code into the badge tooltip" do
+      current = User.last
+      current.highlights.create!(translation: translation,
+                                 osis_ref: "Bible.KJV.John.3.16", color: "gold")
+
+      get "/bible/rv1909/john/3"
+      # The rendered HTML escapes the apostrophe in "You've"; match on
+      # the unique middle substring that won't be re-encoded.
+      expect(response.body).to include("annotated this verse in KJV")
+    end
   end
 end

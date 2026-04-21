@@ -38,7 +38,7 @@ module Bible
       @chapter     = @book.chapters.find_by!(number: params[:chapter].to_i)
       @verses      = @chapter.verses.order(:number)
       @highlights  = load_highlights_for_chapter
-      @cross_translation_highlighted_verse_numbers = load_cross_translation_highlight_verse_numbers
+      @cross_translation_highlights = load_cross_translation_highlight_map
     end
 
     private
@@ -58,11 +58,16 @@ module Bible
       user_signed_in? && current_user.default_translation&.code || "KJV"
     end
 
-    # Returns the Set of verse numbers in the current chapter that have
-    # at least one highlight from a different translation. Used by the
-    # verse partial to render a bridge badge.
-    def load_cross_translation_highlight_verse_numbers
-      return Set.new unless user_signed_in?
+    # Returns a hash mapping verse_number => other_translation_code for
+    # verses in the current chapter that the user has highlighted in a
+    # different translation. Used by the verse partial to render the
+    # bridge badge as a link into that other translation.
+    #
+    # If two different translations both touch the same verse, the first
+    # one encountered wins — with KJV + RV1909 that case doesn't arise,
+    # but it's safe enough for a future third translation too.
+    def load_cross_translation_highlight_map
+      return {} unless user_signed_in?
 
       cross = current_user.highlights.from_other_translations_in_chapter(
         translation_code: @translation.code,
@@ -70,17 +75,17 @@ module Bible
         chapter:          @chapter.number
       )
 
-      numbers = Set.new
-      cross.each do |h|
+      cross.each_with_object({}) do |h, acc|
+        code = h.translation.code
         h.parsed_ref.verse_osis_refs.each do |ref|
-          numbers << ref.split(".").last.to_i
+          n = ref.split(".").last.to_i
+          acc[n] ||= code
         end
       rescue OsisRef::ParseError
         # Shouldn't happen — validators gate on parse — but a stale row
         # with a malformed ref shouldn't break the reader.
         next
       end
-      numbers
     end
   end
 end

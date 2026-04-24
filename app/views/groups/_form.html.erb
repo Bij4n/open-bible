@@ -1,6 +1,14 @@
+<%
+  label_classes  = "mb-1.5 block font-ui text-sm font-medium text-surface-900 dark:text-surface-100"
+  input_classes  = "w-full rounded-md border border-surface-300 bg-surface-50 px-3 py-2 font-ui text-sm text-surface-900 transition-colors placeholder:text-surface-500 focus:border-accent-700 focus:outline-none focus:ring-2 focus:ring-accent-700/20 dark:border-surface-700 dark:bg-surface-900 dark:text-surface-100 dark:focus:border-accent-400 dark:focus:ring-accent-400/20"
+  radio_classes  = "h-4 w-4 accent-accent-700 dark:accent-accent-400"
+  submit_classes = "rounded-md bg-accent-700 px-4 py-2 font-ui text-sm font-medium text-surface-50 transition-colors hover:bg-accent-800 dark:bg-accent-400 dark:text-surface-950 dark:hover:bg-accent-300"
+  cancel_classes = "font-ui text-sm text-surface-600 transition-colors hover:text-accent-700 dark:text-surface-400 dark:hover:text-accent-400"
+%>
+
 <%= form_with model: group, class: "space-y-5" do |f| %>
   <% if group.errors.any? %>
-    <div role="alert" class="rounded border border-rubric-500/50 bg-rubric-500/10 px-4 py-3 font-serif text-sm text-rubric-600 dark:text-amber-100">
+    <div role="alert" class="rounded-md border border-red-200 bg-red-50 px-4 py-3 font-ui text-sm text-red-800 dark:border-red-900 dark:bg-red-950/50 dark:text-red-200">
       <ul class="list-inside list-disc space-y-1">
         <% group.errors.full_messages.each do |msg| %>
           <li><%= msg %></li>
@@ -10,31 +18,27 @@
   <% end %>
 
   <div>
-    <%= f.label :name, class: "mb-1 block font-serif text-sm font-medium uppercase tracking-wider text-walnut-900/80 dark:text-amber-200/80" %>
-    <%= f.text_field :name, required: true, maxlength: 100,
-        class: "w-full rounded border border-walnut-900/25 bg-parchment-50 px-3 py-2 font-serif text-walnut-900 focus:border-walnut-900 focus:outline-none focus:ring-1 focus:ring-walnut-900 dark:border-gilt-500/40 dark:bg-walnut-900 dark:text-amber-200" %>
+    <%= f.label :name, class: label_classes %>
+    <%= f.text_field :name, required: true, maxlength: 100, class: input_classes %>
   </div>
 
   <div>
-    <%= f.label :description, class: "mb-1 block font-serif text-sm font-medium uppercase tracking-wider text-walnut-900/80 dark:text-amber-200/80" %>
-    <%= f.text_area :description, rows: 3, maxlength: 500,
-        class: "w-full rounded border border-walnut-900/25 bg-parchment-50 px-3 py-2 font-serif text-walnut-900 focus:border-walnut-900 focus:outline-none focus:ring-1 focus:ring-walnut-900 dark:border-gilt-500/40 dark:bg-walnut-900 dark:text-amber-200" %>
+    <%= f.label :description, class: label_classes %>
+    <%= f.text_area :description, rows: 3, maxlength: 500, class: input_classes %>
   </div>
 
-  <fieldset class="space-y-2 font-serif text-sm">
-    <legend class="mb-1 block font-serif text-sm font-medium uppercase tracking-wider text-walnut-900/80 dark:text-amber-200/80">
-      <%= Group.human_attribute_name(:privacy) %>
-    </legend>
+  <fieldset class="space-y-2">
+    <legend class="<%= label_classes %>"><%= Group.human_attribute_name(:privacy) %></legend>
     <% Group::PRIVACIES.keys.each do |key| %>
-      <label class="flex items-center gap-2">
-        <%= f.radio_button :privacy, key %>
+      <label class="flex items-center gap-2 font-ui text-sm text-surface-700 dark:text-surface-300">
+        <%= f.radio_button :privacy, key, class: radio_classes %>
         <%= t("groups.privacy.#{key}") %>
       </label>
     <% end %>
   </fieldset>
 
   <div class="flex items-center justify-end gap-3">
-    <%= link_to t("groups.cancel"), groups_path, class: "font-serif text-sm text-walnut-700 hover:text-rubric-500 dark:text-amber-300" %>
-    <%= f.submit class: "rounded bg-walnut-900 px-4 py-2 font-display text-sm font-medium uppercase tracking-wider text-parchment-100 hover:bg-walnut-800 dark:bg-amber-200 dark:text-walnut-900 dark:hover:bg-amber-100" %>
+    <%= link_to t("groups.cancel"), groups_path, class: cancel_classes %>
+    <%= f.submit class: submit_classes %>
   </div>
 <% end %>

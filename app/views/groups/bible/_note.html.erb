@@ -1,12 +1,12 @@
 <li id="<%= dom_id(note) %>"
-    class="border-b border-walnut-900/10 pb-3 last:border-0 last:pb-0 dark:border-gilt-500/20">
-  <p class="text-xs uppercase tracking-[0.18em] text-walnut-700/70 dark:text-amber-200/60">
+    class="border-b border-surface-200 pb-3 last:border-0 last:pb-0 dark:border-surface-800">
+  <p class="font-ui text-xs uppercase tracking-wider text-surface-500 dark:text-surface-400">
     <%= note.highlights.map(&:osis_ref).join(", ") %>
     <span class="ml-2 italic normal-case tracking-normal">
       <%= t("bible.reader.by_author", name: note.user.author_name) %>
     </span>
   </p>
-  <div class="trix-content mt-1 font-serif text-walnut-900 dark:text-amber-200">
+  <div class="trix-content mt-1 font-reading text-surface-900 dark:text-surface-100">
     <%= note.body %>
   </div>
   <%= render partial: "comments/thread", locals: { note: note } %>

@@ -86,6 +86,8 @@ If a commit changes a view, layout, Stimulus controller, or any user-interaction
 
 "Request specs + unit specs green, ship it" is not sufficient. System specs are the contract against the rendered UI; moving a button and leaving its system spec asserting the old location is the exact kind of drift this rule forbids. If you don't know which system spec covers the surface you just changed, grep for it; if nothing covers it, that's a gap to flag, not an excuse to skip.
 
+**System specs default to `rack_test`.** The before-each hook in `spec/rails_helper.rb` only switches to headless Firefox when the example (or its group) is tagged `js: true`. If a test needs Stimulus, Turbo, Trix, or anything JS-driven, tag it `js: true` — without it, clicks on Stimulus targets will silently do nothing and the spec will fail in confusing ways. A parent describe's tag propagates to its children; a bare `it` inside an un-tagged describe runs under rack_test.
+
 ---
 
 ## Stack

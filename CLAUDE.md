@@ -68,6 +68,24 @@ Use Rails credentials and `.env` (with `.env.example` checked in, `.env` gitigno
 
 Product decision. Email-based only, always. If a gem or feature request would add SMS or phone fields, flag it and stop.
 
+### 7. No Chrome, Chromium, chromedriver, or google-chrome
+
+Browser automation (system specs, scripts, any tooling) uses **Firefox + geckodriver** or **WebKit via Playwright**. Not Chrome. Not Chromium. Not "just for this run."
+
+Applies to `spec/rails_helper.rb` driver registrations, anything installed via `selenium-manager` / `webdrivers` gem cache, any script that spawns a browser. If you find yourself reaching for `Selenium::WebDriver::Chrome::Options` or `browser: :chrome`, stop.
+
+### 8. No Google-hosted third-party dependencies
+
+No `fonts.googleapis.com`, `fonts.gstatic.com`, `www.google-analytics.com`, `ajax.googleapis.com`, Google Tag Manager, or any other Google-hosted asset.
+
+Self-host open-licensed assets from `/public` or the asset pipeline. Fonts (Inter, Source Serif 4, etc.) are OFL-licensed — download the `.woff2` into `public/fonts/` and declare `@font-face` rules in `application.css`. No CDN.
+
+### 9. Every UI commit updates its matching system spec in the same commit
+
+If a commit changes a view, layout, Stimulus controller, or any user-interaction surface, it must also update the system spec that exercises that surface — in the *same* commit. CI must be green on main.
+
+"Request specs + unit specs green, ship it" is not sufficient. System specs are the contract against the rendered UI; moving a button and leaving its system spec asserting the old location is the exact kind of drift this rule forbids. If you don't know which system spec covers the surface you just changed, grep for it; if nothing covers it, that's a gap to flag, not an excuse to skip.
+
 ---
 
 ## Stack

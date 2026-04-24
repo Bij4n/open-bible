@@ -1,5 +1,43 @@
 @import "tailwindcss";
 
+/*
+ * Self-hosted OFL fonts. Inter and Source Serif 4 .woff2 files live in
+ * public/fonts/ and ship with the repo — no Google Fonts or other
+ * third-party loader. Variable fonts: one file per roman/italic axis
+ * covers every weight we use.
+ */
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/InterVariable.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/InterVariable-Italic.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Source Serif 4";
+  src: url("/fonts/SourceSerif4Variable-Roman.otf.woff2") format("woff2-variations");
+  font-weight: 200 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Source Serif 4";
+  src: url("/fonts/SourceSerif4Variable-Italic.otf.woff2") format("woff2-variations");
+  font-weight: 200 900;
+  font-style: italic;
+  font-display: swap;
+}
+
 /* Dark mode driven by a `data-theme="dark"` attribute on <html> (set by the
    theme Stimulus controller from localStorage / prefers-color-scheme). This
    overrides Tailwind's default media-query based dark variant. */

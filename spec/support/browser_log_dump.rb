@@ -1,6 +1,10 @@
-# Dumps the Chrome browser console log when a JS-driven system spec
-# fails, so "expected X, got nothing" becomes diagnosable without hand-
-# attaching a debugger. Only active for driven_by :headless_chrome_ci.
+# Dumps the browser console log when a JS-driven system spec fails,
+# so "expected X, got nothing" becomes diagnosable without hand-
+# attaching a debugger. geckodriver doesn't support Selenium's
+# :browser log type, so the driver.browser.logs.get call raises and
+# is rescued — this effectively no-ops under Firefox. Left in place
+# so a future swap to a driver that does support logs (WebKit via
+# Playwright, say) picks it up automatically.
 RSpec.configure do |config|
   config.after(:each, type: :system, js: true) do |example|
     next unless example.exception

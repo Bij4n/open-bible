@@ -83,7 +83,7 @@ RSpec.configure do |config|
   end
 
   config.before(:each, type: :system, js: true) do
-    driven_by :headless_chrome_ci
+    driven_by :headless_firefox_ci
   end
 
   # VerseEmbedding memoises parsed vectors in class state for performance.
@@ -96,19 +96,25 @@ RSpec.configure do |config|
   end
 end
 
-# Register a Chrome driver that plays nicely in sandboxed Linux CI / container
-# environments. --no-sandbox is required when running as root or without a
-# user namespace; --disable-dev-shm-usage prevents /dev/shm exhaustion.
-Capybara.register_driver(:headless_chrome_ci) do |app|
-  options = Selenium::WebDriver::Chrome::Options.new
-  options.add_argument("--headless=new")
-  options.add_argument("--no-sandbox")
-  options.add_argument("--disable-dev-shm-usage")
-  options.add_argument("--disable-gpu")
-  options.add_argument("--window-size=1400,1400")
-  options.add_option("goog:loggingPrefs", { browser: "ALL" })
+# Headless Firefox + geckodriver. Uses a local Mozilla-tarball install
+# at ~/.local/opt/firefox and matching geckodriver rather than system
+# snap packages, because snap-confined Firefox and snap-confined
+# geckodriver can't hand off through the /usr/bin/firefox transitional
+# shim. Paths are overridable via FIREFOX_BINARY / GECKODRIVER_PATH
+# env vars so CI (different install layout) can point them elsewhere.
+Capybara.register_driver(:headless_firefox_ci) do |app|
+  firefox_binary   = ENV.fetch("FIREFOX_BINARY",   File.expand_path("~/.local/opt/firefox/firefox"))
+  geckodriver_path = ENV.fetch("GECKODRIVER_PATH", File.expand_path("~/.local/opt/geckodriver"))
 
-  Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
+  options = Selenium::WebDriver::Firefox::Options.new
+  options.binary = firefox_binary
+  options.add_argument("-headless")
+  options.add_argument("--width=1400")
+  options.add_argument("--height=1400")
+
+  service = Selenium::WebDriver::Firefox::Service.new(path: geckodriver_path)
+
+  Capybara::Selenium::Driver.new(app, browser: :firefox, options: options, service: service)
 end
 
 Shoulda::Matchers.configure do |config|

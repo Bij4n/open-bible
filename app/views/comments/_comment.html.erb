@@ -9,9 +9,9 @@
          data-depth="<%= comment.depth %>"
          class="comment mt-2"
          style="margin-left: <%= indent %>px;">
-  <header class="flex items-center justify-between gap-2 text-xs text-walnut-700/80 dark:text-amber-200/70">
+  <header class="flex items-center justify-between gap-2 font-ui text-xs text-surface-600 dark:text-surface-400">
     <span>
-      <strong class="font-display uppercase tracking-[0.08em] text-walnut-900 dark:text-amber-200">
+      <strong class="font-ui font-semibold text-surface-900 dark:text-surface-100">
         <%= comment.user.author_name %>
       </strong>
       <span class="ml-2 italic">
@@ -20,15 +20,15 @@
     </span>
   </header>
 
-  <div class="mt-1 whitespace-pre-wrap font-serif text-sm text-walnut-900 dark:text-amber-200">
+  <div class="mt-1 whitespace-pre-wrap font-reading text-sm text-surface-900 dark:text-surface-100">
     <%= comment.body %>
   </div>
 
-  <footer class="mt-1 flex items-center gap-3 text-xs text-walnut-700 dark:text-amber-300">
+  <footer class="mt-1 flex items-center gap-3 font-ui text-xs text-surface-600 dark:text-surface-400">
     <% if comment.depth < Comment::MAX_DEPTH %>
       <button type="button"
               data-action="comment#toggleReply"
-              class="hover:text-rubric-500 dark:hover:text-gilt-400">
+              class="transition-colors hover:text-accent-700 dark:hover:text-accent-400">
         <%= t("comments.reply") %>
       </button>
     <% end %>
@@ -39,7 +39,7 @@
                     method: :delete,
                     form_class: "inline",
                     data: { turbo_confirm: t("comments.confirm_delete") },
-                    class: "hover:text-rubric-500 dark:hover:text-gilt-400" %>
+                    class: "transition-colors hover:text-red-700 dark:hover:text-red-400" %>
     <% end %>
   </footer>
 

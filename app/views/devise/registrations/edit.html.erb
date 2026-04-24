@@ -5,60 +5,62 @@
 <% cancel_h = t(".cancel_my_account") %>
 <% unhappy  = t(".unhappy") %>
 <% sure     = t(".are_you_sure") %>
+<%
+  label_classes  = "mb-1.5 block font-ui text-sm font-medium text-surface-900 dark:text-surface-100"
+  input_classes  = "w-full rounded-md border border-surface-300 bg-surface-50 px-3 py-2 font-ui text-sm text-surface-900 transition-colors placeholder:text-surface-500 focus:border-accent-700 focus:outline-none focus:ring-2 focus:ring-accent-700/20 dark:border-surface-700 dark:bg-surface-900 dark:text-surface-100 dark:focus:border-accent-400 dark:focus:ring-accent-400/20"
+  hint_classes   = "mb-1.5 font-ui text-xs text-surface-600 dark:text-surface-400"
+  submit_classes = "w-full rounded-md bg-accent-700 px-4 py-2.5 font-ui text-sm font-medium text-surface-50 transition-colors hover:bg-accent-800 dark:bg-accent-400 dark:text-surface-950 dark:hover:bg-accent-300"
+%>
 
 <%= render "devise/shared/auth_shell", heading: heading do %>
   <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: "space-y-5" }) do |f| %>
     <%= render "devise/shared/error_messages", resource: resource %>
 
     <div>
-      <%= f.label :email, class: "mb-1 block font-serif text-sm font-medium uppercase tracking-wider text-walnut-900/80 dark:text-amber-200/80" %>
-      <%= f.email_field :email, autofocus: true, autocomplete: "email",
-          class: "w-full rounded border border-walnut-900/25 bg-parchment-50 px-3 py-2 font-serif text-walnut-900 focus:border-walnut-900 focus:outline-none focus:ring-1 focus:ring-walnut-900 dark:border-gilt-500/40 dark:bg-walnut-900 dark:text-amber-200 dark:focus:border-gilt-400 dark:focus:ring-gilt-400" %>
+      <%= f.label :email, class: label_classes %>
+      <%= f.email_field :email, autofocus: true, autocomplete: "email", class: input_classes %>
     </div>
 
     <div>
-      <%= f.label :password, class: "mb-1 block font-serif text-sm font-medium uppercase tracking-wider text-walnut-900/80 dark:text-amber-200/80" %>
-      <p class="mb-1 font-serif text-xs italic text-walnut-700/80 dark:text-amber-300/70"><%= pw_hint %></p>
-      <%= f.password_field :password, autocomplete: "new-password",
-          class: "w-full rounded border border-walnut-900/25 bg-parchment-50 px-3 py-2 font-serif text-walnut-900 focus:border-walnut-900 focus:outline-none focus:ring-1 focus:ring-walnut-900 dark:border-gilt-500/40 dark:bg-walnut-900 dark:text-amber-200 dark:focus:border-gilt-400 dark:focus:ring-gilt-400" %>
+      <%= f.label :password, class: label_classes %>
+      <p class="<%= hint_classes %>"><%= pw_hint %></p>
+      <%= f.password_field :password, autocomplete: "new-password", class: input_classes %>
       <% if @minimum_password_length %>
-        <p class="mt-1 font-serif text-xs italic text-walnut-700/80 dark:text-amber-300/70">
+        <p class="mt-1.5 font-ui text-xs text-surface-600 dark:text-surface-400">
           <%= t("devise.shared.minimum_password_length", count: @minimum_password_length) %>
         </p>
       <% end %>
     </div>
 
     <div>
-      <%= f.label :password_confirmation, class: "mb-1 block font-serif text-sm font-medium uppercase tracking-wider text-walnut-900/80 dark:text-amber-200/80" %>
-      <%= f.password_field :password_confirmation, autocomplete: "new-password",
-          class: "w-full rounded border border-walnut-900/25 bg-parchment-50 px-3 py-2 font-serif text-walnut-900 focus:border-walnut-900 focus:outline-none focus:ring-1 focus:ring-walnut-900 dark:border-gilt-500/40 dark:bg-walnut-900 dark:text-amber-200 dark:focus:border-gilt-400 dark:focus:ring-gilt-400" %>
+      <%= f.label :password_confirmation, class: label_classes %>
+      <%= f.password_field :password_confirmation, autocomplete: "new-password", class: input_classes %>
     </div>
 
     <div>
-      <%= f.label :current_password, class: "mb-1 block font-serif text-sm font-medium uppercase tracking-wider text-walnut-900/80 dark:text-amber-200/80" %>
-      <p class="mb-1 font-serif text-xs italic text-walnut-700/80 dark:text-amber-300/70"><%= cp_hint %></p>
-      <%= f.password_field :current_password, autocomplete: "current-password",
-          class: "w-full rounded border border-walnut-900/25 bg-parchment-50 px-3 py-2 font-serif text-walnut-900 focus:border-walnut-900 focus:outline-none focus:ring-1 focus:ring-walnut-900 dark:border-gilt-500/40 dark:bg-walnut-900 dark:text-amber-200 dark:focus:border-gilt-400 dark:focus:ring-gilt-400" %>
+      <%= f.label :current_password, class: label_classes %>
+      <p class="<%= hint_classes %>"><%= cp_hint %></p>
+      <%= f.password_field :current_password, autocomplete: "current-password", class: input_classes %>
     </div>
 
-    <%= f.submit submit, class: "w-full rounded bg-walnut-900 px-4 py-2 font-display text-sm font-medium uppercase tracking-wider text-parchment-100 hover:bg-walnut-800 dark:bg-amber-200 dark:text-walnut-900 dark:hover:bg-amber-100" %>
+    <%= f.submit submit, class: submit_classes %>
   <% end %>
 
-  <div class="mt-8 border-t border-walnut-900/15 pt-6 dark:border-gilt-500/30">
-    <h3 class="font-display text-sm font-medium uppercase tracking-[0.18em] text-walnut-900/70 dark:text-amber-200/70">
+  <div class="mt-8 border-t border-surface-200 pt-6 dark:border-surface-800">
+    <h3 class="font-ui text-sm font-semibold text-surface-900 dark:text-surface-100">
       <%= cancel_h %>
     </h3>
-    <p class="mt-2 font-serif text-sm text-walnut-700 dark:text-amber-300">
+    <p class="mt-2 font-ui text-sm text-surface-600 dark:text-surface-400">
       <%= unhappy %>
-      <%= button_to cancel_h,
-                    registration_path(resource_name),
-                    data: { confirm: sure, turbo_confirm: sure },
-                    method: :delete,
-                    class: "mt-3 rounded border border-rubric-500/50 bg-transparent px-3 py-1 font-display text-xs font-medium uppercase tracking-wider text-rubric-600 hover:bg-rubric-500 hover:text-parchment-100 dark:border-rubric-500/40 dark:text-amber-100" %>
     </p>
+    <%= button_to cancel_h,
+                  registration_path(resource_name),
+                  data: { confirm: sure, turbo_confirm: sure },
+                  method: :delete,
+                  class: "mt-3 rounded-md border border-red-500/40 bg-transparent px-3 py-1.5 font-ui text-xs font-medium text-red-700 transition-colors hover:bg-red-500 hover:text-surface-50 dark:border-red-400/40 dark:text-red-300 dark:hover:bg-red-500 dark:hover:text-surface-50" %>
   </div>
 
-  <p class="mt-6 text-center font-serif text-sm">
-    <%= link_to t("devise.shared.links.back"), :back, class: "text-walnut-700 hover:text-rubric-500 dark:text-amber-300 dark:hover:text-gilt-400" %>
+  <p class="mt-6 text-center font-ui text-sm">
+    <%= link_to t("devise.shared.links.back"), :back, class: "text-surface-600 transition-colors hover:text-accent-700 dark:text-surface-400 dark:hover:text-accent-400" %>
   </p>
 <% end %>

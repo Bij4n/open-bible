@@ -1,17 +1,21 @@
 <% heading = t(".forgot_your_password") %>
 <% submit  = t(".send_me_reset_password_instructions") %>
+<%
+  label_classes  = "mb-1.5 block font-ui text-sm font-medium text-surface-900 dark:text-surface-100"
+  input_classes  = "w-full rounded-md border border-surface-300 bg-surface-50 px-3 py-2 font-ui text-sm text-surface-900 transition-colors placeholder:text-surface-500 focus:border-accent-700 focus:outline-none focus:ring-2 focus:ring-accent-700/20 dark:border-surface-700 dark:bg-surface-900 dark:text-surface-100 dark:focus:border-accent-400 dark:focus:ring-accent-400/20"
+  submit_classes = "w-full rounded-md bg-accent-700 px-4 py-2.5 font-ui text-sm font-medium text-surface-50 transition-colors hover:bg-accent-800 dark:bg-accent-400 dark:text-surface-950 dark:hover:bg-accent-300"
+%>
 
 <%= render "devise/shared/auth_shell", heading: heading do %>
   <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post, class: "space-y-5" }) do |f| %>
     <%= render "devise/shared/error_messages", resource: resource %>
 
     <div>
-      <%= f.label :email, class: "mb-1 block font-serif text-sm font-medium uppercase tracking-wider text-walnut-900/80 dark:text-amber-200/80" %>
-      <%= f.email_field :email, autofocus: true, autocomplete: "email",
-          class: "w-full rounded border border-walnut-900/25 bg-parchment-50 px-3 py-2 font-serif text-walnut-900 focus:border-walnut-900 focus:outline-none focus:ring-1 focus:ring-walnut-900 dark:border-gilt-500/40 dark:bg-walnut-900 dark:text-amber-200 dark:focus:border-gilt-400 dark:focus:ring-gilt-400" %>
+      <%= f.label :email, class: label_classes %>
+      <%= f.email_field :email, autofocus: true, autocomplete: "email", class: input_classes %>
     </div>
 
-    <%= f.submit submit, class: "w-full rounded bg-walnut-900 px-4 py-2 font-display text-sm font-medium uppercase tracking-wider text-parchment-100 hover:bg-walnut-800 dark:bg-amber-200 dark:text-walnut-900 dark:hover:bg-amber-100" %>
+    <%= f.submit submit, class: submit_classes %>
   <% end %>
 
   <%= render "devise/shared/links" %>

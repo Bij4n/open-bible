@@ -6,44 +6,6 @@
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 @theme {
-  /*
-   * Manuscript tokens (Sprints 0-11). Kept alive until Sprint 14
-   * closes and no views reference them; then removed in one commit.
-   */
-  --font-sans: "EB Garamond", ui-serif, Georgia, serif;
-  --font-serif: "EB Garamond", ui-serif, Georgia, serif;
-  --font-display: "Cinzel", "EB Garamond", ui-serif, Georgia, serif;
-
-  /* Parchment + walnut palette (light). */
-  --color-parchment-50:  #faf4e4;
-  --color-parchment-100: #f4ecd8;
-  --color-parchment-200: #ecdfbf;
-  --color-parchment-300: #e0cda1;
-
-  /* Walnut ink (dark). */
-  --color-walnut-900: #2a1f14;
-  --color-walnut-800: #3a2c1d;
-  --color-walnut-700: #4a3a28;
-
-  /* Candlelit amber (dark-mode text). */
-  --color-amber-100: #f5e4c0;
-  --color-amber-200: #e8d5a8;
-  --color-amber-300: #d4a574;
-
-  /* Rubric red (Jesus's words, illuminated initials). */
-  --color-rubric-500: #8b2e2e;
-  --color-rubric-600: #7a2525;
-
-  /* Gilt (accents, dividers in dark mode). */
-  --color-gilt-400: #d4a574;
-  --color-gilt-500: #b88a4a;
-
-  /*
-   * Modern SaaS tokens (Sprint 12 pivot). These sit alongside the
-   * manuscript tokens above until migration completes. Prefer these
-   * on any new view; prefer these when touching an existing view.
-   */
-
   /* UI sans for navbar, buttons, headings, labels. */
   --font-ui: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   /* Reading serif for verse body, note body, long-form. Serif sustains
@@ -72,9 +34,8 @@
   --color-accent-700: #b45309;
   --color-accent-800: #92400e;
 
-  /* Jesus's words — retuned for white ground. The manuscript
-     `#8a1c1c` reads harsh as block-red on near-white; `red-800` is
-     WCAG AA on surface-50 and WCAG AA on surface-950 for the dark
+  /* Jesus's words — tuned for the surface palette. red-800 is WCAG AA
+     on surface-50; red-300 is WCAG AA on surface-950 for the dark
      variant. */
   --color-jesus-light: #991b1b;
   --color-jesus-dark:  #fca5a5;
@@ -146,11 +107,6 @@
 
 @layer components {
   /*
-   * Jesus's words — distinct shade from the rubric red accent
-   * (#8b2e2e) used for UI chrome. The in-text red is slightly darker
-   * and more saturated to read well as body copy; don't unify them.
-   */
-  /*
    * Theme toggle icons: both sun and moon live in the button's DOM;
    * CSS shows whichever matches the current theme so the icon reads
    * as "you are here" rather than "click to change." Swap keys off
@@ -184,10 +140,8 @@
   }
 
   /*
-   * Highlight overlays — retuned for the near-white / near-black
-   * surface palette. Slight alpha bump on light over the previous
-   * parchment-calibrated values because near-white ground makes soft
-   * pastels read paler than they did on cream parchment.
+   * Highlight overlays — tuned for the near-white / near-black surface
+   * palette at 55% alpha light / 35% alpha dark.
    */
   .highlight-gold     { background-color: rgba(230, 199, 132, 0.55); }
   .highlight-rose     { background-color: rgba(232, 185, 185, 0.55); }
@@ -270,65 +224,12 @@
   }
 
   /*
-   * Drop cap on the first verse of each chapter. The .chapter-opening
-   * wrapper exists so ::first-letter targets the first body letter
-   * instead of the verse-number superscript that precedes it. Float
-   * left so subsequent prose flows around the ornament.
-   */
-  .chapter-opening::first-letter {
-    float: left;
-    font-family: var(--font-display);
-    font-size: clamp(3rem, 9vw, 4.5rem);
-    line-height: 0.85;
-    margin: 0.05em 0.1em 0 0;
-    color: var(--color-rubric-500);
-    font-weight: 600;
-  }
-
-  html[data-theme="dark"] .chapter-opening::first-letter {
-    color: var(--color-gilt-400);
-  }
-
-  /*
-   * Manuscript ornaments: a small fleuron above each chapter title and
-   * a centered fleuron below the chapter body. Decorative-only, so
-   * marked aria-hidden in the markup; CSS just sizes and tones them.
-   */
-  .book-ornament {
-    display: block;
-    font-size: 1.25rem;
-    color: var(--color-gilt-500);
-    margin-bottom: 0.4rem;
-    letter-spacing: normal;
-    text-transform: none;
-  }
-
-  html[data-theme="dark"] .book-ornament {
-    color: var(--color-gilt-400);
-  }
-
-  .chapter-fleuron {
-    text-align: center;
-    font-size: 1.5rem;
-    color: var(--color-gilt-500);
-    margin-top: 1.5rem;
-    margin-bottom: 0.5rem;
-    letter-spacing: 0.5em;
-    line-height: 1;
-  }
-
-  html[data-theme="dark"] .chapter-fleuron {
-    color: var(--color-gilt-400);
-  }
-
-  /*
-   * Reader-only typography polish: kerning + standard ligatures (EB
-   * Garamond ships beautiful fi/fl/ff glyphs we weren't using),
+   * Reader-only typography polish: kerning + standard ligatures (Source
+   * Serif 4 ships well-cut fi/fl/ff glyphs we want to surface),
    * optimizeLegibility for browsers that gate kerning on it, slightly
-   * tighter leading than Tailwind's leading-loose (2.0 felt sparse for
-   * a serif at this size), and a max-width in `ch` so the line length
-   * stays inside the 50-75ch reading-comfort band regardless of
-   * viewport width.
+   * tighter leading than Tailwind's leading-loose, and a max-width in
+   * `ch` so the line length stays inside the 50-75ch reading-comfort
+   * band regardless of viewport width.
    */
   .chapter-body {
     font-feature-settings: "kern" 1, "liga" 1;
@@ -374,7 +275,6 @@
   nav,
   aside,
   button,
-  .chapter-fleuron,
   [data-controller="theme"] *,
   [data-highlight-target="toolbar"],
   #note-panel-container,
@@ -382,7 +282,7 @@
     display: none !important;
   }
 
-  /* Reset the warm focus + selection so they don't print. */
+  /* Reset the focus + selection so they don't print. */
   :focus-visible { outline: none; }
   ::selection { background: transparent; }
 
@@ -394,10 +294,6 @@
     line-height: 1.5;
     color: #000 !important;
     font-feature-settings: "kern" 1, "liga" 1;
-  }
-
-  .chapter-opening::first-letter {
-    color: #000 !important;
   }
 
   /* Verses shouldn't be split across pages mid-sentence when we can

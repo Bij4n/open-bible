@@ -52,21 +52,33 @@ Rails.application.configure do
   # Replace the default in-process and non-durable queuing backend for Active Job.
   config.active_job.queue_adapter = :solid_queue
 
-  # Ignore bad email addresses and do not raise email delivery errors.
-  # Set this to true and configure the email server for immediate delivery to raise delivery errors.
-  # config.action_mailer.raise_delivery_errors = false
-
   # Set host to be used by links generated in mailer templates.
   config.action_mailer.default_url_options = { host: "bible-together.org", protocol: "https" }
 
-  # Specify outgoing SMTP server. Remember to add smtp/* credentials via bin/rails credentials:edit.
-  # config.action_mailer.smtp_settings = {
-  #   user_name: Rails.application.credentials.dig(:smtp, :user_name),
-  #   password: Rails.application.credentials.dig(:smtp, :password),
-  #   address: "smtp.example.com",
-  #   port: 587,
-  #   authentication: :plain
-  # }
+  # Deliver mail via Resend's SMTP endpoint. API key lives in Rails
+  # encrypted credentials as smtp.resend.api_key — add via
+  # `bin/rails credentials:edit` before the first production deploy
+  # of this change. Without the credential, SMTP auth fails and
+  # Rails raises (see raise_delivery_errors below), which is how the
+  # deploy log will surface a missing key.
+  #
+  # raise_delivery_errors: true is deliberately opposite to Rails'
+  # default. Silent delivery failure is what produced the current bug;
+  # loud failure gets noticed in logs and observability. If Resend
+  # has an outage, password-reset submissions will return 500 —
+  # preferable to pretending the email sent and leaving users locked
+  # out.
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.smtp_settings = {
+    address: "smtp.resend.com",
+    port: 465,
+    tls: true,
+    user_name: "resend",
+    password: Rails.application.credentials.dig(:smtp, :resend, :api_key),
+    domain: "bible-together.org"
+  }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).

@@ -1,19 +1,19 @@
 <section class="space-y-6">
-  <h1 class="font-display text-5xl font-semibold uppercase tracking-[0.1em] text-walnut-900 dark:text-amber-200">
+  <h1 class="font-ui text-4xl font-semibold tracking-tight text-surface-900 dark:text-surface-50">
     <%= t("home.welcome") %>
   </h1>
-  <p class="font-serif text-lg leading-relaxed text-walnut-800 dark:text-amber-100">
+  <p class="font-reading text-lg leading-relaxed text-surface-700 dark:text-surface-300">
     <%= t("app.tagline") %>
   </p>
 
   <div class="flex flex-wrap gap-3 pt-2">
     <%= link_to t("home.cta_public_bible"),
                 public_bible_chapter_path(translation: "kjv", book: "gen", chapter: 1),
-                class: "rounded bg-walnut-900 px-4 py-2 font-display text-sm font-medium uppercase tracking-wider text-parchment-100 hover:bg-walnut-800 dark:bg-amber-200 dark:text-walnut-900 dark:hover:bg-amber-100" %>
+                class: "rounded-md bg-accent-700 px-4 py-2.5 font-ui text-sm font-medium text-surface-50 transition-colors hover:bg-accent-800 dark:bg-accent-400 dark:text-surface-950 dark:hover:bg-accent-300" %>
     <% if user_signed_in? %>
       <%= link_to t("home.cta_my_bible"),
                   bible_chapter_path(translation: "kjv", book: "gen", chapter: 1),
-                  class: "rounded border border-walnut-900/30 px-4 py-2 font-display text-sm uppercase tracking-wider text-walnut-900 hover:bg-walnut-900 hover:text-parchment-100 dark:border-gilt-500/40 dark:text-amber-200" %>
+                  class: "rounded-md border border-surface-300 px-4 py-2.5 font-ui text-sm font-medium text-surface-700 transition-colors hover:bg-surface-100 hover:text-surface-900 dark:border-surface-700 dark:text-surface-300 dark:hover:bg-surface-800 dark:hover:text-surface-50" %>
     <% end %>
   </div>
 </section>

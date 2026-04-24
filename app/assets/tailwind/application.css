@@ -222,6 +222,54 @@
   }
 
   /*
+   * Trix editor theming. Trix renders <trix-toolbar> and <trix-editor>
+   * as separate custom elements; inline class="..." on f.rich_text_area
+   * lands on the editor only, so the toolbar needs CSS here. Centralize
+   * both so the pair always matches.
+   */
+  trix-toolbar {
+    display: block;
+    background-color: var(--color-surface-100);
+    border: 1px solid var(--color-surface-300);
+    border-bottom: none;
+    border-radius: 0.375rem 0.375rem 0 0;
+    padding: 0.25rem 0.5rem;
+  }
+
+  html[data-theme="dark"] trix-toolbar {
+    background-color: var(--color-surface-800);
+    border-color: var(--color-surface-700);
+  }
+
+  trix-editor {
+    display: block;
+    border: 1px solid var(--color-surface-300);
+    border-radius: 0 0 0.375rem 0.375rem;
+    background-color: var(--color-surface-50);
+    color: var(--color-surface-900);
+    font-family: var(--font-reading);
+    min-height: 10rem;
+    padding: 0.75rem;
+  }
+
+  html[data-theme="dark"] trix-editor {
+    border-color: var(--color-surface-700);
+    background-color: var(--color-surface-900);
+    color: var(--color-surface-100);
+  }
+
+  trix-editor:focus {
+    outline: none;
+    border-color: var(--color-accent-700);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-accent-700) 20%, transparent);
+  }
+
+  html[data-theme="dark"] trix-editor:focus {
+    border-color: var(--color-accent-400);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-accent-400) 20%, transparent);
+  }
+
+  /*
    * Drop cap on the first verse of each chapter. The .chapter-opening
    * wrapper exists so ::first-letter targets the first body letter
    * instead of the verse-number superscript that precedes it. Float

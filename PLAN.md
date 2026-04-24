@@ -2,7 +2,7 @@
 
 ## Current sprint
 
-**Backlog / unplanned.** Sprint 11 closed; pick from [Backlog](#backlog-post-v1) or open a new sprint brief.
+**Sprint 12 — Design system pivot: manuscript → modern SaaS.** Foundation sprint for a 4-sprint visual overhaul (12-15). See the brief under [Sprint roadmap](#sprint-12--design-system-pivot-to-modern-saas). Rolling out progressively — each sprint ships live; users will see transitional inconsistency between 12 and 14 close.
 
 ---
 
@@ -130,6 +130,8 @@ Append-only. Each entry: date-ish, decision, rationale.
 - **2026-04-21 Deployment** — **Standard plan ($25/mo) for the embedding pserv, 1 GB persistent disk for the model cache.** sentence-transformers + torch resident set is ~600-800 MB; starter's 512 MB would OOM. `HF_HOME` + `TRANSFORMERS_CACHE` point at the mounted disk so the 80 MB `all-MiniLM-L6-v2` download survives redeploys instead of re-pulling every boot. Disk is 1 GB — overkill for one model but the Render minimum; the additional $1/mo is cheaper than re-downloading every deploy.
 - **2026-04-21 Deployment** — **Assets precompile with `SECRET_KEY_BASE_DUMMY=1`, db:migrate in `preDeployCommand`, embeddings generation stays manual.** The master key isn't needed at build time when we provide a dummy; keeps the secret out of the build env. `preDeployCommand: bundle exec rails db:prepare` runs between build and start, so migrations apply before traffic shifts. `rails embeddings:generate` is 15-20 min over ~62k verses (KJV + RV1909); putting it in preDeploy would lock the deploy pipeline, so it stays a Render shell invocation triggered by hand after the first deploy settles.
 - **2026-04-21 Deployment** — **`Translation` seed rejected; `bible:import` is the source of truth.** The downloaded deployment guide proposed a `db/seeds.rb` that called `find_or_create_by` with `name_en` / `name_es` columns. The actual schema is `name` singular, and `bible:import` already creates the Translation row from `config/bible_sources.yml` as part of the import. A separate seed would either no-op (if import runs first) or create with wrong data (the guide's values diverged from the yml). Production setup is: deploy → migrate via preDeploy → Render shell `rails bible:import[kjv]` → `rails bible:import[rv1909]` → `rails embeddings:generate`.
+- **2026-04-23 Sprint 12** — **Aesthetic pivot: manuscript → modern SaaS.** Sprint 0's illuminated-manuscript identity (Cinzel/EB Garamond, parchment/walnut/gilt, drop caps, fleurons, candlelit dark mode) is being replaced over Sprints 12-15 with a modern SaaS language: Inter + Source Serif 4 hybrid, near-white light / cool near-black dark, `amber-700` bronze accent. Rationale from the product owner: the manuscript feel reads "too ancient" and the goal is a tool users reach for in long reading sessions — referenced Grammarly's clean UI. I pushed back on fully-sans-like-Grammarly in favor of hybrid (sans UI + serif body) because reading-comfort in long-form serif is well-documented (Substack, Medium, NYT). Bronze accent chosen over the blue/teal/indigo SaaS default to avoid clone-vibes and keep some warmth. Red-letter convention preserved but colors retuned — the `#8a1c1c` red was calibrated for parchment body-copy legibility (Sprint 1), harsh on white. CLAUDE.md aesthetic line updated in the sprint's first commit so future sessions don't drift back toward manuscript. Sprint 11's decisions log entries about the manuscript palette stay as historical record. Rollout is progressive: each sprint ships live, transitional inconsistency for ~3 sprints until Sprint 14 closes.
+
 - **2026-04-21 Deployment** — **Live at bible-together.org. Rails-multi-DB collapse had a missed file: `config/cache.yml`.** First deploy of `open-bible-web` crashed at boot with `AdapterNotSpecified: The 'cache' database is not configured for production`. The collapse commit (87e7a50) had swept `database.yml`, `production.rb`, and `cable.yml` but not `config/cache.yml`, which carried a `database: cache` under production that still referenced the dropped named connection. Solid Cache's config lives in its own yaml, same shape as cable.yml and queue.yml. Lesson: when removing a named DB connection, grep every `config/*.yml` for `database:` and `connects_to`, not just `database.yml`. Fix was a one-line deletion (commit 3b9df42). After that: 62,204 verses imported across KJV + RV1909, 1,424 fully-red verses mirrored, custom domain + HTTPS working. Semantic search is still offline pending the embedding pserv build (Python version pin may or may not have resolved it; deferred).
 
 ---
@@ -418,6 +420,26 @@ Only `private` visibility works this sprint. Sharing comes in Sprint 4.
 - Print stylesheet for chapters (people will want this)
 
 **Tests:** accessibility assertions via `axe-core-rspec`; visual regression is manual.
+
+### Sprint 12 — Design system pivot to modern SaaS
+
+**Goal:** replace the manuscript aesthetic with a modern SaaS design language (hybrid sans UI + serif body, bronze accent, near-white light / cool near-black dark). Ship the foundation tokens + the global navbar/footer shell + the signed-in reader chapter page as the proof surface. Other surfaces migrate in Sprints 13-14.
+
+- Typography: **Inter** (UI, navbar, labels, buttons, headings in new design) + **Source Serif 4** (verse body, notes body, long-form reading). Loaded alongside existing EB Garamond / Cinzel until the last manuscript reference is gone — removal ships in Sprint 14.
+- Palette: new tokens added **alongside** parchment / walnut / amber / gilt rather than renamed in place. Un-migrated surfaces keep rendering through the sprint sequence.
+- Accent: **bronze** (`amber-700` `#b45309` light / `amber-400` `#fbbf24` dark). Warmer than the blue/teal/indigo SaaS default; distinctive without clone-vibes.
+- Jesus-words red re-tuned for white ground — existing `#8a1c1c` was calibrated for parchment; on near-white it reads as harsh block-red. Target `red-800` `#991b1b` light / `red-300` `#fca5a5` dark.
+- Character-level highlight palette repainted against near-white — Sprint 3's gold/rose/sage/lavender/sky mixed for parchment won't hold up on white.
+- Navbar streamlined to `[logo] | [search] | [user menu]`. Theme toggle, locale switcher, admin/settings/sign-out all move inside the user menu.
+- Drop caps, fleurons, `::first-letter` ornaments removed from the migrated reader surface. CSS definitions stay alive until no view references them (Sprint 13-14).
+- Dark mode re-themed to cool / near-black (`#0a0a0a` or similar). The `data-theme="dark"` attribute contract is preserved so the existing theme Stimulus controller continues to work without changes.
+- CLAUDE.md aesthetic line updated in this sprint's first commit.
+
+**Tests:** existing 571-spec suite as regression safety net — functional behavior doesn't change. New specs only for new behavior (user-menu dropdown toggle + click-outside, if a Stimulus controller is introduced). Re-run `axe-core-rspec` on the migrated signed-in reader page; expect it to stay clean on the new palette.
+
+**Known fallout to watch:** Sprint 2 retro flagged that `text-transform: uppercase` on headings kept biting Capybara `have_content` / `click_on` matchers. Dropping uppercase in the new design will flip some of those tests in the opposite direction. Any spec asserting directly on a `.bg-parchment-100`-style color class will break.
+
+**Confidence:** high on sprint ordering and dependencies; medium on specific color values and typography choices (will iterate once the first render lands); medium on scope — navbar + reader + tokens is three real chunks.
 
 ---
 

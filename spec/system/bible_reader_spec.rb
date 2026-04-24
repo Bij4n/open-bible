@@ -56,7 +56,13 @@ RSpec.describe "Bible reader", type: :system, js: true do
 
   it "jumps to a chapter via the picker dropdown" do
     visit "/bible/kjv/john/3"
-    find("select[aria-label='Chapter']").find("option", text: "Chapter 5").select_option
+
+    # The chapter picker was a native <select> pre-Sprint 12; it's now
+    # a custom listbox built on shared/_nav_select + nav_select_controller.
+    # Open the listbox by clicking its trigger, then click the option.
+    find("button[aria-label='Chapter']").click
+    click_on "Chapter 5"
+
     expect(page).to have_current_path("/bible/kjv/john/5")
   end
 end

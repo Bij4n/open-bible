@@ -40,16 +40,29 @@ RSpec.describe "Bilingual bible (KJV + RV1909)", type: :system do
   end
 
   describe "translation picker" do
-    it "shows both translations as options when viewing a chapter" do
+    # js: true because the picker is Stimulus-driven (nav_select_controller)
+    # since Sprint 12 — clicking the trigger runs JS to flip the listbox
+    # out of `hidden`. The sibling test below (line 55) doesn't need JS
+    # because it just visits URLs.
+    it "shows both translations as options when viewing a chapter", js: true do
       sign_in create(:user)
       visit "/bible/kjv/john/3"
 
       expect(page).to have_content("For God so loved")
-      expect(page).to have_select(nil, selected: "King James Version",
-                                  options: [ "King James Version", "Reina-Valera 1909" ])
-      # Option values are preloaded URLs — visiting the RV1909 option
-      # lands on the same book and chapter in the other translation.
-      expect(page).to have_css(%(option[value="/bible/rv1909/john/3"]))
+
+      # Open the listbox, then assert against the visible options.
+      # Scoped with `within` so the chapter picker's aria-selected
+      # option doesn't collide with this listbox's.
+      find("button[aria-label='Translation']").click
+
+      within "[role='listbox'][aria-label='Translation']" do
+        expect(page).to have_css(
+          "[role='option'][aria-selected='true']", text: "King James Version"
+        )
+        expect(page).to have_css(
+          "[role='option'][data-url='/bible/rv1909/john/3']", text: "Reina-Valera 1909"
+        )
+      end
     end
 
     it "preserves the chapter when following the picker's RV1909 option url" do

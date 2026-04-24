@@ -18,6 +18,13 @@ RSpec.describe "Devise password reset flow", type: :request do
 
     mail = ActionMailer::Base.deliveries.last
     expect(mail.to).to eq([ user.email ])
+    # Regression guard: Resend only accepts mail from the verified
+    # send.bible-together.org subdomain. A placeholder here would
+    # silently 550 in production the first time a real user submits
+    # a reset. Devise's sender comes from config.mailer_sender in
+    # config/initializers/devise.rb; ApplicationMailer#default from
+    # must match.
+    expect(mail.from).to eq([ "noreply@send.bible-together.org" ])
     expect(mail.subject).to match(/password|reset/i)
 
     body = [ mail.body, *mail.parts.map(&:body) ].map(&:to_s).join(" ")

@@ -22,10 +22,11 @@ Devise.setup do |config|
 
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
-  # note that it will be overwritten if you use your own mailer class
-  # with default "from" parameter.
-  # TODO(pre-launch): replace with the real production domain once it's chosen.
-  config.mailer_sender = "no-reply@open-bible.local"
+  # Resend accepts mail from the verified send.bible-together.org
+  # subdomain only. Must match ApplicationMailer#default from — both
+  # sites are the source of truth for outbound From; changing either
+  # one alone will 550 the next real reset attempt in production.
+  config.mailer_sender = "noreply@send.bible-together.org"
 
   # Configure the class responsible to send e-mails.
   # config.mailer = 'Devise::Mailer'

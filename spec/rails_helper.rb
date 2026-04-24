@@ -94,6 +94,23 @@ RSpec.configure do |config|
   config.before(:each) do
     VerseEmbedding.reset_cache! if defined?(VerseEmbedding)
   end
+
+  # Rebuild the Tailwind CSS bundle once before the suite runs IF
+  # system specs are in this invocation. System specs exercise the
+  # compiled bundle at app/assets/builds/application.css (which is
+  # gitignored); a source-CSS change without a manual rebuild would
+  # pass false-green — the exact failure mode that hid the
+  # verse-number contrast regression until axe caught it manually.
+  # Unit / request / helper runs skip this hook so they stay fast.
+  config.before(:suite) do
+    has_system_specs = RSpec.world.filtered_examples.values.flatten.any? do |example|
+      example.metadata[:type] == :system
+    end
+    if has_system_specs
+      output = `cd #{Rails.root} && bundle exec rails tailwindcss:build 2>&1`
+      abort "Tailwind build failed before system specs:\n#{output}" unless $?.success?
+    end
+  end
 end
 
 # Headless Firefox + geckodriver. Uses a local Mozilla-tarball install

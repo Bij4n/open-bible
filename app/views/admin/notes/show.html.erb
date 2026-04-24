@@ -1,30 +1,31 @@
 <% content_for :title, t("admin.notes.title") %>
 
 <article class="mx-auto max-w-3xl space-y-6">
-  <header class="space-y-1 border-b border-walnut-900/15 pb-4 dark:border-gilt-500/30">
-    <p class="text-sm uppercase tracking-[0.3em] text-walnut-700/70 dark:text-amber-200/60">
+  <header class="space-y-2 border-b border-surface-200 pb-4 dark:border-surface-800">
+    <p class="font-ui text-xs font-medium uppercase tracking-wider text-surface-500 dark:text-surface-400">
       <%= t("admin.title") %>
     </p>
-    <h1 class="font-display text-2xl uppercase tracking-[0.08em] text-walnut-900 dark:text-amber-200">
+    <h1 class="font-ui text-2xl font-semibold tracking-tight text-surface-900 dark:text-surface-50">
       <%= @note.highlights.map(&:osis_ref).join(", ") %>
     </h1>
-    <p class="font-serif text-sm italic text-walnut-700 dark:text-amber-300">
+    <p class="font-ui text-sm italic text-surface-600 dark:text-surface-400">
       by <%= @note.user.author_name %>
     </p>
   </header>
 
-  <div class="trix-content font-serif">
+  <div class="trix-content font-reading text-surface-900 dark:text-surface-100">
     <%= @note.body %>
   </div>
 
   <section>
-    <h2 class="font-display text-sm uppercase tracking-wider text-walnut-900/70 dark:text-amber-200/70">
+    <h2 class="font-ui text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400">
       <%= t("admin.notes.header_flags") %> (<%= @note.flags.unresolved.size %>)
     </h2>
-    <ul class="mt-2 space-y-2 font-serif text-sm">
+    <ul class="mt-2 space-y-2 font-ui text-sm text-surface-700 dark:text-surface-300">
       <% @note.flags.unresolved.includes(:user).each do |flag| %>
-        <li class="rounded border border-walnut-900/10 px-3 py-2 dark:border-gilt-500/20">
-          <strong><%= flag.reason %></strong> — <%= flag.user.author_name %>
+        <li class="rounded-md border border-surface-200 px-3 py-2 dark:border-surface-800">
+          <strong class="text-surface-900 dark:text-surface-100"><%= flag.reason %></strong>
+          <span class="text-surface-500 dark:text-surface-400">— <%= flag.user.author_name %></span>
           <% if flag.details.present? %><em class="ml-1"><%= flag.details %></em><% end %>
         </li>
       <% end %>

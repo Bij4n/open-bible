@@ -1,28 +1,35 @@
 <% content_for :title, t("admin.notes.title") %>
+<%
+  nav_link       = "transition-colors hover:text-accent-700 dark:hover:text-accent-400"
+  nav_link_active = "text-accent-700 dark:text-accent-400 underline underline-offset-4 decoration-accent-700 dark:decoration-accent-400"
+  neutral_sm_btn = "rounded-md border border-surface-300 bg-transparent px-2.5 py-0.5 font-ui text-xs font-medium text-surface-700 transition-colors hover:bg-surface-100 hover:text-surface-900 dark:border-surface-700 dark:text-surface-300 dark:hover:bg-surface-800 dark:hover:text-surface-50"
+  danger_sm_btn  = "rounded-md border border-red-500/40 bg-transparent px-2.5 py-0.5 font-ui text-xs font-medium text-red-700 transition-colors hover:bg-red-500 hover:text-surface-50 dark:border-red-400/40 dark:text-red-300 dark:hover:bg-red-500 dark:hover:text-surface-50"
+%>
 
 <article class="mx-auto max-w-5xl space-y-6">
-  <header class="space-y-1 border-b border-walnut-900/15 pb-4 dark:border-gilt-500/30">
-    <p class="text-sm uppercase tracking-[0.3em] text-walnut-700/70 dark:text-amber-200/60">
+  <header class="space-y-2 border-b border-surface-200 pb-4 dark:border-surface-800">
+    <p class="font-ui text-xs font-medium uppercase tracking-wider text-surface-500 dark:text-surface-400">
       <%= t("admin.title") %>
     </p>
-    <h1 class="font-display text-3xl uppercase tracking-[0.1em] text-walnut-900 dark:text-amber-200">
+    <h1 class="font-ui text-3xl font-semibold tracking-tight text-surface-900 dark:text-surface-50">
       <%= t("admin.notes.title") %>
     </h1>
   </header>
 
-  <nav class="flex items-center gap-4 text-sm font-display uppercase tracking-wider">
+  <nav class="flex items-center gap-4 font-ui text-sm text-surface-700 dark:text-surface-300">
     <% [ %w[all All], %w[flagged Flagged], %w[featured Featured], %w[hidden Hidden] ].each do |filter, _| %>
+      <% active = @filter == filter || (filter == "all" && @filter.blank?) %>
       <%= link_to t("admin.filters.#{filter}"),
                   admin_notes_path(filter: (filter == "all" ? nil : filter)),
-                  class: "#{"underline underline-offset-4" if @filter == filter || (filter == "all" && @filter.blank?)} hover:text-rubric-500 dark:hover:text-gilt-400" %>
+                  class: active ? nav_link_active : nav_link %>
     <% end %>
-    <span aria-hidden="true" class="text-walnut-900/30 dark:text-amber-200/30">·</span>
-    <%= link_to t("admin.nav.flags"), admin_flags_path, class: "hover:text-rubric-500 dark:hover:text-gilt-400" %>
+    <span aria-hidden="true" class="text-surface-300 dark:text-surface-700">·</span>
+    <%= link_to t("admin.nav.flags"), admin_flags_path, class: nav_link %>
   </nav>
 
   <% if @notes.any? %>
-    <table class="w-full table-auto border-collapse text-sm">
-      <thead class="border-b border-walnut-900/20 text-left font-display uppercase tracking-wider text-walnut-700/80 dark:border-gilt-500/30 dark:text-amber-200/80">
+    <table class="w-full table-auto border-collapse font-ui text-sm">
+      <thead class="border-b border-surface-200 text-left text-xs font-semibold uppercase tracking-wider text-surface-500 dark:border-surface-800 dark:text-surface-400">
         <tr>
           <th class="py-2 pr-3"><%= t("admin.notes.header_author") %></th>
           <th class="py-2 pr-3"><%= t("admin.notes.header_preview") %></th>
@@ -32,36 +39,33 @@
           <th class="py-2 pr-3 text-right"><%= t("admin.notes.header_actions") %></th>
         </tr>
       </thead>
-      <tbody class="divide-y divide-walnut-900/10 font-serif dark:divide-gilt-500/20">
+      <tbody class="divide-y divide-surface-200 text-surface-900 dark:divide-surface-800 dark:text-surface-100">
         <% @notes.each do |note| %>
-          <tr class="<%= "bg-rubric-500/5" if note.flags.unresolved.any? %>">
+          <tr class="<%= "bg-red-500/5" if note.flags.unresolved.any? %>">
             <td class="py-2 pr-3"><%= note.user.author_name %></td>
             <td class="py-2 pr-3 max-w-md truncate"><%= truncate(note.body.to_plain_text, length: 100) %></td>
             <td class="py-2 pr-3 text-center"><%= note.upvote_count %></td>
             <td class="py-2 pr-3 text-center"><%= note.flags.unresolved.size %></td>
             <td class="py-2 pr-3 space-x-1 text-xs">
               <% if note.featured? %>
-                <span class="rounded bg-gilt-500/20 px-2 py-0.5 uppercase tracking-wider text-gilt-500"><%= t("public_bible.featured") %></span>
+                <span class="rounded-md bg-accent-700/10 px-2 py-0.5 font-medium tracking-wide text-accent-700 dark:bg-accent-400/10 dark:text-accent-400"><%= t("public_bible.featured") %></span>
               <% end %>
               <% if note.hidden? %>
-                <span class="rounded bg-rubric-500/20 px-2 py-0.5 uppercase tracking-wider text-rubric-600"><%= t("public_bible.hidden") %></span>
+                <span class="rounded-md bg-red-500/10 px-2 py-0.5 font-medium tracking-wide text-red-700 dark:text-red-300"><%= t("public_bible.hidden") %></span>
               <% end %>
             </td>
             <td class="py-2 pr-0 text-right space-x-1">
               <% if note.featured? %>
-                <%= button_to t("admin.notes.unfeature"), unfeature_admin_note_path(note), method: :patch, form_class: "inline",
-                              class: "rounded border border-walnut-900/25 px-2 py-0.5 text-xs hover:bg-walnut-900 hover:text-parchment-100 dark:border-gilt-500/40" %>
+                <%= button_to t("admin.notes.unfeature"), unfeature_admin_note_path(note), method: :patch, form_class: "inline", class: neutral_sm_btn %>
               <% else %>
-                <%= button_to t("admin.notes.feature"), feature_admin_note_path(note), method: :patch, form_class: "inline",
-                              class: "rounded border border-walnut-900/25 px-2 py-0.5 text-xs hover:bg-walnut-900 hover:text-parchment-100 dark:border-gilt-500/40" %>
+                <%= button_to t("admin.notes.feature"), feature_admin_note_path(note), method: :patch, form_class: "inline", class: neutral_sm_btn %>
               <% end %>
               <% if note.hidden? %>
-                <%= button_to t("admin.notes.unhide"), unhide_admin_note_path(note), method: :patch, form_class: "inline",
-                              class: "rounded border border-walnut-900/25 px-2 py-0.5 text-xs hover:bg-walnut-900 hover:text-parchment-100 dark:border-gilt-500/40" %>
+                <%= button_to t("admin.notes.unhide"), unhide_admin_note_path(note), method: :patch, form_class: "inline", class: neutral_sm_btn %>
               <% else %>
                 <%= button_to t("admin.notes.hide"), hide_admin_note_path(note), method: :patch, form_class: "inline",
                               data: { turbo_confirm: t("admin.notes.hide") + "?" },
-                              class: "rounded border border-rubric-500/40 px-2 py-0.5 text-xs text-rubric-600 hover:bg-rubric-500 hover:text-parchment-100" %>
+                              class: danger_sm_btn %>
               <% end %>
             </td>
           </tr>
@@ -69,6 +73,6 @@
       </tbody>
     </table>
   <% else %>
-    <p class="font-serif italic text-walnut-700 dark:text-amber-300"><%= t("admin.notes.empty") %></p>
+    <p class="font-reading italic text-surface-600 dark:text-surface-400"><%= t("admin.notes.empty") %></p>
   <% end %>
 </article>

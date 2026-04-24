@@ -77,8 +77,11 @@
                 <% end %>
                 <%= link_to settings_path, role: "menuitem", class: "block px-4 py-2 text-surface-700 transition-colors hover:bg-surface-100 hover:text-surface-900 dark:text-surface-300 dark:hover:bg-surface-800 dark:hover:text-surface-50" do %><%= t("auth.settings") %><% end %>
               <% else %>
+                <%#  Sign-up intentionally omitted — Devise's sign-in form
+                     renders a "Sign up" link underneath via the shared
+                     _links partial, which is one click away. Matches the
+                     Grammarly/Notion/Linear/Stripe navbar pattern. %>
                 <%= link_to new_user_session_path, role: "menuitem", class: "block px-4 py-2 text-surface-700 transition-colors hover:bg-surface-100 hover:text-surface-900 dark:text-surface-300 dark:hover:bg-surface-800 dark:hover:text-surface-50" do %><%= t("auth.sign_in") %><% end %>
-                <%= link_to new_user_registration_path, role: "menuitem", class: "block px-4 py-2 text-surface-700 transition-colors hover:bg-surface-100 hover:text-surface-900 dark:text-surface-300 dark:hover:bg-surface-800 dark:hover:text-surface-50" do %><%= t("auth.sign_up") %><% end %>
               <% end %>
 
               <div class="my-1 border-t border-surface-200 dark:border-surface-800" role="separator"></div>

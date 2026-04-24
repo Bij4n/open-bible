@@ -5,11 +5,13 @@ require "rails_helper"
 # dropdown's JS behavior (toggle, click-outside, Escape) is a thin
 # Stimulus controller the user is verifying locally; what belongs in
 # CI is "does the rendered markup contain the right items behind the
-# user-menu trigger." We hit a cheap page (the Devise sign-in view)
-# so the spec doesn't need the bible fixture tree.
+# user-menu trigger." Signed-out checks hit the home page (not the
+# Devise sign-in view) because Devise's shared _links partial renders
+# a "Sign up" link underneath the form, which would make it impossible
+# to assert that "Sign up" is absent from the navbar.
 RSpec.describe "Navbar", type: :request do
   describe "signed-out visitors" do
-    before { get "/users/sign_in" }
+    before { get "/" }
 
     it "wires the user-menu Stimulus controller with a trigger + menu pair" do
       expect(response.body).to include('data-controller="user-menu"')
@@ -17,9 +19,9 @@ RSpec.describe "Navbar", type: :request do
       expect(response.body).to include('data-user-menu-target="menu"')
     end
 
-    it "places sign-in and sign-up inside the menu" do
+    it "places sign-in inside the menu and omits sign-up (sign-up is one click away via the Devise form)" do
       expect(response.body).to include("Sign in")
-      expect(response.body).to include("Sign up")
+      expect(response.body).not_to include("Sign up")
     end
 
     it "places the theme toggle and both locale options inside the menu" do

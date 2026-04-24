@@ -113,7 +113,11 @@
                     <% if user_signed_in? %>
                       <%= button_to label, settings_path, method: :patch, params: { user: { ui_locale: code } }, form_class: "inline", class: locale_classes %>
                     <% else %>
-                      <%= link_to label, url_for(locale: code), role: "menuitem", class: locale_classes %>
+                      <%# data-turbo-prefetch="false": locale change writes
+                          through to session via params, so hover-prefetch
+                          would silently flip the user's UI language. Click
+                          still navigates via Turbo as normal. %>
+                      <%= link_to label, url_for(locale: code), role: "menuitem", class: locale_classes, data: { turbo_prefetch: "false" } %>
                     <% end %>
                   <% end %>
                 </div>

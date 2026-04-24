@@ -35,6 +35,25 @@ RSpec.describe "Locale resolution", type: :request do
     expect(response.body).to include(english_greeting)
   end
 
+  # Bug repro attempt: user reports that starting in English, clicking
+  # Sign in → Sign up → Sign in flips the UI to Spanish. If the request
+  # sequence alone reproduces it, something in the app is writing
+  # session[:locale] = "es" where it shouldn't. If the sequence stays
+  # English, the bug is triggered by an intermediate click (e.g., an
+  # accidental locale-pill tap).
+  it "stays English across an unauthenticated sign_in -> sign_up -> sign_in flow" do
+    get "/users/sign_in"
+    expect(response.body).to include(">Sign in</button>").or include("Sign in<")
+    expect(response.body).not_to include("Iniciar sesión")
+
+    get "/users/sign_up"
+    expect(response.body).not_to include("Registrarse")
+    expect(response.body).not_to match(/lang="es"/)
+
+    get "/users/sign_in"
+    expect(response.body).not_to match(/lang="es"/)
+  end
+
   context "when signed in" do
     let(:user) { create(:user, ui_locale: "es") }
     before { sign_in user }

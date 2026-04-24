@@ -2,19 +2,19 @@
 <% notes  = results[:notes] %>
 
 <% if verses.empty? && notes.empty? %>
-  <p class="rounded border border-walnut-900/15 bg-parchment-50 px-4 py-3 font-serif text-sm text-walnut-700 dark:border-gilt-500/30 dark:bg-walnut-800 dark:text-amber-300">
+  <p class="rounded-md border border-surface-200 bg-surface-100 px-4 py-3 font-ui text-sm text-surface-700 dark:border-surface-800 dark:bg-surface-800 dark:text-surface-300">
     <%= t("search.no_results_html", query: h(query)).html_safe %>
   </p>
 <% else %>
-  <p class="font-serif text-sm text-walnut-700 dark:text-amber-300">
+  <p class="font-ui text-sm text-surface-600 dark:text-surface-400">
     <%= t("search.results_for_html", query: h(query)).html_safe %>
   </p>
 
   <% if verses.any? %>
     <section class="space-y-3">
-      <h2 class="font-display text-lg uppercase tracking-wider text-walnut-900 dark:text-amber-200">
+      <h2 class="font-ui text-lg font-semibold tracking-tight text-surface-900 dark:text-surface-50">
         <%= t("search.verses_heading") %>
-        <span class="ml-2 text-sm tracking-normal text-walnut-700/70 dark:text-amber-200/60">(<%= verses.size %>)</span>
+        <span class="ml-2 font-normal text-sm text-surface-500 dark:text-surface-400">(<%= verses.size %>)</span>
       </h2>
       <ul class="space-y-2">
         <% verses.each do |verse| %>
@@ -22,7 +22,7 @@
         <% end %>
       </ul>
       <% if verses.size >= SearchService::VERSE_LIMIT %>
-        <p class="text-xs italic text-walnut-700/70 dark:text-amber-200/60">
+        <p class="font-ui text-xs italic text-surface-500 dark:text-surface-400">
           <%= t("search.showing_top", limit: SearchService::VERSE_LIMIT) %>
         </p>
       <% end %>
@@ -31,9 +31,9 @@
 
   <% if notes.any? %>
     <section class="space-y-3">
-      <h2 class="font-display text-lg uppercase tracking-wider text-walnut-900 dark:text-amber-200">
+      <h2 class="font-ui text-lg font-semibold tracking-tight text-surface-900 dark:text-surface-50">
         <%= t("search.notes_heading") %>
-        <span class="ml-2 text-sm tracking-normal text-walnut-700/70 dark:text-amber-200/60">(<%= notes.size %>)</span>
+        <span class="ml-2 font-normal text-sm text-surface-500 dark:text-surface-400">(<%= notes.size %>)</span>
       </h2>
       <ul class="space-y-3">
         <% notes.each do |note| %>

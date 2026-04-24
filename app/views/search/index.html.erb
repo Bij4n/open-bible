@@ -1,11 +1,16 @@
 <% content_for :title, t("search.title") %>
+<%
+  input_classes  = "flex-1 rounded-md border border-surface-300 bg-surface-50 px-3 py-2 font-ui text-sm text-surface-900 transition-colors placeholder:text-surface-500 focus:border-accent-700 focus:outline-none focus:ring-2 focus:ring-accent-700/20 dark:border-surface-700 dark:bg-surface-900 dark:text-surface-100 dark:focus:border-accent-400 dark:focus:ring-accent-400/20"
+  submit_classes = "rounded-md bg-accent-700 px-4 py-2 font-ui text-sm font-medium text-surface-50 transition-colors hover:bg-accent-800 dark:bg-accent-400 dark:text-surface-950 dark:hover:bg-accent-300"
+  banner_classes = "rounded-md border border-surface-200 bg-surface-100 px-4 py-3 font-ui text-sm text-surface-700 dark:border-surface-800 dark:bg-surface-800 dark:text-surface-300"
+%>
 
 <article class="mx-auto max-w-3xl space-y-8">
-  <header class="space-y-1">
-    <h1 class="font-display text-4xl font-semibold uppercase tracking-[0.1em] text-walnut-900 dark:text-amber-200">
+  <header class="space-y-2">
+    <h1 class="font-ui text-4xl font-semibold tracking-tight text-surface-900 dark:text-surface-50">
       <%= t("search.title") %>
     </h1>
-    <p class="font-serif italic text-walnut-700 dark:text-amber-300">
+    <p class="font-reading italic text-surface-600 dark:text-surface-400">
       <%= t("search.subtitle") %>
     </p>
   </header>
@@ -17,37 +22,36 @@
                        placeholder: t("search.input_placeholder"),
                        autofocus: true,
                        autocomplete: "off",
-                       class: "flex-1 rounded border border-walnut-900/25 bg-parchment-50 px-3 py-2 font-serif text-walnut-900 focus:border-walnut-900 focus:outline-none dark:border-gilt-500/40 dark:bg-walnut-900 dark:text-amber-200" %>
-      <%= f.submit t("search.submit"),
-                   class: "rounded bg-walnut-900 px-4 py-2 font-display text-sm font-medium uppercase tracking-wider text-parchment-100 hover:bg-walnut-800 dark:bg-amber-200 dark:text-walnut-900" %>
+                       class: input_classes %>
+      <%= f.submit t("search.submit"), class: submit_classes %>
     </div>
 
-    <fieldset class="flex items-center gap-4 font-serif text-sm">
+    <fieldset class="flex items-center gap-4 font-ui text-sm text-surface-700 dark:text-surface-300">
       <legend class="sr-only"><%= t("search.modes.keyword") %></legend>
       <% SearchController::MODES.each do |mode| %>
-        <label class="flex items-center gap-1">
-          <%= f.radio_button :mode, mode, checked: @mode == mode %>
+        <label class="flex items-center gap-1.5">
+          <%= f.radio_button :mode, mode, checked: @mode == mode, class: "h-4 w-4 accent-accent-700 dark:accent-accent-400" %>
           <%= t("search.modes.#{mode}") %>
         </label>
       <% end %>
     </fieldset>
 
-    <fieldset class="flex items-center gap-4 font-serif text-sm">
+    <fieldset class="flex items-center gap-4 font-ui text-sm text-surface-700 dark:text-surface-300">
       <legend class="sr-only"><%= t("search.filters.all") %></legend>
       <% SearchService::VALID_SCOPES.each do |scope| %>
-        <label class="flex items-center gap-1">
-          <%= f.radio_button :scope, scope, checked: @scope == scope %>
+        <label class="flex items-center gap-1.5">
+          <%= f.radio_button :scope, scope, checked: @scope == scope, class: "h-4 w-4 accent-accent-700 dark:accent-accent-400" %>
           <%= t("search.filters.#{scope}") %>
         </label>
       <% end %>
     </fieldset>
 
     <% if Translation.count > 1 %>
-      <fieldset class="flex items-center gap-4 font-serif text-sm">
+      <fieldset class="flex items-center gap-4 font-ui text-sm text-surface-700 dark:text-surface-300">
         <legend class="sr-only"><%= t("search.translations.all") %></legend>
         <% SearchService::VALID_TRANSLATIONS.each do |ts| %>
-          <label class="flex items-center gap-1">
-            <%= f.radio_button :translations, ts, checked: @translations == ts %>
+          <label class="flex items-center gap-1.5">
+            <%= f.radio_button :translations, ts, checked: @translations == ts, class: "h-4 w-4 accent-accent-700 dark:accent-accent-400" %>
             <%= t("search.translations.#{ts}") %>
           </label>
         <% end %>
@@ -56,7 +60,7 @@
     <% end %>
 
     <% if @mode == "semantic" %>
-      <p class="font-serif text-xs italic text-walnut-700/70 dark:text-amber-200/60">
+      <p class="font-ui text-xs italic text-surface-500 dark:text-surface-400">
         <%= t("search.semantic_explanation") %>
       </p>
     <% end %>
@@ -64,13 +68,13 @@
 
   <% if @query.present? %>
     <% if @results[:semantic_fallback] %>
-      <p class="rounded border border-rubric-500/30 bg-rubric-500/10 px-4 py-3 font-serif text-sm text-walnut-900 dark:border-gilt-500/40 dark:bg-walnut-800 dark:text-amber-200">
+      <p class="<%= banner_classes %>">
         <%= t("search.semantic_unavailable") %>
       </p>
     <% end %>
 
     <% if @results[:notes_scope_requested] %>
-      <p class="rounded border border-walnut-900/15 bg-parchment-50 px-4 py-3 font-serif text-sm text-walnut-700 dark:border-gilt-500/30 dark:bg-walnut-800 dark:text-amber-300">
+      <p class="<%= banner_classes %>">
         <%= t("search.semantic_notes_pending") %>
       </p>
     <% end %>
@@ -78,17 +82,17 @@
     <%= render partial: "results", locals: { results: @results, query: @query, scope: @scope } %>
   <% else %>
     <section class="space-y-3">
-      <p class="font-serif italic text-walnut-700 dark:text-amber-300">
+      <p class="font-reading italic text-surface-600 dark:text-surface-400">
         <%= t("search.empty_hint") %>
       </p>
       <div>
-        <h2 class="font-display text-sm uppercase tracking-wider text-walnut-900/70 dark:text-amber-200/70">
+        <h2 class="font-ui text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400">
           <%= t("search.suggestions_heading") %>
         </h2>
         <div class="mt-2 flex flex-wrap gap-2">
           <% t("search.suggestions").each do |term| %>
             <%= link_to term, search_path(q: term),
-                        class: "rounded border border-walnut-900/25 px-3 py-1 text-sm font-serif text-walnut-900 hover:bg-walnut-900 hover:text-parchment-100 dark:border-gilt-500/40 dark:text-amber-200" %>
+                        class: "rounded-md border border-surface-300 px-3 py-1 font-ui text-sm text-surface-700 transition-colors hover:border-accent-700 hover:text-accent-700 dark:border-surface-700 dark:text-surface-300 dark:hover:border-accent-400 dark:hover:text-accent-400" %>
           <% end %>
         </div>
       </div>

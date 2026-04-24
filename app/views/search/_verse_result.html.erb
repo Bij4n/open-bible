@@ -1,17 +1,17 @@
-<li class="rounded border border-walnut-900/15 bg-parchment-50 p-3 dark:border-gilt-500/30 dark:bg-walnut-800">
-  <p class="text-xs uppercase tracking-[0.18em] text-walnut-700/70 dark:text-amber-200/60">
+<li class="rounded-lg border border-surface-200 bg-surface-50 p-3 dark:border-surface-800 dark:bg-surface-900">
+  <p class="font-ui text-xs uppercase tracking-wider text-surface-500 dark:text-surface-400">
     <%= link_to verse_citation(verse),
                 public_bible_chapter_path(translation: verse.chapter.book.translation.code.downcase,
                                           book: verse.chapter.book.osis_code.downcase,
                                           chapter: verse.chapter.number),
-                class: "hover:text-rubric-500 dark:hover:text-gilt-400" %>
+                class: "transition-colors hover:text-accent-700 dark:hover:text-accent-400" %>
     <% if verse.respond_to?(:similarity_score) %>
-      <span class="ml-2 normal-case tracking-normal text-walnut-700/60 dark:text-amber-200/50">
+      <span class="ml-2 font-normal normal-case tracking-normal text-surface-500 dark:text-surface-500">
         <%= t("search.similarity_match", percent: (verse.similarity_score * 100).round) %>
       </span>
     <% end %>
   </p>
-  <p class="mt-1 font-serif text-walnut-900 dark:text-amber-200">
+  <p class="mt-1 font-reading text-surface-900 dark:text-surface-100">
     <%# pg_search_highlight is safe for keyword results (body_text is
         plain, ts_headline wraps matched terms in <mark>). Semantic
         results have no highlight — fall through to escaped body_text. %>

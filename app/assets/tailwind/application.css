@@ -126,6 +126,22 @@
   html[data-theme="dark"] ::selection {
     background-color: color-mix(in srgb, var(--color-accent-400) 25%, transparent);
   }
+
+  /*
+   * Search-match highlighting. pg_search_highlight wraps matched
+   * terms in <mark>; the native browser yellow looks off on the
+   * cool surface palette, so tint it with the accent instead.
+   */
+  mark {
+    background-color: color-mix(in srgb, var(--color-accent-700) 22%, transparent);
+    color: inherit;
+    padding: 0 0.15em;
+    border-radius: 0.125rem;
+  }
+
+  html[data-theme="dark"] mark {
+    background-color: color-mix(in srgb, var(--color-accent-400) 28%, transparent);
+  }
 }
 
 @layer components {

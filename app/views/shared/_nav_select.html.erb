@@ -1,0 +1,40 @@
+<%# Custom listbox-style dropdown. Pass:
+      options:       array of [label, url] pairs
+      selected_url:  url of the option that should render as selected
+      aria_label:    accessible name for both the trigger and the listbox
+    Clicking an option Turbo.visits the url (see nav_select controller). %>
+<% selected_label = options.find { |_label, url| url == selected_url }&.first || options.first&.first %>
+
+<div data-controller="nav-select" class="relative">
+  <button type="button"
+          data-nav-select-target="trigger"
+          data-action="nav-select#toggle"
+          aria-expanded="false"
+          aria-haspopup="listbox"
+          aria-label="<%= aria_label %>"
+          class="flex items-center gap-1.5 rounded-md border border-surface-300 bg-surface-50 px-3 py-1.5 font-ui text-sm text-surface-700 transition-colors hover:bg-surface-100 dark:border-surface-700 dark:bg-surface-900 dark:text-surface-300 dark:hover:bg-surface-800">
+    <span><%= selected_label %></span>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4 opacity-60" aria-hidden="true">
+      <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+    </svg>
+  </button>
+
+  <ul data-nav-select-target="menu"
+      hidden
+      role="listbox"
+      aria-label="<%= aria_label %>"
+      class="absolute right-0 z-20 mt-2 max-h-72 w-max min-w-full origin-top-right overflow-y-auto rounded-lg border border-surface-200 bg-surface-50 py-1 text-sm shadow-lg ring-1 ring-surface-900/5 dark:border-surface-800 dark:bg-surface-900 dark:ring-surface-50/10">
+    <% options.each do |label, url| %>
+      <li>
+        <button type="button"
+                data-action="nav-select#select"
+                data-url="<%= url %>"
+                role="option"
+                aria-selected="<%= url == selected_url %>"
+                class="block w-full cursor-pointer px-4 py-2 text-left text-surface-700 transition-colors hover:bg-surface-100 hover:text-surface-900 focus:bg-surface-100 focus:text-surface-900 focus:outline-none dark:text-surface-300 dark:hover:bg-surface-800 dark:hover:text-surface-50 dark:focus:bg-surface-800 dark:focus:text-surface-50 aria-selected:bg-accent-700/10 aria-selected:font-medium aria-selected:text-accent-700 dark:aria-selected:bg-accent-400/10 dark:aria-selected:text-accent-400">
+          <%= label %>
+        </button>
+      </li>
+    <% end %>
+  </ul>
+</div>

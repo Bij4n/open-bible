@@ -93,13 +93,13 @@ RSpec.describe "Bible::Reader", type: :request do
     it "shows the picker when more than one translation exists" do
       create(:translation, code: "RV1909", name: "Reina-Valera 1909", language: "es")
       get "/bible/kjv/john/3"
-      expect(response.body).to include("translation-picker")
+      expect(response.body).to include(%(aria-label="Translation"))
       expect(response.body).to include("Reina-Valera 1909")
     end
 
     it "omits the picker when only one translation exists" do
       get "/bible/kjv/john/3"
-      expect(response.body).not_to include("translation-picker")
+      expect(response.body).not_to include(%(aria-label="Translation"))
     end
 
     it "picker options preserve book and chapter across translations" do
@@ -107,7 +107,7 @@ RSpec.describe "Bible::Reader", type: :request do
       create(:book, osis_code: "John", translation: rv, name_en: "John", name_es: "Juan", position: 43, testament: :new)
 
       get "/bible/kjv/john/3"
-      expect(response.body).to include(%(value="/bible/rv1909/john/3"))
+      expect(response.body).to include(%(data-url="/bible/rv1909/john/3"))
     end
   end
 

@@ -20,17 +20,13 @@
       <span aria-hidden="true"></span>
     <% end %>
 
-    <select data-controller="chapter-picker"
-            data-action="change->chapter-picker#navigate"
-            aria-label="<%= t("bible.reader.chapter_label") %>"
-            class="rounded-md border border-surface-300 bg-surface-50 px-3 py-1.5 font-ui text-sm text-surface-700 [&>option]:bg-surface-50 [&>option]:text-surface-900 dark:border-surface-700 dark:bg-surface-900 dark:text-surface-300 dark:[&>option]:bg-surface-900 dark:[&>option]:text-surface-100">
-      <% @book.chapters.order(:number).each do |ch| %>
-        <option value="<%= bible_chapter_path(translation: @translation.code.downcase, book: @book.osis_code.downcase, chapter: ch.number) %>"
-                <%= "selected" if ch.id == @chapter.id %>>
-          <%= t("bible.reader.chapter_label") %> <%= ch.number %>
-        </option>
-      <% end %>
-    </select>
+    <%= render "shared/nav_select",
+               options: @book.chapters.order(:number).map { |ch|
+                 [ "#{t('bible.reader.chapter_label')} #{ch.number}",
+                   bible_chapter_path(translation: @translation.code.downcase, book: @book.osis_code.downcase, chapter: ch.number) ]
+               },
+               selected_url: bible_chapter_path(translation: @translation.code.downcase, book: @book.osis_code.downcase, chapter: @chapter.number),
+               aria_label: t("bible.reader.chapter_label") %>
 
     <% if next_chapter %>
       <%= link_to t("bible.reader.next_chapter"),
@@ -50,17 +46,12 @@
       </p>
       <% translations = Translation.order(:name) %>
       <% if translations.size > 1 %>
-        <select data-controller="translation-picker"
-                data-action="change->translation-picker#navigate"
-                aria-label="<%= t("bible.reader.translation_picker") %>"
-                class="rounded-md border border-surface-300 bg-surface-50 px-3 py-1.5 font-ui text-sm text-surface-700 [&>option]:bg-surface-50 [&>option]:text-surface-900 dark:border-surface-700 dark:bg-surface-900 dark:text-surface-300 dark:[&>option]:bg-surface-900 dark:[&>option]:text-surface-100">
-          <% translations.each do |t| %>
-            <option value="<%= bible_chapter_path(translation: t.code.downcase, book: @book.osis_code.downcase, chapter: @chapter.number) %>"
-                    <%= "selected" if t.id == @translation.id %>>
-              <%= t.name %>
-            </option>
-          <% end %>
-        </select>
+        <%= render "shared/nav_select",
+                   options: translations.map { |t|
+                     [ t.name, bible_chapter_path(translation: t.code.downcase, book: @book.osis_code.downcase, chapter: @chapter.number) ]
+                   },
+                   selected_url: bible_chapter_path(translation: @translation.code.downcase, book: @book.osis_code.downcase, chapter: @chapter.number),
+                   aria_label: t("bible.reader.translation_picker") %>
       <% end %>
     </div>
     <h1 class="font-ui text-4xl font-semibold tracking-tight text-surface-900 dark:text-surface-50">

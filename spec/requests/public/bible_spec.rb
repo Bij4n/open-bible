@@ -84,7 +84,7 @@ RSpec.describe "Public::Bible", type: :request do
   describe "translation picker on /public/bible/:translation/:book/:chapter" do
     it "is not rendered when only one translation is installed" do
       get "/public/bible/kjv/john/3"
-      expect(response.body).not_to include('data-controller="translation-picker"')
+      expect(response.body).not_to include(%(aria-label="Translation"))
     end
 
     it "renders the picker when two translations are installed, with options pointing at the same chapter in each translation and the current one marked selected" do
@@ -98,10 +98,10 @@ RSpec.describe "Public::Bible", type: :request do
                      osis_ref: "Bible.RV1909.John.3.16")
 
       get "/public/bible/kjv/john/3"
-      expect(response.body).to include('data-controller="translation-picker"')
-      expect(response.body).to include(%(value="/public/bible/kjv/john/3"))
-      expect(response.body).to include(%(value="/public/bible/rv1909/john/3"))
-      expect(response.body).to match(%r{<option[^>]*value="/public/bible/kjv/john/3"[^>]*selected}i)
+      expect(response.body).to include(%(aria-label="Translation"))
+      expect(response.body).to include(%(data-url="/public/bible/kjv/john/3"))
+      expect(response.body).to include(%(data-url="/public/bible/rv1909/john/3"))
+      expect(response.body).to match(%r{<button[^>]*data-url="/public/bible/kjv/john/3"[^>]*aria-selected="true"}m)
     end
   end
 

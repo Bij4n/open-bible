@@ -103,6 +103,23 @@ RSpec.describe "Home page", type: :system do
     end
   end
 
+  it "renders the About section as five distinct paragraphs" do
+    # v2.6 restructured About from 2 paragraphs into 5 to surface the
+    # "verse that wrecks you" line as a standalone paragraph between
+    # the belief opener and its consequence, and to split the dense
+    # practical paragraph into translations + funding/maintainer.
+    visit "/"
+
+    paragraphs = all("section#about p", visible: :all)
+    expect(paragraphs.size).to eq(5)
+
+    expect(paragraphs[0].text).to include("scripture is meant to be read with someone")
+    expect(paragraphs[1].text).to include("verse that wrecks you wrecks somebody else")
+    expect(paragraphs[2].text).to include("changes how you read it yourself")
+    expect(paragraphs[3].text).to include("Two public-domain translations live")
+    expect(paragraphs[4].text).to include("Built and maintained by one person")
+  end
+
   it "renders the softened public-notes card without specific archetype examples" do
     visit "/"
 

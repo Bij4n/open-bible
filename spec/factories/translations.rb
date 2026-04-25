@@ -13,5 +13,13 @@ FactoryBot.define do
       public_domain { true }
       license_notes { "Public domain in the United States." }
     end
+
+    trait :rv1909 do
+      code { "RV1909" }
+      name { "Reina-Valera 1909" }
+      language { "es" }
+      public_domain { true }
+      license_notes { "Public domain." }
+    end
   end
 end

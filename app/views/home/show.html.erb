@@ -1,19 +1,116 @@
-<section class="space-y-6">
-  <h1 class="font-ui text-4xl font-semibold tracking-tight text-surface-900 dark:text-surface-50">
-    <%= t("home.welcome") %>
-  </h1>
-  <p class="font-reading text-lg leading-relaxed text-surface-700 dark:text-surface-300">
-    <%= t("app.tagline") %>
-  </p>
+<%
+  feature_keys = %w[highlights notes groups public bilingual keyword_search semantic_search]
+  feature_destinations = {
+    "highlights"      => public_bible_chapter_path(translation: "kjv", book: "gen", chapter: 1),
+    "notes"           => public_bible_chapter_path(translation: "kjv", book: "gen", chapter: 1),
+    "groups"          => groups_path,
+    "public"          => public_bible_chapter_path(translation: "kjv", book: "gen", chapter: 1),
+    "bilingual"       => public_bible_chapter_path(translation: "rv1909", book: "gen", chapter: 1),
+    "keyword_search"  => search_path,
+    "semantic_search" => search_path
+  }
 
-  <div class="flex flex-wrap gap-3 pt-2">
-    <%= link_to t("home.cta_public_bible"),
-                public_bible_chapter_path(translation: "kjv", book: "gen", chapter: 1),
-                class: "rounded-md bg-accent-700 px-4 py-2.5 font-ui text-sm font-medium text-surface-50 transition-colors hover:bg-accent-800 dark:bg-accent-400 dark:text-surface-950 dark:hover:bg-accent-300" %>
-    <% if user_signed_in? %>
-      <%= link_to t("home.cta_my_bible"),
-                  bible_chapter_path(translation: "kjv", book: "gen", chapter: 1),
-                  class: "rounded-md border border-surface-300 px-4 py-2.5 font-ui text-sm font-medium text-surface-700 transition-colors hover:bg-surface-100 hover:text-surface-900 dark:border-surface-700 dark:text-surface-300 dark:hover:bg-surface-800 dark:hover:text-surface-50" %>
-    <% end %>
-  </div>
-</section>
+  primary_btn  = "rounded-md bg-accent-700 px-5 py-3 font-ui text-sm font-medium text-surface-50 transition-colors hover:bg-accent-800 dark:bg-accent-400 dark:text-surface-950 dark:hover:bg-accent-300"
+  card_classes = "block rounded-lg border border-surface-200 bg-surface-50 p-5 transition-colors hover:border-accent-700 dark:border-surface-800 dark:bg-surface-900 dark:hover:border-accent-400"
+%>
+
+<div class="space-y-20">
+  <%# Hero %>
+  <section class="space-y-6 pt-4">
+    <h1 class="font-ui text-4xl font-semibold tracking-tight text-surface-900 dark:text-surface-50 sm:text-5xl">
+      <%= t("home.welcome") %>
+    </h1>
+    <p class="font-reading text-lg leading-relaxed text-surface-700 dark:text-surface-300 sm:text-xl">
+      <%= t("home.subhead") %>
+    </p>
+
+    <div class="pt-2">
+      <%= link_to t("home.cta_public_bible"),
+                  public_bible_chapter_path(translation: "kjv", book: "gen", chapter: 1),
+                  class: primary_btn %>
+    </div>
+
+    <p class="font-ui text-xs text-surface-500 dark:text-surface-400">
+      <%= t("home.tertiary") %>
+    </p>
+  </section>
+
+  <%# Features grid %>
+  <section class="space-y-6">
+    <h2 class="font-ui text-2xl font-semibold tracking-tight text-surface-900 dark:text-surface-50">
+      <%= t("home.features.heading") %>
+    </h2>
+
+    <ul class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <% feature_keys.each do |key| %>
+        <li>
+          <%= link_to feature_destinations[key], class: card_classes do %>
+            <h3 class="font-ui text-base font-semibold text-surface-900 dark:text-surface-50">
+              <%= t("home.features.#{key}.title") %>
+            </h3>
+            <p class="mt-1.5 font-reading text-sm leading-relaxed text-surface-600 dark:text-surface-400">
+              <%= t("home.features.#{key}.body") %>
+            </p>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </section>
+
+  <%# How it works %>
+  <section class="space-y-6">
+    <h2 class="font-ui text-2xl font-semibold tracking-tight text-surface-900 dark:text-surface-50">
+      <%= t("home.how.heading") %>
+    </h2>
+
+    <ol class="grid grid-cols-1 gap-6 sm:grid-cols-3">
+      <% (1..3).each do |n| %>
+        <li class="space-y-2">
+          <div class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-accent-700/10 font-ui text-sm font-semibold text-accent-700 dark:bg-accent-400/10 dark:text-accent-400">
+            <%= n %>
+          </div>
+          <h3 class="font-ui text-base font-semibold text-surface-900 dark:text-surface-50">
+            <%= t("home.how.step_#{n}_title") %>
+          </h3>
+          <p class="font-reading text-sm leading-relaxed text-surface-600 dark:text-surface-400">
+            <%= t("home.how.step_#{n}_body") %>
+          </p>
+        </li>
+      <% end %>
+    </ol>
+  </section>
+
+  <%# About %>
+  <section class="space-y-4">
+    <h2 class="font-ui text-2xl font-semibold tracking-tight text-surface-900 dark:text-surface-50">
+      <%= t("home.about.heading") %>
+    </h2>
+    <p class="font-reading text-base leading-relaxed text-surface-700 dark:text-surface-300">
+      <%= t("home.about.para_1") %>
+    </p>
+    <p class="font-reading text-base leading-relaxed text-surface-700 dark:text-surface-300">
+      <%= t("home.about.para_2") %>
+    </p>
+  </section>
+
+  <%# Donate CTA — gated on the same active-address check as the
+      footer link, so the donations affordance is uniformly visible
+      or hidden site-wide. When there's no wallet, the page just
+      ends after the About section; surfacing a Donate button that
+      lands on the "donations are paused" explainer is worse UX
+      than not surfacing one at all. %>
+  <% if donate_link_visible? %>
+    <section data-section="donate-cta"
+             class="rounded-lg border border-surface-200 bg-surface-50 p-6 text-center dark:border-surface-800 dark:bg-surface-900 sm:p-8">
+      <h2 class="font-ui text-xl font-semibold tracking-tight text-surface-900 dark:text-surface-50">
+        <%= t("home.donate_cta.heading") %>
+      </h2>
+      <p class="mx-auto mt-2 max-w-md font-reading text-base leading-relaxed text-surface-700 dark:text-surface-300">
+        <%= t("home.donate_cta.body") %>
+      </p>
+      <div class="mt-5">
+        <%= link_to t("home.donate_cta.button"), donate_path, class: primary_btn %>
+      </div>
+    </section>
+  <% end %>
+</div>

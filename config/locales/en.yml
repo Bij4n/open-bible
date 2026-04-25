@@ -20,10 +20,49 @@ en:
     switch_to: "Switch to %{name}"
     dismiss: Dismiss
   home:
-    welcome: Welcome to Open Bible.
-    placeholder: This is a placeholder landing page. Real reader coming soon.
+    welcome: A bilingual Bible reader.
+    subhead: Read, annotate, share. Public domain texts in KJV and RV1909.
     cta_public_bible: Read the Bible
-    cta_my_bible: My reader
+    tertiary: No tracking. Donation-supported.
+    features:
+      heading: Features
+      highlights:
+        title: Character-level highlighting
+        body: Select any range of text — even mid-word — and color it.
+      notes:
+        title: Private and shared notes
+        body: Attach rich-text notes to any verse. Keep them private or share them with people you choose.
+      groups:
+        title: Group Bibles, real-time
+        body: Read together with friends. Highlights, notes, and comments update live.
+      public:
+        title: Public notes with upvotes
+        body: Publish a note and join a curated public Bible — discussion, upvotes, threading.
+      bilingual:
+        title: Bilingual — KJV and RV1909
+        body: Read in English or Spanish. Switch translations from the reader.
+      keyword_search:
+        title: Keyword search
+        body: Find verses and notes by phrase or word.
+      semantic_search:
+        title: Semantic search (English)
+        body: Find verses by meaning, not just exact words. KJV only for now.
+    how:
+      heading: How it works
+      step_1_title: Open a chapter
+      step_1_body: Pick a translation and start reading.
+      step_2_title: Highlight and take notes
+      step_2_body: Select text and attach a note. Yours, by default.
+      step_3_title: Share when you want
+      step_3_body: With specific people, with a group, or publicly.
+    about:
+      heading: About
+      para_1: Open Bible is a reader for highlighting, taking notes, and reading with others. Two public-domain translations live — KJV in English, RV1909 in Spanish — with a UI in both languages.
+      para_2: Built and maintained by one person. The Bible texts are public domain. Hosting and maintenance are funded by donations — no subscription, no tracker, no upsell.
+    donate_cta:
+      heading: Support Open Bible
+      body: If Open Bible has been useful, donations keep it running.
+      button: Donate
   bible:
     reader:
       prev_chapter: Previous

@@ -5,8 +5,8 @@ require "rails_helper"
 # We use home#show as the probe; the welcome string differs between
 # English and Spanish so we can read the locale out of the response body.
 RSpec.describe "Locale resolution", type: :request do
-  let(:english_greeting) { "Welcome to Open Bible" }
-  let(:spanish_greeting) { "Bienvenido a Open Bible" }
+  let(:english_greeting) { "A bilingual Bible reader" }
+  let(:spanish_greeting) { "Un lector de Biblia bilingüe" }
 
   it "defaults to English" do
     get "/"

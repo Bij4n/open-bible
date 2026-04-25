@@ -20,10 +20,49 @@ es:
     switch_to: "Cambiar a %{name}"
     dismiss: Descartar
   home:
-    welcome: Bienvenido a Open Bible.
-    placeholder: Esta es una página de inicio provisional. Pronto llegará el lector.
+    welcome: Un lector de Biblia bilingüe.
+    subhead: Lee, anota, comparte. Textos de dominio público en KJV y RV1909.
     cta_public_bible: Leer la Biblia
-    cta_my_bible: Mi lector
+    tertiary: Sin rastreo. Sostenido por donaciones.
+    features:
+      heading: Características
+      highlights:
+        title: Resaltado a nivel de carácter
+        body: Selecciona cualquier rango de texto — incluso a mitad de palabra — y dale color.
+      notes:
+        title: Notas privadas y compartidas
+        body: Adjunta notas de texto enriquecido a cualquier versículo. Guárdalas en privado o compártelas con quien elijas.
+      groups:
+        title: Biblias en grupo, en tiempo real
+        body: Lee con amigos. Los resaltados, las notas y los comentarios se actualizan al instante.
+      public:
+        title: Notas públicas con votos
+        body: Publica una nota y únete a la Biblia pública — conversación, votos y respuestas.
+      bilingual:
+        title: Bilingüe — KJV y RV1909
+        body: Lee en inglés o en español. Cambia de traducción desde el lector.
+      keyword_search:
+        title: Búsqueda por palabra clave
+        body: Encuentra versículos y notas por frase o palabra.
+      semantic_search:
+        title: Búsqueda semántica (inglés)
+        body: Encuentra versículos por significado, no sólo por palabras exactas. Sólo KJV por ahora.
+    how:
+      heading: Cómo funciona
+      step_1_title: Abre un capítulo
+      step_1_body: Elige una traducción y comienza a leer.
+      step_2_title: Resalta y toma notas
+      step_2_body: Selecciona texto y adjunta una nota. Privada por defecto.
+      step_3_title: Comparte cuando quieras
+      step_3_body: Con personas concretas, con un grupo o de forma pública.
+    about:
+      heading: Acerca de
+      para_1: Open Bible es un lector para resaltar, tomar notas y leer en compañía. Dos traducciones de dominio público — KJV en inglés y RV1909 en español — con interfaz en ambos idiomas.
+      para_2: Hecho y mantenido por una sola persona. Los textos bíblicos son de dominio público. El alojamiento y el mantenimiento se financian con donaciones — sin suscripción, sin rastreo, sin trampas.
+    donate_cta:
+      heading: Apoya a Open Bible
+      body: Si Open Bible te ha sido útil, las donaciones lo mantienen funcionando.
+      button: Donar
   bible:
     reader:
       prev_chapter: Anterior

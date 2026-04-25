@@ -221,3 +221,25 @@ en:
       archived_badge: Archived
       rotated: Address rotated. New address is now active; previous one archived.
       empty: No addresses yet. Add the first one to enable the donate page.
+  donations:
+    title: Support Open Bible
+    intro_html: "Open Bible is independently funded. If it has been useful to you, a small donation goes a long way — there is no team behind it, just one person and a server bill."
+    address_heading: Send to this Bitcoin address
+    address_hint: Tap to copy. Or scan the QR with any wallet.
+    copy: Copy
+    copied: Copied
+    qr_alt: "Bitcoin payment QR code containing the donation address"
+    confirm_heading: Tell us you sent it (optional)
+    confirm_intro: "If you'd like a thank-you reply, drop your email below. A short note is welcome too. Both fields are optional — clicking the button alone is enough."
+    email_label: Email
+    email_placeholder: you@example.com
+    message_label: Message
+    message_placeholder: Anything you'd like to share…
+    submit: I sent a donation
+    unavailable:
+      heading: Donations are paused right now
+      body: "Between wallets at the moment. Check back soon, or get in touch if you would like to help in another way."
+    thank_you:
+      heading: Thank you
+      body: "Your support keeps Open Bible alive. If you left an email, expect a short reply soon."
+      back_to_reading: Back to reading

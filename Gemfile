@@ -53,6 +53,10 @@ gem "strong_migrations"
 # Keyword search over verses and notes.
 gem "pg_search"
 
+# Pure-Ruby QR generation for the donation page (Sprint 15).
+# Renders inline SVG so the QR scales cleanly and inherits theme colors.
+gem "rqrcode"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"

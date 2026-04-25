@@ -53,6 +53,10 @@ Rails.application.routes.draw do
 
   get "/search", to: "search#index", as: :search
 
+  get  "/donate",            to: "donations#show",         as: :donate
+  post "/donate/confirm",    to: "donations#create_report", as: :donate_confirm
+  get  "/donate/thank_you",  to: "donations#thanks",       as: :donate_thank_you
+
   namespace :admin do
     resources :notes, only: [ :index, :show ] do
       member do

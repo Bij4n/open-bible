@@ -67,5 +67,6 @@ Rails.application.routes.draw do
         patch :resolve
       end
     end
+    resources :bitcoin_addresses, only: [ :index, :new, :create ]
   end
 end

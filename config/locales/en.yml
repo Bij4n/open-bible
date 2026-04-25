@@ -203,3 +203,21 @@ en:
       resolve: Resolve
       resolved_flash: Flag resolved.
       empty: No unresolved flags.
+    bitcoin_addresses:
+      title: Bitcoin addresses
+      new: New address
+      new_description: "Adding an address rotates: any current active address is archived and the new one becomes active in the same step."
+      add: Add address
+      cancel: Cancel
+      address_label: Bitcoin address
+      notes_label: Notes
+      notes_hint: Optional. Admin-only context — e.g. which wallet or account this address came from.
+      header_address: Address
+      header_status: Status
+      header_notes: Notes
+      header_created: Created
+      header_archived: Archived
+      active_badge: Active
+      archived_badge: Archived
+      rotated: Address rotated. New address is now active; previous one archived.
+      empty: No addresses yet. Add the first one to enable the donate page.

@@ -203,3 +203,21 @@ es:
       resolve: Resolver
       resolved_flash: Reporte resuelto.
       empty: No hay reportes pendientes.
+    bitcoin_addresses:
+      title: Direcciones de Bitcoin
+      new: Nueva dirección
+      new_description: "Agregar una dirección rota: cualquier dirección activa actual se archiva y la nueva queda activa en el mismo paso."
+      add: Añadir dirección
+      cancel: Cancelar
+      address_label: Dirección Bitcoin
+      notes_label: Notas
+      notes_hint: Opcional. Contexto sólo para administración — p. ej. de qué cartera o cuenta proviene esta dirección.
+      header_address: Dirección
+      header_status: Estado
+      header_notes: Notas
+      header_created: Creada
+      header_archived: Archivada
+      active_badge: Activa
+      archived_badge: Archivada
+      rotated: Dirección rotada. La nueva está activa; la anterior fue archivada.
+      empty: Aún no hay direcciones. Añade la primera para habilitar la página de donaciones.

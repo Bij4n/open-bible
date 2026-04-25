@@ -1,0 +1,51 @@
+<% content_for :title, t("admin.bitcoin_addresses.new") %>
+<%
+  label_classes  = "mb-1.5 block font-ui text-sm font-medium text-surface-900 dark:text-surface-100"
+  hint_classes   = "mt-1.5 font-ui text-xs text-surface-600 dark:text-surface-400"
+  input_classes  = "w-full rounded-md border border-surface-300 bg-surface-50 px-3 py-2 font-ui text-sm text-surface-900 transition-colors placeholder:text-surface-500 focus:border-accent-700 focus:outline-none focus:ring-2 focus:ring-accent-700/20 dark:border-surface-700 dark:bg-surface-900 dark:text-surface-100 dark:focus:border-accent-400 dark:focus:ring-accent-400/20"
+  submit_classes = "rounded-md bg-accent-700 px-4 py-2 font-ui text-sm font-medium text-surface-50 transition-colors hover:bg-accent-800 dark:bg-accent-400 dark:text-surface-950 dark:hover:bg-accent-300"
+  cancel_classes = "font-ui text-sm text-surface-600 transition-colors hover:text-accent-700 dark:text-surface-400 dark:hover:text-accent-400"
+%>
+
+<article class="mx-auto max-w-xl space-y-6">
+  <header class="space-y-2 border-b border-surface-200 pb-4 dark:border-surface-800">
+    <p class="font-ui text-xs font-medium uppercase tracking-wider text-surface-500 dark:text-surface-400">
+      <%= t("admin.title") %>
+    </p>
+    <h1 class="font-ui text-2xl font-semibold tracking-tight text-surface-900 dark:text-surface-50">
+      <%= t("admin.bitcoin_addresses.new") %>
+    </h1>
+    <p class="font-ui text-sm text-surface-600 dark:text-surface-400">
+      <%= t("admin.bitcoin_addresses.new_description") %>
+    </p>
+  </header>
+
+  <%= form_with model: @address, url: admin_bitcoin_addresses_path, scope: :bitcoin_address, class: "space-y-5" do |f| %>
+    <% if @address.errors.any? %>
+      <div role="alert" class="rounded-md border border-red-200 bg-red-50 px-4 py-3 font-ui text-sm text-red-800 dark:border-red-900 dark:bg-red-950/50 dark:text-red-200">
+        <ul class="list-inside list-disc space-y-1">
+          <% @address.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div>
+      <%= f.label :address, t("admin.bitcoin_addresses.address_label"), class: label_classes %>
+      <%= f.text_field :address, required: true, autofocus: true, autocomplete: "off",
+                       class: "#{input_classes} font-mono" %>
+    </div>
+
+    <div>
+      <%= f.label :notes, t("admin.bitcoin_addresses.notes_label"), class: label_classes %>
+      <%= f.text_area :notes, rows: 3, maxlength: 1000, class: input_classes %>
+      <p class="<%= hint_classes %>"><%= t("admin.bitcoin_addresses.notes_hint") %></p>
+    </div>
+
+    <div class="flex items-center justify-end gap-3">
+      <%= link_to t("admin.bitcoin_addresses.cancel"), admin_bitcoin_addresses_path, class: cancel_classes %>
+      <%= f.submit t("admin.bitcoin_addresses.add"), class: submit_classes %>
+    </div>
+  <% end %>
+</article>

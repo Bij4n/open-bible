@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_20_210002) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_25_030001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -52,6 +52,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_20_210002) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "bitcoin_addresses", force: :cascade do |t|
+    t.boolean "active", default: false, null: false
+    t.string "address", null: false
+    t.datetime "archived_at"
+    t.datetime "created_at", null: false
+    t.text "notes"
+    t.datetime "updated_at", null: false
+    t.index ["active"], name: "index_bitcoin_addresses_on_active", unique: true, where: "(active = true)"
+  end
+
   create_table "books", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name_en", null: false
@@ -88,6 +98,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_20_210002) do
     t.index ["note_id"], name: "index_comments_on_note_id"
     t.index ["parent_id"], name: "index_comments_on_parent_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
+  create_table "donation_reports", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "email"
+    t.text "message"
+    t.datetime "updated_at", null: false
   end
 
   create_table "flags", force: :cascade do |t|

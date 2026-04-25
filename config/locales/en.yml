@@ -52,11 +52,11 @@ en:
     how:
       heading: How it works
       step_1_title: Open scripture
-      step_1_body: Pick a translation and start reading.
+      step_1_body: Pick a translation. Open a chapter.
       step_2_title: Mark what matters
-      step_2_body: Select text and attach a note. Yours, by default.
+      step_2_body: Select what struck you. Write what it meant. Yours by default.
       step_3_title: Share your story
-      step_3_body: With specific people, with a group, or publicly.
+      step_3_body: With one person. With a group. With everyone.
     about:
       heading: About
       para_1: "Open Bible is built on a simple belief: scripture is meant to be read with someone."

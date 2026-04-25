@@ -103,6 +103,19 @@ RSpec.describe "Home page", type: :system do
     end
   end
 
+  it "renders the How it works step bodies in their tight one-liner register" do
+    # How it works is the structural counter-beat between the testimony-
+    # voice features grid and About section. Step bodies are deliberately
+    # terse (parallel-structure one-liners) so the page rhythm has a
+    # mechanical 1-2-3 moment between two emotion-rich sections, rather
+    # than every section pressing the same emotional register.
+    visit "/"
+
+    expect(page).to have_content("Pick a translation. Open a chapter.")
+    expect(page).to have_content("Select what struck you. Write what it meant. Yours by default.")
+    expect(page).to have_content("With one person. With a group. With everyone.")
+  end
+
   it "renders the About section as five distinct paragraphs" do
     # v2.6 restructured About from 2 paragraphs into 5 to surface the
     # "verse that wrecks you" line as a standalone paragraph between

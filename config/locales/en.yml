@@ -13,6 +13,7 @@ en:
     open_menu: Open menu
     close_menu: Close menu
     account: Account
+    donate_link: Donate
   locale_banner:
     aria_label: Reading language suggestion
     reading: "You're reading %{name}."

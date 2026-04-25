@@ -31,12 +31,15 @@ class ApplicationController < ActionController::Base
   # own bottom Donate CTA card as the explicit pitch; stacking the
   # muted footer link below it reads as redundancy. Footer link is
   # visible everywhere else (still gated on an active address).
-  # `request.path == root_path` rather than `current_page?` because
-  # the latter is an ActionView::Helpers method not available on the
-  # controller; this comparison gives the same answer for the case
-  # we care about (the homepage exactly).
+  #
+  # The path comparison can't naively use `request.path != root_path`
+  # because `root_path` is built through `default_url_options`, which
+  # injects `?locale=es` for non-default locales. Under `:es`,
+  # `root_path` becomes `/?locale=es` while `request.path` stays `/`,
+  # and the gate misfires (footer leaks on the Spanish homepage).
+  # Compare to the literal `/` instead — root never moves.
   def donate_footer_link_visible?
-    donate_link_visible? && request.path != root_path
+    donate_link_visible? && request.path != "/"
   end
 
   # Returns "light" / "dark" when the signed-in user has a concrete

@@ -30,6 +30,17 @@ RSpec.describe "Footer donate link", type: :system do
       expect(page).not_to have_css("footer a", text: I18n.t("layout.donate_link"))
     end
 
+    # default_url_options injects ?locale= for non-default locales, so
+    # `root_path` evaluated with `:es` is "/?locale=es" while
+    # `request.path` is "/". Comparing those returns "different" and
+    # the footer leaks. The gate has to compare path-to-path.
+    it "hides the footer Donate link on the homepage in Spanish too" do
+      visit "/?locale=es"
+
+      expect(page).not_to have_css("footer a", text: I18n.t("layout.donate_link", locale: :es))
+      expect(page).not_to have_css("footer")
+    end
+
     it "shows the donate link in the footer on a public reader page" do
       visit "/public/bible/kjv/gen/1"
 

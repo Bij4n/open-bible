@@ -59,8 +59,11 @@ en:
       step_3_body: With specific people, with a group, or publicly.
     about:
       heading: About
-      para_1: "Open Bible is built on a simple belief: scripture is meant to be read with someone. The verse that wrecks you wrecks somebody else, somewhere. Knowing that — being able to say so, being able to read what it meant for someone else — changes how you read it yourself."
-      para_2: "Two public-domain translations live: KJV in English, RV1909 in Spanish, with the interface in both languages. Built and maintained by one person. Hosting is funded by donations — no subscription, no tracker, no upsell."
+      para_1: "Open Bible is built on a simple belief: scripture is meant to be read with someone."
+      para_2: The verse that wrecks you wrecks somebody else, somewhere.
+      para_3: Knowing that — being able to say so, being able to read what it meant for someone else — changes how you read it yourself.
+      para_4: "Two public-domain translations live: KJV in English, RV1909 in Spanish, with the interface in both languages."
+      para_5: Built and maintained by one person. Hosting is funded by donations — no subscription, no tracker, no upsell.
     donate_cta:
       heading: Support Open Bible
       body: If Open Bible has mattered to you, donations keep it open for whoever comes next.

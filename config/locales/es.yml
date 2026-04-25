@@ -59,8 +59,11 @@ es:
       step_3_body: Con personas concretas, con un grupo o de forma pública.
     about:
       heading: Acerca de
-      para_1: "Open Bible se basa en una idea sencilla: la Escritura está hecha para leerse en compañía. El versículo que te atraviesa atraviesa a otro, en algún lugar. Saberlo — poder decirlo, poder leer lo que significó para alguien más — cambia cómo lo lees tú."
-      para_2: "Dos traducciones de dominio público viven aquí: KJV en inglés, RV1909 en español, con la interfaz en ambos idiomas. Hecho y mantenido por una sola persona. El alojamiento se financia con donaciones — sin suscripción, sin rastreo, sin trampas."
+      para_1: "Open Bible se basa en una idea sencilla: la Escritura está hecha para leerse en compañía."
+      para_2: El versículo que te atraviesa atraviesa a otro, en algún lugar.
+      para_3: Saberlo — poder decirlo, poder leer lo que significó para alguien más — cambia cómo lo lees tú.
+      para_4: "Dos traducciones de dominio público viven aquí: KJV en inglés, RV1909 en español, con la interfaz en ambos idiomas."
+      para_5: Hecho y mantenido por una sola persona. El alojamiento se financia con donaciones — sin suscripción, sin rastreo, sin trampas.
     donate_cta:
       heading: Apoya a Open Bible
       body: Si Open Bible te ha importado, las donaciones lo mantienen abierto para quien llegue después.

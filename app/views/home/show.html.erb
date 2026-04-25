@@ -111,17 +111,20 @@
     </ol>
   </section>
 
-  <%# About %>
-  <section class="space-y-5">
+  <%# About — 5 paragraphs by design. The strong line ("the verse
+      that wrecks you...") sits as its own paragraph between the
+      belief opener (p1) and its consequence (p3); translations
+      (p4) and maintainer/funding (p5) split apart so the practical
+      content doesn't run together in one breath. %>
+  <section id="about" class="space-y-4">
     <h2 class="<%= section_h2 %>">
       <%= t("home.about.heading") %>
     </h2>
-    <p class="max-w-2xl font-reading text-base leading-relaxed text-surface-700 dark:text-surface-300 sm:text-lg">
-      <%= t("home.about.para_1") %>
-    </p>
-    <p class="max-w-2xl font-reading text-base leading-relaxed text-surface-700 dark:text-surface-300">
-      <%= t("home.about.para_2") %>
-    </p>
+    <% (1..5).each do |n| %>
+      <p class="max-w-2xl font-reading text-base leading-relaxed text-surface-700 dark:text-surface-300">
+        <%= t("home.about.para_#{n}") %>
+      </p>
+    <% end %>
   </section>
 
   <%# Donate CTA — gated on the same active-address check as the

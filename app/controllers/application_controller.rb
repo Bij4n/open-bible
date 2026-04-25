@@ -7,12 +7,24 @@ class ApplicationController < ActionController::Base
 
   before_action :set_locale
 
-  helper_method :resolved_theme
+  helper_method :resolved_theme, :donate_link_visible?
 
   # Admin gate for /admin/* controllers. Non-admins get 404 rather than
   # 403 so the existence of admin routes isn't advertised.
   def ensure_admin
     head :not_found unless current_user&.admin?
+  end
+
+  # Layout-level gate for the site-wide footer donate link. Memoized
+  # per-request — multiple partial renders within the same response
+  # share one indexed `SELECT 1` against the partial unique index.
+  # `exists?` over `BitcoinAddress.current` because the layout only
+  # needs the boolean; the donate page itself loads the full row in
+  # its own controller.
+  def donate_link_visible?
+    return @_donate_link_visible if defined?(@_donate_link_visible)
+
+    @_donate_link_visible = BitcoinAddress.exists?(active: true)
   end
 
   # Returns "light" / "dark" when the signed-in user has a concrete

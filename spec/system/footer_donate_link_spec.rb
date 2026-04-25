@@ -20,12 +20,14 @@ RSpec.describe "Footer donate link", type: :system do
   context "when an active BitcoinAddress exists" do
     before { BitcoinAddress.rotate_to!(address: "bc1qfzfen6peqgqmc03gj2jsu0zc96s49dwgahvu2l") }
 
-    it "shows the donate link in the footer on the home page" do
+    # The footer "Donate" link is hidden on the homepage specifically
+    # because the homepage's bottom Donate CTA card is the explicit
+    # pitch. Stacking the muted footer link below the bigger card
+    # reads as redundancy. Footer link is visible everywhere else.
+    it "hides the footer Donate link on the homepage" do
       visit "/"
 
-      within("footer") do
-        expect(page).to have_link(I18n.t("layout.donate_link"), href: "/donate")
-      end
+      expect(page).not_to have_css("footer a", text: I18n.t("layout.donate_link"))
     end
 
     it "shows the donate link in the footer on a public reader page" do
@@ -36,7 +38,7 @@ RSpec.describe "Footer donate link", type: :system do
       end
     end
 
-    it "shows the donate link on the donate page itself (global means global)" do
+    it "shows the donate link on the donate page itself (global means global except on /)" do
       visit "/donate"
 
       within("footer") do

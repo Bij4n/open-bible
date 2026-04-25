@@ -78,6 +78,44 @@ RSpec.describe "Home page", type: :system do
     expect(page).not_to have_content("Bilingual UI")
   end
 
+  it "groups feature cards into 'For yourself' and 'With others' subgroups" do
+    visit "/"
+
+    # Each subgroup gets its own H3 — the grid splits at the heading.
+    expect(page).to have_css("h3", text: I18n.t("home.features.for_yourself"))
+    expect(page).to have_css("h3", text: I18n.t("home.features.with_others"))
+
+    # "For yourself" group contains the personal-experience cards
+    # (read, mark, find), "With others" contains the shared/relational
+    # cards (groups, public, bilingual). Bilingual lands in "With
+    # others" because of the heart-language framing in its body.
+    within(:xpath, "//section//div[.//h3[contains(text(),'#{I18n.t('home.features.for_yourself')}')]]") do
+      expect(page).to have_content(I18n.t("home.features.highlights.title"))
+      expect(page).to have_content(I18n.t("home.features.notes.title"))
+      expect(page).to have_content(I18n.t("home.features.keyword_search.title"))
+      expect(page).to have_content(I18n.t("home.features.semantic_search.title"))
+    end
+
+    within(:xpath, "//section//div[.//h3[contains(text(),'#{I18n.t('home.features.with_others')}')]]") do
+      expect(page).to have_content(I18n.t("home.features.groups.title"))
+      expect(page).to have_content(I18n.t("home.features.public.title"))
+      expect(page).to have_content(I18n.t("home.features.bilingual.title"))
+    end
+  end
+
+  it "renders the softened public-notes card without specific archetype examples" do
+    visit "/"
+
+    # The earlier draft listed specific archetypes ("the widow who lost
+    # her husband", "the kid finding their faith") that read as real-
+    # user examples when they were hypothetical. v2 softens to a
+    # generic frame ("someone whose life looks nothing like yours")
+    # which keeps the testimony tone without manufacturing testimony.
+    expect(page).to have_content("someone whose life looks nothing like yours")
+    expect(page).not_to have_content("widow who lost her husband")
+    expect(page).not_to have_content("kid finding their faith")
+  end
+
   it "lands the hero CTA on the public reader" do
     visit "/"
 
@@ -109,11 +147,6 @@ RSpec.describe "Home page", type: :system do
     BitcoinAddress.rotate_to!(address: "bc1qfzfen6peqgqmc03gj2jsu0zc96s49dwgahvu2l")
     visit "/"
 
-    # Two donate links appear on the page (footer + bottom CTA card).
-    # `match: :first` consistently picks the bottom CTA card under
-    # rack_test because the link text "Donate" is the CTA button label
-    # while the footer link uses the same label — selecting the CTA
-    # explicitly via its surrounding heading.
     within("section[data-section='donate-cta']") do
       click_on I18n.t("home.donate_cta.button")
     end
@@ -123,13 +156,22 @@ RSpec.describe "Home page", type: :system do
   context "when an active BitcoinAddress exists" do
     before { BitcoinAddress.rotate_to!(address: "bc1qfzfen6peqgqmc03gj2jsu0zc96s49dwgahvu2l") }
 
-    it "lands the footer Donate link on /donate from the homepage" do
+    # v2 hides the footer "Donate" link on the homepage specifically
+    # — the bottom donate-CTA card is the homepage's pitch, and
+    # stacking the muted footer link below it reads as redundancy.
+    # Footer link stays visible on every other page.
+    it "hides the footer Donate link on the homepage even with an active address" do
       visit "/"
 
+      expect(page).not_to have_css("footer a", text: I18n.t("layout.donate_link"))
+    end
+
+    it "still shows the footer Donate link on a non-homepage surface" do
+      visit "/public/bible/kjv/gen/1"
+
       within("footer") do
-        click_on I18n.t("layout.donate_link")
+        expect(page).to have_link(I18n.t("layout.donate_link"), href: "/donate")
       end
-      expect(page).to have_current_path("/donate")
     end
   end
 end

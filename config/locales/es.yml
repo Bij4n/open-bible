@@ -20,48 +20,50 @@ es:
     switch_to: "Cambiar a %{name}"
     dismiss: Descartar
   home:
-    welcome: Un lector de Biblia bilingüe.
-    subhead: Lee, anota, comparte. Textos de dominio público en KJV y RV1909.
+    welcome: Donde los versículos encuentran voz.
+    subhead: Resalta las palabras que te atravesaron. Comparte lo que significaron para ti. Lee lo que el mismo versículo significó para otro.
     cta_public_bible: Leer la Biblia
     tertiary: Sin rastreo. Sostenido por donaciones.
     features:
       heading: Características
+      for_yourself: Para ti
+      with_others: Con otros
       highlights:
         title: Resaltado a nivel de carácter
-        body: Selecciona cualquier rango de texto — incluso a mitad de palabra — y dale color.
+        body: Marca las palabras exactas que te atravesaron. No sólo el versículo — la línea, la frase, la coma donde todo cambió.
       notes:
         title: Notas privadas y compartidas
-        body: Adjunta notas de texto enriquecido a cualquier versículo. Guárdalas en privado o compártelas con quien elijas.
+        body: Escribe lo que la Escritura significa para ti. Guárdalo entre tú y Dios, compártelo con una persona, o ábrelo al mundo.
       groups:
         title: Biblias en grupo, en tiempo real
-        body: Lee con amigos. Los resaltados, las notas y los comentarios se actualizan al instante.
+        body: Lee con quienes más amas. Los resaltados, las notas y los comentarios se actualizan en vivo — como sentarse en la misma banca, a doscientos kilómetros de distancia.
       public:
         title: Notas públicas con votos
-        body: Publica una nota y únete a la Biblia pública — conversación, votos y respuestas.
+        body: Lee cómo el mismo versículo le habló a alguien cuya vida no se parece en nada a la tuya. Los versículos viven distinto en cada vida.
       bilingual:
         title: Bilingüe — KJV y RV1909
-        body: Lee en inglés o en español. Cambia de traducción desde el lector.
+        body: Lee en el idioma de tu corazón. King James en inglés, Reina-Valera en español — cambia entre ellos en cualquier versículo, en cualquier página.
       keyword_search:
         title: Búsqueda por palabra clave
-        body: Encuentra versículos y notas por frase o palabra.
+        body: Encuentra el versículo que casi recuerdas. El que tu abuela recitaba. La frase del sermón de hace diez años.
       semantic_search:
         title: Búsqueda semántica (inglés)
-        body: Encuentra versículos por significado, no sólo por palabras exactas. Sólo KJV por ahora.
+        body: "Busca por lo que quieres decir, no por lo que está escrito. Pide \"versículos sobre sentirse perdido\" y encuentra salmos que nunca habrías buscado. Sólo KJV por ahora."
     how:
       heading: Cómo funciona
-      step_1_title: Abre un capítulo
+      step_1_title: Abre la Escritura
       step_1_body: Elige una traducción y comienza a leer.
-      step_2_title: Resalta y toma notas
+      step_2_title: Marca lo que importa
       step_2_body: Selecciona texto y adjunta una nota. Privada por defecto.
-      step_3_title: Comparte cuando quieras
+      step_3_title: Comparte tu historia
       step_3_body: Con personas concretas, con un grupo o de forma pública.
     about:
       heading: Acerca de
-      para_1: Open Bible es un lector para resaltar, tomar notas y leer en compañía. Dos traducciones de dominio público — KJV en inglés y RV1909 en español — con interfaz en ambos idiomas.
-      para_2: Hecho y mantenido por una sola persona. Los textos bíblicos son de dominio público. El alojamiento y el mantenimiento se financian con donaciones — sin suscripción, sin rastreo, sin trampas.
+      para_1: "Open Bible se basa en una idea sencilla: la Escritura está hecha para leerse en compañía. El versículo que te atraviesa atraviesa a otro, en algún lugar. Saberlo — poder decirlo, poder leer lo que significó para alguien más — cambia cómo lo lees tú."
+      para_2: "Dos traducciones de dominio público viven aquí: KJV en inglés, RV1909 en español, con la interfaz en ambos idiomas. Hecho y mantenido por una sola persona. El alojamiento se financia con donaciones — sin suscripción, sin rastreo, sin trampas."
     donate_cta:
       heading: Apoya a Open Bible
-      body: Si Open Bible te ha sido útil, las donaciones lo mantienen funcionando.
+      body: Si Open Bible te ha importado, las donaciones lo mantienen abierto para quien llegue después.
       button: Donar
   bible:
     reader:

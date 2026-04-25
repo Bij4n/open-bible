@@ -140,7 +140,7 @@
       <%= yield %>
     </main>
 
-    <% if donate_link_visible? %>
+    <% if donate_footer_link_visible? %>
       <footer class="mx-auto max-w-5xl px-6 pb-10 pt-2 text-center">
         <%= link_to t("layout.donate_link"), donate_path,
                     class: "font-ui text-xs font-medium text-surface-500 transition-colors hover:text-accent-700 dark:text-surface-400 dark:hover:text-accent-400" %>

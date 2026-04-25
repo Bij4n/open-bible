@@ -20,48 +20,50 @@ en:
     switch_to: "Switch to %{name}"
     dismiss: Dismiss
   home:
-    welcome: A bilingual Bible reader.
-    subhead: Read, annotate, share. Public domain texts in KJV and RV1909.
+    welcome: Where verses meet voices.
+    subhead: Highlight the words that pierced through. Share what they meant to you. Read what the same verse meant to someone else.
     cta_public_bible: Read the Bible
     tertiary: No tracking. Donation-supported.
     features:
       heading: Features
+      for_yourself: For yourself
+      with_others: With others
       highlights:
         title: Character-level highlighting
-        body: Select any range of text — even mid-word — and color it.
+        body: Mark the exact words that pierced through. Not just the verse — the line, the phrase, the comma where everything turned.
       notes:
         title: Private and shared notes
-        body: Attach rich-text notes to any verse. Keep them private or share them with people you choose.
+        body: Write what scripture means to you. Keep it between you and God, share it with one person, or open it up.
       groups:
         title: Group Bibles, real-time
-        body: Read together with friends. Highlights, notes, and comments update live.
+        body: Read with the people closest to you. Highlights, notes, and comments update live — like sitting in the same pew, two hundred miles apart.
       public:
         title: Public notes with upvotes
-        body: Publish a note and join a curated public Bible — discussion, upvotes, threading.
+        body: Read how the same verse landed for someone whose life looks nothing like yours. Verses live differently in every life.
       bilingual:
         title: Bilingual — KJV and RV1909
-        body: Read in English or Spanish. Switch translations from the reader.
+        body: Read in your heart language. King James English, Reina-Valera Spanish — switch between them on any verse, on any page.
       keyword_search:
         title: Keyword search
-        body: Find verses and notes by phrase or word.
+        body: Find the verse you almost remember. The one your grandmother quoted. The phrase from a sermon ten years ago.
       semantic_search:
         title: Semantic search (English)
-        body: Find verses by meaning, not just exact words. KJV only for now.
+        body: "Search by what you mean, not what's written. Ask for \"verses about feeling lost\" and find Psalms you'd never have looked up. KJV only for now."
     how:
       heading: How it works
-      step_1_title: Open a chapter
+      step_1_title: Open scripture
       step_1_body: Pick a translation and start reading.
-      step_2_title: Highlight and take notes
+      step_2_title: Mark what matters
       step_2_body: Select text and attach a note. Yours, by default.
-      step_3_title: Share when you want
+      step_3_title: Share your story
       step_3_body: With specific people, with a group, or publicly.
     about:
       heading: About
-      para_1: Open Bible is a reader for highlighting, taking notes, and reading with others. Two public-domain translations live — KJV in English, RV1909 in Spanish — with a UI in both languages.
-      para_2: Built and maintained by one person. The Bible texts are public domain. Hosting and maintenance are funded by donations — no subscription, no tracker, no upsell.
+      para_1: "Open Bible is built on a simple belief: scripture is meant to be read with someone. The verse that wrecks you wrecks somebody else, somewhere. Knowing that — being able to say so, being able to read what it meant for someone else — changes how you read it yourself."
+      para_2: "Two public-domain translations live: KJV in English, RV1909 in Spanish, with the interface in both languages. Built and maintained by one person. Hosting is funded by donations — no subscription, no tracker, no upsell."
     donate_cta:
       heading: Support Open Bible
-      body: If Open Bible has been useful, donations keep it running.
+      body: If Open Bible has mattered to you, donations keep it open for whoever comes next.
       button: Donate
   bible:
     reader:

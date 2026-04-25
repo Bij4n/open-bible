@@ -14,6 +14,10 @@ en:
     close_menu: Close menu
     account: Account
     donate_link: Donate
+    about_link: About
+    footer_tagline: Read scripture with someone.
+    footer_attribution_translations: "Public domain texts: KJV (English) · Reina-Valera 1909 (Spanish)."
+    footer_attribution_meta: "No tracking. © %{year}."
   locale_banner:
     aria_label: Reading language suggestion
     reading: "You're reading %{name}."

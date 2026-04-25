@@ -195,18 +195,15 @@ RSpec.describe "Home page", type: :system do
   context "when an active BitcoinAddress exists" do
     before { BitcoinAddress.rotate_to!(address: "bc1qfzfen6peqgqmc03gj2jsu0zc96s49dwgahvu2l") }
 
-    # v2 hides the footer "Donate" link on the homepage specifically
-    # — the bottom donate-CTA card is the homepage's pitch, and
-    # stacking the muted footer link below it reads as redundancy.
-    # Footer link stays visible on every other page.
-    it "hides the footer Donate link on the homepage even with an active address" do
+    # The site-wide footer (Sprint 15.6 PR D) renders on every page
+    # including the homepage. The Donate link inside the footer is
+    # visible everywhere when an active address exists — including /.
+    # The earlier "hide on /" gate was per-page logic for a footer
+    # that had only a Donate link in it; the new footer carries its
+    # own chrome (wordmark, About, attribution) and justifies itself
+    # site-wide. Broader footer behavior lives in footer_spec.rb.
+    it "shows the footer Donate link on the homepage" do
       visit "/"
-
-      expect(page).not_to have_css("footer a", text: I18n.t("layout.donate_link"))
-    end
-
-    it "still shows the footer Donate link on a non-homepage surface" do
-      visit "/public/bible/kjv/gen/1"
 
       within("footer") do
         expect(page).to have_link(I18n.t("layout.donate_link"), href: "/donate")

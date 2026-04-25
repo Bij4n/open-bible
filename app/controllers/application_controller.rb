@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
 
   before_action :set_locale
 
-  helper_method :resolved_theme, :donate_link_visible?, :donate_footer_link_visible?
+  helper_method :resolved_theme, :donate_link_visible?
 
   # Admin gate for /admin/* controllers. Non-admins get 404 rather than
   # 403 so the existence of admin routes isn't advertised.
@@ -25,21 +25,6 @@ class ApplicationController < ActionController::Base
     return @_donate_link_visible if defined?(@_donate_link_visible)
 
     @_donate_link_visible = BitcoinAddress.exists?(active: true)
-  end
-
-  # Per-page gate for the footer donate link. The homepage carries its
-  # own bottom Donate CTA card as the explicit pitch; stacking the
-  # muted footer link below it reads as redundancy. Footer link is
-  # visible everywhere else (still gated on an active address).
-  #
-  # The path comparison can't naively use `request.path != root_path`
-  # because `root_path` is built through `default_url_options`, which
-  # injects `?locale=es` for non-default locales. Under `:es`,
-  # `root_path` becomes `/?locale=es` while `request.path` stays `/`,
-  # and the gate misfires (footer leaks on the Spanish homepage).
-  # Compare to the literal `/` instead — root never moves.
-  def donate_footer_link_visible?
-    donate_link_visible? && request.path != "/"
   end
 
   # Returns "light" / "dark" when the signed-in user has a concrete

@@ -14,6 +14,10 @@ es:
     close_menu: Cerrar menú
     account: Cuenta
     donate_link: Donar
+    about_link: Acerca de
+    footer_tagline: Lee la Escritura en compañía.
+    footer_attribution_translations: "Textos de dominio público: KJV (inglés) · Reina-Valera 1909 (español)."
+    footer_attribution_meta: "Sin rastreo. © %{year}."
   locale_banner:
     aria_label: Sugerencia de idioma de lectura
     reading: "Estás leyendo %{name}."

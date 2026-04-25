@@ -140,12 +140,42 @@
       <%= yield %>
     </main>
 
-    <% if donate_footer_link_visible? %>
-      <footer class="mx-auto max-w-5xl px-6 pb-10 pt-2 text-center">
-        <%= link_to t("layout.donate_link"), donate_path,
-                    class: "font-ui text-xs font-medium text-surface-500 transition-colors hover:text-accent-700 dark:text-surface-400 dark:hover:text-accent-400" %>
-      </footer>
-    <% end %>
+    <%
+      footer_link = "transition-colors hover:text-accent-700 dark:hover:text-accent-400"
+    %>
+    <footer class="border-t border-surface-200 bg-surface-50 dark:border-surface-800 dark:bg-surface-950">
+      <div class="mx-auto max-w-5xl space-y-6 px-6 py-8 sm:py-10">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div class="space-y-1">
+            <p class="font-ui text-base font-semibold text-surface-900 dark:text-surface-50">
+              <%= t("app.name") %>
+            </p>
+            <p class="hidden font-reading text-sm text-surface-600 dark:text-surface-400 sm:block">
+              <%= t("layout.footer_tagline") %>
+            </p>
+          </div>
+
+          <nav class="flex flex-wrap items-center gap-4 font-ui text-sm text-surface-600 dark:text-surface-400">
+            <% if donate_link_visible? %>
+              <%= link_to t("layout.donate_link"), donate_path, class: footer_link %>
+            <% end %>
+            <%= link_to t("layout.about_link"), "#{root_path}#about", class: footer_link %>
+            <% if user_signed_in? %>
+              <%= link_to t("auth.settings"), settings_path, class: footer_link %>
+            <% end %>
+          </nav>
+        </div>
+
+        <div class="space-y-1 border-t border-surface-200 pt-4 dark:border-surface-800">
+          <p class="font-ui text-xs text-surface-500 dark:text-surface-400">
+            <%= t("layout.footer_attribution_translations") %>
+          </p>
+          <p class="font-ui text-xs text-surface-400 dark:text-surface-500">
+            <%= t("layout.footer_attribution_meta", year: Date.current.year) %>
+          </p>
+        </div>
+      </div>
+    </footer>
 
     <aside id="note-panel-container"
            class="fixed inset-y-0 right-0 w-full max-w-full translate-x-full transform border-l border-surface-200 bg-surface-50 shadow-xl transition-transform duration-150 ease-out sm:max-w-md dark:border-surface-800 dark:bg-surface-950"

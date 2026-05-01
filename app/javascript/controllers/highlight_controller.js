@@ -181,6 +181,17 @@ export default class extends Controller {
     })
   }
 
+  // The × button. Hides the toolbar and collapses the selection. The
+  // collapse is necessary — without it, the still-active range would
+  // re-fire selectionchange after the toolbar hides and re-show the
+  // toolbar instantly. Removing the highlight is intentionally NOT
+  // this button's responsibility (Sprint 16.5 PR C lands removal on
+  // the color swatch as a toggle).
+  dismiss(event) {
+    this.hideToolbar()
+    window.getSelection()?.removeAllRanges()
+  }
+
   async apply(event) {
     const color = event.currentTarget.dataset.color
     if (!color || !this.currentRef) return
@@ -250,30 +261,6 @@ export default class extends Controller {
     const anchor = sel?.anchorNode?.parentElement?.closest("[data-highlight-ids]")
     if (!anchor) return []
     return (anchor.dataset.highlightIds || "").split(",").filter(Boolean).map(Number)
-  }
-
-  async remove(event) {
-    // Look up the highlight id on a span under the current selection,
-    // if any; otherwise silently bail.
-    const sel = window.getSelection()
-    if (!sel || sel.rangeCount === 0) return
-    const anchor = sel.anchorNode?.parentElement?.closest("[data-highlight-ids]")
-    if (!anchor) return
-    const ids = (anchor.dataset.highlightIds || "").split(",").filter(Boolean)
-    if (ids.length === 0) return
-
-    const csrfMeta = document.querySelector('meta[name="csrf-token"]')
-    const csrf = csrfMeta ? csrfMeta.content : ""
-
-    // Delete the most recent (highest id) under the cursor — matches the
-    // color precedence in the renderer.
-    const target = ids.map((n) => parseInt(n, 10)).sort((a, b) => b - a)[0]
-    await fetch(`/highlights/${target}`, {
-      method: "DELETE",
-      credentials: "same-origin",
-      headers: { "X-CSRF-Token": csrf, "Accept": "text/vnd.turbo-stream.html" }
-    })
-    window.Turbo?.visit(window.location.href, { action: "replace" }) || window.location.reload()
   }
 
   mountInspector() {

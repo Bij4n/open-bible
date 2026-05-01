@@ -130,7 +130,12 @@ RSpec.describe "Highlights", type: :system, js: true do
     expect(page).to have_css("span.jesus-words", text: /For God so/)
   end
 
-  it "removes a highlight and the DOM updates" do
+  it "the × button dismisses the toolbar without destroying any highlight" do
+    # Sprint 16.5 PR B regression-protect: the × used to call
+    # highlight#remove (DELETE the highlight); it's now bound to
+    # highlight#dismiss (hide toolbar + collapse selection only).
+    # Removal is moving to the color-swatch toggle in PR C — no other
+    # UI path destroys highlights between PR B merge and PR C merge.
     v16 = Verse.find_by!(osis_ref: "Bible.KJV.John.3.16")
     highlight = create(:highlight, user: user, translation: translation,
                                    osis_ref: "Bible.KJV.John.3.16!0-Bible.KJV.John.3.16!3",
@@ -138,13 +143,26 @@ RSpec.describe "Highlights", type: :system, js: true do
     visit "/bible/kjv/john/3"
     expect(page).to have_css("span.highlight-gold", text: "For")
 
-    # Select text inside the existing highlight so the remove button can
-    # locate it via data-highlight-ids.
     select_within_verse(v16.id, "For", start_offset: 0, length: 3)
-    find("[data-highlight-target='toolbar'] [data-action='highlight#remove']", visible: :all).click
+    find("[data-highlight-target='toolbar'] [data-action='highlight#dismiss']", visible: :all).click
 
-    expect(page).not_to have_css("span.highlight-gold")
-    expect(Highlight.exists?(highlight.id)).to be false
+    # Toolbar hidden, highlight unchanged in DB and DOM, selection cleared.
+    expect(page).to have_css("[data-highlight-target='toolbar']", visible: :hidden)
+    expect(Highlight.exists?(highlight.id)).to be true
+    expect(page).to have_css("span.highlight-gold", text: "For")
+    expect(page.evaluate_script("window.getSelection().rangeCount")).to eq(0)
+
+    # Active-state lifecycle: after × dismisses (and clears the active
+    # ring on the gold swatch), re-selecting in plain text on a verse
+    # without highlights opens a fresh toolbar with all swatches
+    # un-pressed. Confirms the active-state from the prior selection
+    # didn't leak through dismiss. Locks lifecycle behavior down before
+    # PRs C/D/E build on top of it.
+    v17 = Verse.find_by!(osis_ref: "Bible.KJV.John.3.17")
+    select_within_verse(v17.id, "For", start_offset: 0, length: 3)
+    Highlight::COLORS.each do |c|
+      expect(page).to have_css("[data-highlight-target='toolbar'] button[data-color='#{c}'][aria-pressed='false']", visible: :all)
+    end
   end
 
   it "does not show the toolbar for signed-out visitors" do

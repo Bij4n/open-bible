@@ -39,9 +39,13 @@
     <% end %>
   </nav>
 
-  <header class="space-y-3 border-b border-surface-200 pb-6 dark:border-surface-800">
+  <header class="space-y-4 border-b border-surface-200 pb-7 dark:border-surface-800">
     <div class="flex items-center justify-between gap-3">
-      <p class="font-ui text-xs font-medium uppercase tracking-wider text-surface-500 dark:text-surface-400">
+      <%# Translation NAMES are mixed-case proper nouns ("King James
+          Version", "Reina-Valera 1909"); mono-caps would erase the
+          information. Sans uppercase tracked-out is the right eyebrow
+          treatment here. %>
+      <p class="font-ui text-xs font-medium uppercase tracking-widest text-surface-500 dark:text-surface-400">
         <%= @translation.name %>
       </p>
       <% translations = Translation.order(:name) %>
@@ -54,7 +58,7 @@
                    aria_label: t("bible.reader.translation_picker") %>
       <% end %>
     </div>
-    <h1 class="font-ui text-4xl font-semibold tracking-tight text-surface-900 dark:text-surface-50">
+    <h1 class="font-ui text-4xl font-semibold leading-[1.05] tracking-[-0.025em] text-surface-900 dark:text-surface-50 sm:text-5xl md:text-6xl">
       <span class="book-title-text"><%= book_name %> <%= @chapter.number %></span>
     </h1>
   </header>

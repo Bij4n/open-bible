@@ -98,13 +98,17 @@
     <ol class="grid grid-cols-1 gap-8 sm:grid-cols-3 sm:gap-6">
       <% (1..3).each do |n| %>
         <li class="space-y-2.5">
-          <%# Numeral renders in Instrument Serif italic at 28px in a
-              44x44 mint-tinted disc. Echo's signal: the steps read as
-              considered (literary numeral) rather than mechanical
-              (sans-bold counter). If on production review this reads
-              as decorative/precious instead of considered, revert to
-              `inline-flex h-8 w-8 ... font-ui text-sm font-semibold`
-              in the same PR per Rule 9. %>
+          <%# Numeral: Instrument Serif italic 28px in a 44x44 mint
+              disc. Echo's signal: steps read as considered (literary)
+              rather than mechanical (sans counter). If production
+              review reads it as decorative/precious, swap the active
+              <div> below for the commented sans-bold revert (Rule 9
+              fix-on-this-branch — delete-and-uncomment). %>
+          <%# Sans-bold revert path:
+          <div class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-accent-700/10 font-ui text-sm font-semibold text-accent-700 dark:bg-accent-400/10 dark:text-accent-400">
+            <%= n %>
+          </div>
+          %>
           <div class="inline-flex h-11 w-11 items-center justify-center rounded-full bg-accent-700/10 font-reading text-[28px] font-normal italic leading-none text-accent-700 dark:bg-accent-400/10 dark:text-accent-400">
             <%= n %>
           </div>
@@ -140,11 +144,29 @@
       or hidden site-wide. /donate itself stays accessible by URL
       with the unavailable explainer. %>
   <% if donate_link_visible? %>
-    <%# Donate panel ships in the .donate-callout chrome — dark
-        statement in light mode, subtle elevation in dark mode, with
-        a mint radial-gradient glow in the upper-right. The button
-        flips inverse (paper bg, ink text) so it reads as a CTA on
-        the dark panel in both themes. %>
+    <%# Donate panel: .donate-callout chrome — dark statement in
+        light mode, subtle elevation in dark mode, mint radial glow,
+        inverse paper-on-ink button. If production review feels too
+        heavy against the now-mint page, swap the active <section>
+        below for the commented light-card revert (Rule 9 fix-on-
+        this-branch — delete-and-uncomment). The light-card revert
+        is self-contained: the donate_btn local stays in place but
+        is unused inside the comment, the bg-accent-700 button class
+        string is inlined so the revert needs no other edits. %>
+    <%# Light-card revert path:
+    <section data-section="donate-cta"
+             class="rounded-lg border border-surface-200 bg-surface-50 p-7 text-center dark:border-surface-800 dark:bg-surface-900 sm:p-10">
+      <h2 class="font-ui text-xl font-semibold tracking-tight text-surface-900 dark:text-surface-50 sm:text-2xl">
+        <%= t("home.donate_cta.heading") %>
+      </h2>
+      <p class="mx-auto mt-3 max-w-md font-reading text-base leading-relaxed text-surface-700 dark:text-surface-300">
+        <%= t("home.donate_cta.body") %>
+      </p>
+      <div class="mt-6">
+        <%= link_to t("home.donate_cta.button"), donate_path, class: "inline-block rounded-md bg-accent-700 px-6 py-3.5 font-ui text-base font-medium text-surface-50 transition-colors hover:bg-accent-800 dark:bg-accent-400 dark:text-surface-950 dark:hover:bg-accent-300" %>
+      </div>
+    </section>
+    %>
     <section data-section="donate-cta"
              class="donate-callout rounded-3xl p-8 text-center sm:p-12">
       <div class="relative">

@@ -24,7 +24,7 @@ es:
     switch_to: "Cambiar a %{name}"
     dismiss: Descartar
   home:
-    welcome: Donde los versículos encuentran voz.
+    welcome_html: Donde los <em>versículos</em> encuentran <em>voz</em>.
     subhead: Resalta las palabras que te atravesaron. Comparte lo que significaron para ti. Lee lo que el mismo versículo significó para otro.
     cta_public_bible: Leer la Biblia
     tertiary: Sin rastreo. Sostenido por donaciones.

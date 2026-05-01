@@ -11,26 +11,27 @@
     "semantic_search" => search_path
   }
 
-  primary_btn  = "inline-block rounded-md bg-accent-700 px-6 py-3.5 font-ui text-base font-medium text-surface-50 transition-colors hover:bg-accent-800 dark:bg-accent-400 dark:text-surface-950 dark:hover:bg-accent-300"
-  card_classes = "block h-full rounded-lg border border-surface-200 bg-surface-50 p-5 transition-colors hover:border-accent-700 dark:border-surface-800 dark:bg-surface-900 dark:hover:border-accent-400 sm:p-6"
+  hero_btn     = "inline-flex items-center gap-2 rounded-full bg-surface-950 px-7 py-3.5 font-ui text-base font-medium text-surface-50 transition-colors hover:bg-accent-700 hover:-translate-y-px dark:bg-surface-50 dark:text-surface-950 dark:hover:bg-accent-400"
+  donate_btn   = "inline-flex items-center gap-2 rounded-full bg-surface-50 px-7 py-3.5 font-ui text-base font-medium text-surface-950 transition-colors hover:bg-accent-300 hover:-translate-y-px"
+  card_classes = "block h-full rounded-2xl border border-surface-200 bg-surface-50 p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-surface-900 hover:shadow-[0_16px_40px_-16px_rgba(14,20,17,0.14)] dark:border-surface-800 dark:bg-surface-900 dark:hover:border-surface-50 dark:hover:shadow-[0_24px_48px_-16px_rgba(0,0,0,0.4)] sm:p-6"
   section_h2   = "font-ui text-2xl font-semibold tracking-tight text-surface-900 dark:text-surface-50 sm:text-3xl"
-  subgroup_h3  = "font-ui text-sm font-medium uppercase tracking-wider text-surface-500 dark:text-surface-400"
+  subgroup_h3  = "font-ui text-sm font-semibold uppercase tracking-widest text-surface-500 dark:text-surface-400"
 %>
 
 <div class="space-y-24 sm:space-y-28">
   <%# Hero %>
   <section class="space-y-5 pt-2 sm:space-y-6 sm:pt-4">
-    <h1 class="font-ui text-4xl font-semibold tracking-tight text-surface-900 dark:text-surface-50 sm:text-5xl">
-      <%= t("home.welcome") %>
+    <h1 class="hero-emphasis font-ui text-5xl font-semibold leading-[1.05] tracking-[-0.035em] text-surface-900 dark:text-surface-50 sm:text-6xl md:text-7xl">
+      <%= t("home.welcome_html") %>
     </h1>
-    <p class="max-w-2xl font-reading text-lg leading-relaxed text-surface-700 dark:text-surface-300 sm:text-xl">
+    <p class="max-w-2xl font-reading text-lg leading-[1.6] text-pretty text-surface-700 dark:text-surface-300 sm:text-xl">
       <%= t("home.subhead") %>
     </p>
 
     <div class="pt-2">
       <%= link_to t("home.cta_public_bible"),
                   public_bible_chapter_path(translation: "kjv", book: "gen", chapter: 1),
-                  class: primary_btn %>
+                  class: hero_btn %>
     </div>
 
     <p class="font-ui text-xs text-surface-500 dark:text-surface-400">
@@ -97,7 +98,21 @@
     <ol class="grid grid-cols-1 gap-8 sm:grid-cols-3 sm:gap-6">
       <% (1..3).each do |n| %>
         <li class="space-y-2.5">
-          <div class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-accent-700/10 font-ui text-sm font-semibold text-accent-700 dark:bg-accent-400/10 dark:text-accent-400">
+          <%# Numeral: Instrument Serif italic 28px in a 44x44 mint
+              disc. Echo's signal: steps read as considered (literary)
+              rather than mechanical (sans counter). If production
+              review reads it as decorative/precious, swap which
+              block is gated by `if false` below (Rule 9 fix-on-
+              this-branch). Using an `if false` guard rather than an
+              ERB comment block because erubi closes a comment at
+              the first close-tag, and inner ERB output tags break
+              the parse. %>
+          <% if false # sans-bold revert path %>
+            <div class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-accent-700/10 font-ui text-sm font-semibold text-accent-700 dark:bg-accent-400/10 dark:text-accent-400">
+              <%= n %>
+            </div>
+          <% end %>
+          <div class="inline-flex h-11 w-11 items-center justify-center rounded-full bg-accent-700/10 font-reading text-[28px] font-normal italic leading-none text-accent-700 dark:bg-accent-400/10 dark:text-accent-400">
             <%= n %>
           </div>
           <h3 class="font-ui text-base font-semibold text-surface-900 dark:text-surface-50">
@@ -121,7 +136,7 @@
       <%= t("home.about.heading") %>
     </h2>
     <% (1..5).each do |n| %>
-      <p class="max-w-2xl font-reading text-base leading-relaxed text-surface-700 dark:text-surface-300">
+      <p class="max-w-2xl font-reading text-base leading-[1.7] text-pretty text-surface-700 dark:text-surface-300">
         <%= t("home.about.para_#{n}") %>
       </p>
     <% end %>
@@ -132,16 +147,43 @@
       or hidden site-wide. /donate itself stays accessible by URL
       with the unavailable explainer. %>
   <% if donate_link_visible? %>
+    <%# Donate panel: .donate-callout chrome — dark statement in
+        light mode, subtle elevation in dark mode, mint radial glow,
+        inverse paper-on-ink button. If production review feels too
+        heavy against the now-mint page, swap which section is
+        gated by `if false` below (Rule 9 fix-on-this-branch).
+        Using an `if false` guard rather than an ERB comment block
+        because erubi closes a comment at the first close-tag, and
+        inner ERB output tags inside the revert block would break
+        the parse. The light-card revert below is self-contained:
+        the bg-accent-700 button class string is inlined so the
+        revert needs no other edits. %>
+    <% if false # light-card revert path %>
+      <section data-section="donate-cta"
+               class="rounded-lg border border-surface-200 bg-surface-50 p-7 text-center dark:border-surface-800 dark:bg-surface-900 sm:p-10">
+        <h2 class="font-ui text-xl font-semibold tracking-tight text-surface-900 dark:text-surface-50 sm:text-2xl">
+          <%= t("home.donate_cta.heading") %>
+        </h2>
+        <p class="mx-auto mt-3 max-w-md font-reading text-base leading-relaxed text-surface-700 dark:text-surface-300">
+          <%= t("home.donate_cta.body") %>
+        </p>
+        <div class="mt-6">
+          <%= link_to t("home.donate_cta.button"), donate_path, class: "inline-block rounded-md bg-accent-700 px-6 py-3.5 font-ui text-base font-medium text-surface-50 transition-colors hover:bg-accent-800 dark:bg-accent-400 dark:text-surface-950 dark:hover:bg-accent-300" %>
+        </div>
+      </section>
+    <% end %>
     <section data-section="donate-cta"
-             class="rounded-lg border border-surface-200 bg-surface-50 p-7 text-center dark:border-surface-800 dark:bg-surface-900 sm:p-10">
-      <h2 class="font-ui text-xl font-semibold tracking-tight text-surface-900 dark:text-surface-50 sm:text-2xl">
-        <%= t("home.donate_cta.heading") %>
-      </h2>
-      <p class="mx-auto mt-3 max-w-md font-reading text-base leading-relaxed text-surface-700 dark:text-surface-300">
-        <%= t("home.donate_cta.body") %>
-      </p>
-      <div class="mt-6">
-        <%= link_to t("home.donate_cta.button"), donate_path, class: primary_btn %>
+             class="donate-callout rounded-3xl p-8 text-center sm:p-12">
+      <div class="relative">
+        <h2 class="font-ui text-2xl font-semibold tracking-tight text-surface-50 sm:text-3xl">
+          <%= t("home.donate_cta.heading") %>
+        </h2>
+        <p class="mx-auto mt-3 max-w-md font-reading text-base leading-[1.7] text-pretty text-surface-50/72">
+          <%= t("home.donate_cta.body") %>
+        </p>
+        <div class="mt-7">
+          <%= link_to t("home.donate_cta.button"), donate_path, class: donate_btn %>
+        </div>
       </div>
     </section>
   <% end %>

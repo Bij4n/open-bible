@@ -211,6 +211,69 @@
   html[data-theme="dark"] .theme-icon-sun  { display: none; }
   html[data-theme="dark"] .theme-icon-moon { display: inline-block; }
 
+  /*
+   * Hero headline em-accent. Ships rendered emphasis on specific words
+   * inside the hero h1 — the i18n string carries `<em>` for the words
+   * we want lifted (welcome_html in en/es). Em swaps the sans run for
+   * Instrument Serif italic in the mint accent, breaks the heading's
+   * 600 weight back to 400 so the italic axis renders correctly, and
+   * tightens letter-spacing slightly for the serif rhythm against the
+   * sans surround. Scoped to .hero-emphasis so other em usage on the
+   * page is unaffected.
+   */
+  .hero-emphasis em {
+    font-family: var(--font-reading);
+    font-style: italic;
+    font-weight: 400;
+    color: var(--color-accent-700);
+    letter-spacing: -0.02em;
+  }
+
+  html[data-theme="dark"] .hero-emphasis em {
+    color: var(--color-accent-400);
+  }
+
+  /*
+   * Donate-CTA panel chrome. Light mode: dark statement panel
+   * (ink on the page, ink-on-paper inverted) so the donate moment
+   * registers as a deliberate callout, not just another card. Dark
+   * mode: subtle elevation panel (one surface step lighter than the
+   * page bg) since a darker-than-dark callout would disappear into
+   * the ground. The radial-gradient ::before adds a soft mint glow
+   * in the upper-right corner — accent-700 in light mode (sits well
+   * over the ink panel), accent-400 in dark mode (visible on the
+   * lighter elevation surface). Color palette stays inside the new
+   * tokens; no hardcoded hex values.
+   */
+  .donate-callout {
+    position: relative;
+    overflow: hidden;
+    background: var(--color-surface-950);
+    color: var(--color-surface-50);
+  }
+
+  .donate-callout::before {
+    content: '';
+    position: absolute;
+    top: -120px;
+    right: -120px;
+    width: 420px;
+    height: 420px;
+    background: radial-gradient(circle, var(--color-accent-700) 0%, transparent 60%);
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  html[data-theme="dark"] .donate-callout {
+    background: var(--color-surface-800);
+    border: 1px solid var(--color-surface-700);
+  }
+
+  html[data-theme="dark"] .donate-callout::before {
+    background: radial-gradient(circle, var(--color-accent-400) 0%, transparent 60%);
+    opacity: 0.28;
+  }
+
   .jesus-words {
     color: var(--color-jesus-light);
     font-style: italic;

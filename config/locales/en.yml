@@ -24,7 +24,7 @@ en:
     switch_to: "Switch to %{name}"
     dismiss: Dismiss
   home:
-    welcome: Where verses meet voices.
+    welcome_html: Where <em>verses</em> meet <em>voices</em>.
     subhead: Highlight the words that pierced through. Share what they meant to you. Read what the same verse meant to someone else.
     cta_public_bible: Read the Bible
     tertiary: No tracking. Donation-supported.

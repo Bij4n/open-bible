@@ -29,13 +29,17 @@ RSpec.describe "Home i18n coverage", type: :request do
     end
   end
 
+  # The hero h1 ships `welcome_html` with <em> markup around the two
+  # words rendered as Instrument Serif italic mint accents. The
+  # rendered body contains the literal markup, so the assertion
+  # matches the full HTML form rather than the visible-text form.
   it "renders the localized H1 in English" do
     get "/", params: { locale: :en }
-    expect(response.body).to include("Where verses meet voices")
+    expect(response.body).to include("Where <em>verses</em> meet <em>voices</em>.")
   end
 
   it "renders the localized H1 in Spanish" do
     get "/", params: { locale: :es }
-    expect(response.body).to include("Donde los versículos encuentran voz")
+    expect(response.body).to include("Donde los <em>versículos</em> encuentran <em>voz</em>.")
   end
 end

@@ -33,7 +33,15 @@ RSpec.describe "Home page", type: :system do
   it "renders the new hero copy" do
     visit "/"
 
-    expect(page).to have_css("h1", text: I18n.t("home.welcome"))
+    # welcome_html ships <em> markup around the words rendered as
+    # Instrument Serif italic mint accents inside the hero h1. Capybara's
+    # `text:` matcher reads visible text content (em tags collapse), so
+    # we assert against the rendered string. Hardcoded rather than
+    # I18n.t("home.welcome_html") because the i18n value contains the
+    # raw "<em>" characters and the rendered page does not.
+    expect(page).to have_css("h1.hero-emphasis", text: "Where verses meet voices.")
+    expect(page).to have_css("h1.hero-emphasis em", text: "verses")
+    expect(page).to have_css("h1.hero-emphasis em", text: "voices")
     expect(page).to have_content(I18n.t("home.subhead"))
     expect(page).to have_content(I18n.t("home.tertiary"))
   end

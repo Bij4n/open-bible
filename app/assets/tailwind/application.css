@@ -92,7 +92,12 @@
   --color-surface-100: #ecefe7;
   --color-surface-200: #dde2d8;
   --color-surface-300: #d1d7ce;
-  --color-surface-500: #8a9590;
+  /* surface-500 splits per mode: green-grey #8a9590 fails 4.5:1 on
+     light paper but reads as intended on dark. Light gets #677470
+     (4.57:1 AA); dark keeps the design's --ink-faint via the
+     [data-theme="dark"] override below. Both ≥AA against their
+     respective page bg. */
+  --color-surface-500: #677470;
   --color-surface-700: #4a5450;
   --color-surface-800: #243029;
   --color-surface-900: #161e1a;
@@ -104,6 +109,10 @@
      against near-black. */
   --color-accent-300: #8ee1bc;
   --color-accent-400: #5dd4a0;
+  /* accent-500 (#15a06a): highlight/decorative use only.
+     3.14:1 on light surface — fails AA as text.
+     For interactive/text on light, use accent-700.
+     For text on dark, use accent-400 or accent-300. */
   --color-accent-500: #15a06a;
   --color-accent-600: #0f8056;
   --color-accent-700: #0f5c3f;
@@ -114,6 +123,16 @@
      variant. */
   --color-jesus-light: #991b1b;
   --color-jesus-dark:  #fca5a5;
+}
+
+/* Per-mode token override. Tokens redeclared here win over the @theme
+   default whenever the dark theme attribute is set, so Tailwind
+   utilities resolve to the right value per mode without any markup
+   change. Add new entries only when a token genuinely needs different
+   values for light vs. dark — the @theme block stays the source of
+   truth otherwise. */
+[data-theme="dark"] {
+  --color-surface-500: #8a9590;
 }
 
 @layer base {

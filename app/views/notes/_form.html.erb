@@ -2,9 +2,16 @@
 <% highlight_ids = local_assigns.fetch(:highlight_ids, []) %>
 <% existing = note.persisted? %>
 <%
-  eyebrow_classes = "block font-ui text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400"
+  # eyebrow_classes: section-eyebrow treatment (form section legends,
+  # share-target labels). mono caps for the deliberate form-control
+  # rhythm — short label strings ("Visibility", "Share with users",
+  # "Share with groups") with no proper-noun content. Radio-button
+  # text labels ("Private", "Friends", "Public") stay sans body via
+  # the fieldset's font-ui text-sm — only the eyebrow goes mono.
+  # Revert lever: change font-mono → font-ui here.
+  eyebrow_classes = "block font-mono text-xs font-medium uppercase tracking-widest text-surface-500 dark:text-surface-400"
   input_classes   = "w-full rounded-md border border-surface-300 bg-surface-50 px-3 py-2 font-ui text-sm text-surface-900 transition-colors placeholder:text-surface-500 focus:border-accent-700 focus:outline-none focus:ring-2 focus:ring-accent-700/20 dark:border-surface-700 dark:bg-surface-900 dark:text-surface-100 dark:focus:border-accent-400 dark:focus:ring-accent-400/20"
-  submit_classes  = "rounded-md bg-accent-700 px-4 py-2 font-ui text-sm font-medium text-surface-50 transition-colors hover:bg-accent-800 dark:bg-accent-400 dark:text-surface-950 dark:hover:bg-accent-300"
+  submit_classes  = "rounded-full bg-accent-700 px-7 py-2.5 font-ui text-sm font-medium text-surface-50 transition-colors hover:bg-accent-800 dark:bg-accent-400 dark:text-surface-950 dark:hover:bg-accent-300"
   danger_classes  = "rounded-md border border-red-500/40 bg-transparent px-3 py-1.5 font-ui text-xs font-medium text-red-700 transition-colors hover:bg-red-500 hover:text-surface-50 dark:border-red-400/40 dark:text-red-300 dark:hover:bg-red-500 dark:hover:text-surface-50"
 %>
 

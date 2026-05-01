@@ -197,10 +197,20 @@
       </div>
     </footer>
 
+    <%# Note editor slide-in. Echo card chrome: at sm+ the panel is a
+        fixed-width card from the right edge with rounded-l corners
+        (reads as "sliding card" rather than "screen plane"); at <sm
+        the panel is full-width edge-to-edge so rounding the corners
+        would clip awkwardly. shadow-2xl gives the elevation in light
+        mode. In dark mode both panel bg and page bg are surface-950,
+        so shadow alone leaves the edge invisible — the explicit
+        dark:border-l + dark:border-surface-800 gives the panel a
+        readable edge against the page. The note_panel_controller.js
+        slide-in transform mechanic is untouched. %>
     <aside id="note-panel-container"
-           class="fixed inset-y-0 right-0 w-full max-w-full translate-x-full transform border-l border-surface-200 bg-surface-50 shadow-xl transition-transform duration-150 ease-out sm:max-w-md dark:border-surface-800 dark:bg-surface-950"
+           class="fixed inset-y-0 right-0 w-full max-w-full translate-x-full transform bg-surface-50 shadow-2xl transition-transform duration-150 ease-out sm:max-w-md sm:rounded-l-2xl dark:border-l dark:border-surface-800 dark:bg-surface-950"
            aria-label="Note editor">
-      <div class="h-full overflow-y-auto p-5">
+      <div class="h-full overflow-y-auto p-5 sm:p-6">
         <%= turbo_frame_tag "note_panel" %>
       </div>
     </aside>

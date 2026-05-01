@@ -74,11 +74,22 @@
          hidden
          class="absolute z-20 flex items-center gap-1 rounded-xl border border-surface-200 bg-surface-50 p-1.5 shadow-xl ring-1 ring-surface-900/5 dark:border-surface-800 dark:bg-surface-900 dark:ring-surface-50/10">
       <% Highlight::COLORS.each do |color| %>
+        <%# aria-pressed flips to "true" on the swatch matching the
+            existing highlight color under the current selection (set
+            by highlight#markActiveSwatch). The aria-pressed:ring-*
+            utilities draw an inset ink ring on the active swatch.
+            ring color is surface-900 in BOTH modes — the swatch fills
+            don't theme-flip (PR 1 left them at full opacity, applied
+            identically in both themes), so a near-white dark-mode
+            ring would vanish on the pale pastel fills (verified
+            1.50–1.69:1 across all 5). surface-900 holds 9.45–10.62:1
+            on every swatch. %>
         <button type="button"
                 data-action="highlight#apply"
                 data-color="<%= color %>"
                 title="<%= color.capitalize %>"
-                class="h-6 w-6 rounded-full border border-surface-300 transition-transform hover:scale-110 dark:border-surface-700 highlight-swatch-<%= color %>">
+                aria-pressed="false"
+                class="h-6 w-6 rounded-full border border-surface-300 transition-transform hover:scale-110 aria-pressed:ring-2 aria-pressed:ring-inset aria-pressed:ring-surface-900 dark:border-surface-700 highlight-swatch-<%= color %>">
           <span class="sr-only"><%= color.capitalize %></span>
         </button>
       <% end %>

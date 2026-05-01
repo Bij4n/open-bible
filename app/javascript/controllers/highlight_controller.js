@@ -144,10 +144,41 @@ export default class extends Controller {
     tb.hidden = false
     tb.style.top  = `${window.scrollY + rect.top - tb.offsetHeight - 8}px`
     tb.style.left = `${window.scrollX + rect.left}px`
+    this.markActiveSwatch(range)
   }
 
   hideToolbar() {
-    if (this.hasToolbarTarget) this.toolbarTarget.hidden = true
+    if (this.hasToolbarTarget) {
+      this.toolbarTarget.hidden = true
+      this.clearActiveSwatch()
+    }
+  }
+
+  // Marks the swatch matching the existing highlight color under the
+  // selection's anchor. Reads the dominant color from the
+  // [data-highlight-ids] span's class list — the renderer already
+  // encodes "highest-id wins" as the visible class. Anchor-based
+  // detection is deliberate (codified in highlights_spec): if the
+  // selection STARTS in plain text, no swatch is active even if the
+  // selection extends into a highlighted span.
+  markActiveSwatch(range) {
+    if (!this.hasToolbarTarget) return
+    const startNode = range.startContainer
+    const startEl = startNode.nodeType === Node.ELEMENT_NODE ? startNode : startNode.parentElement
+    const highlightSpan = startEl?.closest("[data-highlight-ids]")
+    const activeColor = highlightSpan
+      ? Array.from(highlightSpan.classList).find((c) => c.startsWith("highlight-"))?.replace("highlight-", "")
+      : null
+    this.toolbarTarget.querySelectorAll("button[data-color]").forEach((btn) => {
+      btn.setAttribute("aria-pressed", btn.dataset.color === activeColor ? "true" : "false")
+    })
+  }
+
+  clearActiveSwatch() {
+    if (!this.hasToolbarTarget) return
+    this.toolbarTarget.querySelectorAll("button[data-color]").forEach((btn) => {
+      btn.setAttribute("aria-pressed", "false")
+    })
   }
 
   async apply(event) {

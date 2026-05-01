@@ -155,4 +155,74 @@ RSpec.describe "Highlights", type: :system, js: true do
     # isn't in the DOM.
     expect(page).not_to have_css("[data-highlight-target='toolbar']", visible: :all)
   end
+
+  describe "active-state on toolbar swatches" do
+    # When the toolbar opens over an existing highlight, the swatch
+    # matching that highlight's color renders as visually-pressed
+    # (aria-pressed="true" + an inset ink ring). This is the
+    # discoverability hint for the toggle-to-remove pattern shipping in
+    # PR C of the Sprint 16.5 cluster — the active swatch is the lever
+    # the user clicks to remove the highlight.
+    #
+    # Detection is ANCHOR-BASED, not boundary-fuzzy: the active state
+    # surfaces iff the selection's start container sits inside a
+    # [data-highlight-ids] span. A selection that starts in plain text
+    # and extends into a highlight produces NO active state. This is a
+    # deliberate behavior choice — partial selections that don't begin
+    # inside a highlight aren't "the active highlight," and the toggle
+    # contract should match the user's mental anchor (where they
+    # started selecting), not the selection's geometric extent.
+
+    it "marks the matching swatch as aria-pressed when selection is inside an existing highlight" do
+      v16 = Verse.find_by!(osis_ref: "Bible.KJV.John.3.16")
+      create(:highlight, user: user, translation: translation,
+                         osis_ref: "Bible.KJV.John.3.16!0-Bible.KJV.John.3.16!11",
+                         color: "gold")
+      visit "/bible/kjv/john/3"
+      expect(page).to have_css("span.highlight-gold", text: "For God so")
+
+      select_within_verse(v16.id, "God", start_offset: 4, length: 3)
+
+      expect(page).to have_css("[data-highlight-target='toolbar'] button[data-color='gold'][aria-pressed='true']", visible: :all)
+      Highlight::COLORS.reject { |c| c == "gold" }.each do |c|
+        expect(page).to have_css("[data-highlight-target='toolbar'] button[data-color='#{c}'][aria-pressed='false']", visible: :all)
+      end
+    end
+
+    it "marks no swatch as aria-pressed when the selection is in plain (un-highlighted) text" do
+      v16 = Verse.find_by!(osis_ref: "Bible.KJV.John.3.16")
+      visit "/bible/kjv/john/3"
+
+      # No highlights anywhere on this verse — plain selection.
+      select_within_verse(v16.id, "God", start_offset: 4, length: 3)
+
+      Highlight::COLORS.each do |c|
+        expect(page).to have_css("[data-highlight-target='toolbar'] button[data-color='#{c}'][aria-pressed='false']", visible: :all)
+      end
+    end
+
+    it "marks no swatch as aria-pressed when selection STARTS in plain text and extends into a highlight" do
+      # Codifies the anchor-based detection contract. A selection that
+      # begins in plain text and crosses into a highlighted span does
+      # NOT surface the highlight's color as active. Future-readers:
+      # this is intentional, not incidental — the active state follows
+      # the user's selection START (their mental anchor), not the
+      # selection's geometric extent.
+      v16 = Verse.find_by!(osis_ref: "Bible.KJV.John.3.16")
+      # Highlight covers offsets 4..10 ("God so").
+      create(:highlight, user: user, translation: translation,
+                         osis_ref: "Bible.KJV.John.3.16!4-Bible.KJV.John.3.16!10",
+                         color: "rose")
+      visit "/bible/kjv/john/3"
+      expect(page).to have_css("span.highlight-rose", text: "God so")
+
+      # Select from offset 0 ("For ", PLAIN text) through into the
+      # highlighted "God" span.
+      select_within_verse(v16.id, "For God", start_offset: 0, length: 7)
+
+      Highlight::COLORS.each do |c|
+        expect(page).to have_css("[data-highlight-target='toolbar'] button[data-color='#{c}'][aria-pressed='false']", visible: :all)
+      end
+    end
+  end
 end

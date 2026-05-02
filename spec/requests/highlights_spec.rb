@@ -24,6 +24,34 @@ RSpec.describe "Highlights", type: :request do
         expect(response.media_type).to eq("text/vnd.turbo-stream.html")
       end
 
+      # Sprint 16.5 PR D — controller returns a surgical turbo_stream
+      # replacing the affected verse partial(s). The JS controller no
+      # longer Turbo.visits on mutation; it consumes this stream
+      # directly. Asserts the contract: action=replace, target=verse_<id>,
+      # body contains the freshly-rendered span with the new highlight's
+      # color class and data-highlight-ids attribute. Broadcast layer
+      # (Highlight#after_create_commit) is independent of this response
+      # shape and is verified by existing model specs.
+      it "returns a turbo_stream that replaces the affected verse partial" do
+        book    = create(:book, :john, translation: translation)
+        chapter = create(:chapter, book: book, number: 3)
+        verse   = create(:verse, chapter: chapter, number: 16,
+                                 body_text: "For God so loved the world",
+                                 body_html: "For God so loved the world",
+                                 red_letter_ranges: [],
+                                 osis_ref: "Bible.KJV.John.3.16")
+
+        post "/highlights",
+             params: { highlight: { osis_ref: "Bible.KJV.John.3.16!0-Bible.KJV.John.3.16!3", color: "gold" } },
+             headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+        expect(response).to have_http_status(:created)
+        expect(response.body).to include(%(<turbo-stream action="replace" target="verse_#{verse.id}">))
+        expect(response.body).to include(%(<span class="verse"))
+        expect(response.body).to include(%(data-highlight-ids="#{Highlight.last.id}"))
+        expect(response.body).to include(%(class="highlight-gold))
+      end
+
       it "infers the translation from the osis_ref" do
         post "/highlights",
              params: { highlight: { osis_ref: "Bible.KJV.John.3.16", color: "gold" } }
@@ -80,6 +108,36 @@ RSpec.describe "Highlights", type: :request do
       expect {
         delete "/highlights/#{highlight.id}"
       }.to change(Highlight, :count).by(-1)
+    end
+
+    # Sprint 16.5 PR D — destroy path also returns surgical streams
+    # (verse re-rendered without the just-removed highlight class +
+    # data attrs). Snapshotted via affected_verses BEFORE the destroy
+    # so the post-destroy chapter highlights query returns the
+    # post-state.
+    it "returns a turbo_stream replacing the affected verse partial on destroy" do
+      sign_in user
+      book    = create(:book, :john, translation: translation)
+      chapter = create(:chapter, book: book, number: 3)
+      verse   = create(:verse, chapter: chapter, number: 16,
+                               body_text: "For God so loved the world",
+                               body_html: "For God so loved the world",
+                               red_letter_ranges: [],
+                               osis_ref: "Bible.KJV.John.3.16")
+      target = create(:highlight, user: user, translation: translation,
+                                  osis_ref: "Bible.KJV.John.3.16!0-Bible.KJV.John.3.16!3",
+                                  color: "gold")
+
+      target_id = target.id
+      delete "/highlights/#{target.id}",
+             headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+      expect(response.body).to include(%(<turbo-stream action="replace" target="verse_#{verse.id}">))
+      # The just-removed highlight's id is no longer in any
+      # data-highlight-ids attribute in the response. Other
+      # highlights (e.g., the describe-level let!(:highlight)) may
+      # still appear — that's correct, only `target` was destroyed.
+      expect(response.body).not_to match(/data-highlight-ids="[^"]*\b#{target_id}\b/)
     end
 
     it "404s when another user tries to delete" do

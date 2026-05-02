@@ -336,9 +336,15 @@ export default class extends Controller {
       const sel = window.getSelection()
       sel.removeAllRanges()
       sel.addRange(range)
-      // selectionchange will fire → syncSelection → showToolbarAt
-      // repositions the toolbar AND markActiveSwatch updates the
-      // active state. Both flow through the existing path.
+      // Explicit reposition + active-state update. Don't depend on
+      // selectionchange firing deterministically across the post-
+      // stream DOM mutation — the timing is browser-dependent and
+      // CI flaked when relying on the natural flow. Direct call to
+      // showToolbarAt is synchronous; markActiveSwatch runs inside
+      // it. currentRef updated so subsequent applies have the right
+      // OsisRef.
+      this.currentRef = this.rangeToOsisRef(range)
+      this.showToolbarAt(range)
     } catch (err) {
       console.warn("[highlight] selection restoration failed; falling back to bounding-rect repositioning:", err.message)
       this.repositionToolbarFallback(applyColor)

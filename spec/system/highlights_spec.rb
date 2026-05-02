@@ -357,22 +357,36 @@ RSpec.describe "Highlights", type: :system, js: true do
 
       select_within_verse(v16.id, "God", start_offset: 4, length: 3)
       expect(page).to have_css("[data-highlight-target='toolbar']:not([hidden])", visible: :all)
+      # Snapshot toolbar position when anchored to v16 — used as the
+      # "didn't move" baseline for the strengthened assertion below.
+      tb_top_at_v16 = page.evaluate_script(<<~JS)
+        document.querySelector('[data-highlight-target="toolbar"]').getBoundingClientRect().top
+      JS
 
       select_within_verse(v17.id, "God", start_offset: 4, length: 3)
-
-      # Toolbar still visible, now anchored to verse 17.
       expect(page).to have_css("[data-highlight-target='toolbar']:not([hidden])", visible: :all)
-      # Strengthened position assertion: toolbar.top should sit close
-      # to verse 17's top (within toolbar-height+8px, the offset
-      # showToolbarAt applies). 50px margin tolerates browser sub-pixel
-      # rounding without admitting a stale verse-16 anchor.
+
+      # Toolbar.top sits ~`offsetHeight + 8px` ABOVE the selection rect
+      # (showToolbarAt applies that offset so the toolbar floats just
+      # above the selected text). Naive `|tb_top - v17_top| < 50px`
+      # was too tight — toolbar height alone is ~40-50px. Two stronger
+      # assertions: toolbar moved DOWN from its v16 position
+      # (re-anchored, not stuck), AND toolbar's bottom edge sits near
+      # v17's top (not buried mid-chapter). Catches stale-anchor
+      # regressions reliably without admitting browser sub-pixel
+      # rounding noise.
+      tb_top_at_v17 = page.evaluate_script(<<~JS)
+        document.querySelector('[data-highlight-target="toolbar"]').getBoundingClientRect().top
+      JS
+      tb_bottom_at_v17 = page.evaluate_script(<<~JS)
+        document.querySelector('[data-highlight-target="toolbar"]').getBoundingClientRect().bottom
+      JS
       v17_top = page.evaluate_script(<<~JS)
         document.querySelector('[data-verse-id="#{v17.id}"]').getBoundingClientRect().top
       JS
-      tb_top = page.evaluate_script(<<~JS)
-        document.querySelector('[data-highlight-target="toolbar"]').getBoundingClientRect().top
-      JS
-      expect((tb_top - v17_top).abs).to be < 50
+
+      expect(tb_top_at_v17).to be > tb_top_at_v16 + 20  # moved down with the new selection
+      expect((tb_bottom_at_v17 - v17_top).abs).to be < 30  # toolbar.bottom is near v17.top
     end
 
     it "restores the selection across the turbo_stream replace on apply (same-verse)" do

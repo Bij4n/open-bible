@@ -119,7 +119,7 @@ class HighlightsController < ApplicationController
       end
       acc[chapter.id] = {
         highlights: current_user.highlights.includes(:notes).for_chapter(prefix).to_a,
-        cross_translation_highlights: cross_map,
+        cross_translation_highlights: cross_map
       }
     end
 
@@ -132,7 +132,7 @@ class HighlightsController < ApplicationController
           verse: verse,
           highlights: ctx[:highlights],
           cross_translation_highlights: ctx[:cross_translation_highlights],
-          chapter_opener: false,
+          chapter_opener: false
         }
       )
     end

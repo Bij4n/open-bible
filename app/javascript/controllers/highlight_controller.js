@@ -160,12 +160,25 @@ export default class extends Controller {
     tb.hidden = false
     tb.style.top  = `${window.scrollY + rect.top - tb.offsetHeight - 8}px`
     tb.style.left = `${window.scrollX + rect.left}px`
+    // Anchor signal — which verse the toolbar is currently positioned
+    // against. Used by system specs as a deterministic wait target
+    // (have_css "[...][data-anchor-verse-id='X']") instead of polling
+    // pixel-level position math under Selenium's async timing. Also
+    // useful in dev-tools for debugging selection lifecycle.
+    const startEl = range.startContainer.nodeType === Node.TEXT_NODE
+      ? range.startContainer.parentElement
+      : range.startContainer
+    const verseEl = startEl?.closest?.(".verse")
+    if (verseEl?.dataset?.verseId) {
+      tb.dataset.anchorVerseId = verseEl.dataset.verseId
+    }
     this.markActiveSwatch(range)
   }
 
   hideToolbar() {
     if (this.hasToolbarTarget) {
       this.toolbarTarget.hidden = true
+      delete this.toolbarTarget.dataset.anchorVerseId
       this.clearActiveSwatch()
     }
   }
@@ -345,6 +358,18 @@ export default class extends Controller {
       // OsisRef.
       this.currentRef = this.rangeToOsisRef(range)
       this.showToolbarAt(range)
+      // For apply path: the just-applied color may not be detected by
+      // markActiveSwatch when the restored range starts at a text-node
+      // boundary (offset N of an N-char node puts startContainer
+      // OUTSIDE the new highlight span — which the anchor-based
+      // detection rejects per PR A's codified contract). Force-set
+      // the active swatch directly here. We know what the user just
+      // applied; we don't need to derive it from selection geometry.
+      if (applyColor) {
+        this.toolbarTarget.querySelectorAll("button[data-color]").forEach((btn) => {
+          btn.setAttribute("aria-pressed", btn.dataset.color === applyColor ? "true" : "false")
+        })
+      }
     } catch (err) {
       console.warn("[highlight] selection restoration failed; falling back to bounding-rect repositioning:", err.message)
       this.repositionToolbarFallback(applyColor)

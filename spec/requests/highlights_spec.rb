@@ -88,5 +88,44 @@ RSpec.describe "Highlights", type: :request do
       expect(response).to have_http_status(:not_found)
       expect(Highlight.exists?(highlight.id)).to be true
     end
+
+    # Sprint 16.5 PR C — orphan-note cascade. The "always attached"
+    # spec invariant doesn't hold without server-side cleanup:
+    # dependent: :destroy on highlight.highlight_notes only removes
+    # the join rows, leaving the note orphaned. Q1 Option A:
+    # auto-destroy the orphan in the same transaction as the
+    # highlight destroy (the user-facing confirm dialog is the gate;
+    # the server is the executor).
+    describe "orphan-note cascade" do
+      it "destroys an attached note when the last highlight referencing it is deleted" do
+        sign_in user
+        note = create(:note, user: user, body: "anchored")
+        create(:highlight_note, highlight: highlight, note: note)
+        expect(Note.exists?(note.id)).to be true
+
+        delete "/highlights/#{highlight.id}"
+
+        expect(response).to have_http_status(:no_content)
+        expect(Highlight.exists?(highlight.id)).to be false
+        expect(Note.exists?(note.id)).to be false
+      end
+
+      it "preserves a note that's still attached to a different highlight" do
+        sign_in user
+        other_highlight = create(:highlight, user: user, translation: translation,
+                                              osis_ref: "Bible.KJV.John.1.1!0-Bible.KJV.John.1.1!4",
+                                              color: "rose")
+        note = create(:note, user: user, body: "shared across two highlights")
+        create(:highlight_note, highlight: highlight, note: note)
+        create(:highlight_note, highlight: other_highlight, note: note)
+
+        delete "/highlights/#{highlight.id}"
+
+        expect(Highlight.exists?(highlight.id)).to be false
+        expect(Highlight.exists?(other_highlight.id)).to be true
+        # Note still has a join row pointing at other_highlight; not orphaned.
+        expect(Note.exists?(note.id)).to be true
+      end
+    end
   end
 end

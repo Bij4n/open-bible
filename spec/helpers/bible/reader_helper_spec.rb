@@ -32,21 +32,21 @@ RSpec.describe Bible::ReaderHelper, type: :helper do
       verse = make_verse(1, "Hello world")
       highlight = highlight_for(user, "Bible.KJV.John.3.1")
       html = helper.render_verse_with_highlights(verse, [ highlight ])
-      expect(html).to eq(%(<span class="highlight-gold" data-highlight-ids="#{highlight.id}">Hello world</span>))
+      expect(html).to eq(%(<span class="highlight-gold" data-highlight-ids="#{highlight.id}" data-note-count="0">Hello world</span>))
     end
 
     it "renders a character range within a single verse" do
       verse = make_verse(1, "Hello world")
       highlight = highlight_for(user, "Bible.KJV.John.3.1!6-Bible.KJV.John.3.1!11")
       html = helper.render_verse_with_highlights(verse, [ highlight ])
-      expect(html).to eq(%(Hello <span class="highlight-gold" data-highlight-ids="#{highlight.id}">world</span>))
+      expect(html).to eq(%(Hello <span class="highlight-gold" data-highlight-ids="#{highlight.id}" data-note-count="0">world</span>))
     end
 
     it "extends a cross-verse highlight to the end when this verse is the start" do
       verse = make_verse(1, "Hello world")
       highlight = highlight_for(user, "Bible.KJV.John.3.1!6-Bible.KJV.John.3.2!3")
       html = helper.render_verse_with_highlights(verse, [ highlight ])
-      expect(html).to eq(%(Hello <span class="highlight-gold" data-highlight-ids="#{highlight.id}">world</span>))
+      expect(html).to eq(%(Hello <span class="highlight-gold" data-highlight-ids="#{highlight.id}" data-note-count="0">world</span>))
     end
 
     it "starts a cross-verse highlight at 0 when this verse is the end" do
@@ -55,7 +55,7 @@ RSpec.describe Bible::ReaderHelper, type: :helper do
       verse = make_verse(2, "Another verse")
       highlight = highlight_for(user, "Bible.KJV.John.3.1!6-Bible.KJV.John.3.2!7")
       html = helper.render_verse_with_highlights(verse, [ highlight ])
-      expect(html).to eq(%(<span class="highlight-gold" data-highlight-ids="#{highlight.id}">Another</span> verse))
+      expect(html).to eq(%(<span class="highlight-gold" data-highlight-ids="#{highlight.id}" data-note-count="0">Another</span> verse))
     end
 
     it "preserves Jesus-words when a highlight overlaps them" do
@@ -70,8 +70,8 @@ RSpec.describe Bible::ReaderHelper, type: :helper do
       #   [9,14) "Love "     jesus + highlight (overlap region)
       #   [14,17)"God"       jesus only
       expect(html).to include("He ")
-      expect(html).to include(%(<span class="highlight-gold" data-highlight-ids="#{highlight.id}">said: </span>))
-      expect(html).to include(%(<span class="jesus-words highlight-gold" data-highlight-ids="#{highlight.id}">Love </span>))
+      expect(html).to include(%(<span class="highlight-gold" data-highlight-ids="#{highlight.id}" data-note-count="0">said: </span>))
+      expect(html).to include(%(<span class="jesus-words highlight-gold" data-highlight-ids="#{highlight.id}" data-note-count="0">Love </span>))
       expect(html).to include(%(<span class="jesus-words">God</span>))
     end
 
@@ -95,16 +95,16 @@ RSpec.describe Bible::ReaderHelper, type: :helper do
       # [0..5) h1 only → gold
       # [5..8) both → sage (h2 later), data-highlight-ids="h1,h2"
       # [8..11) h2 only → sage
-      expect(html).to include(%(<span class="highlight-gold" data-highlight-ids="#{h1.id}">Hello</span>))
-      expect(html).to include(%(<span class="highlight-sage" data-highlight-ids="#{h1.id},#{h2.id}"> wo</span>))
-      expect(html).to include(%(<span class="highlight-sage" data-highlight-ids="#{h2.id}">rld</span>))
+      expect(html).to include(%(<span class="highlight-gold" data-highlight-ids="#{h1.id}" data-note-count="0">Hello</span>))
+      expect(html).to include(%(<span class="highlight-sage" data-highlight-ids="#{h1.id},#{h2.id}" data-note-count="0"> wo</span>))
+      expect(html).to include(%(<span class="highlight-sage" data-highlight-ids="#{h2.id}" data-note-count="0">rld</span>))
     end
 
     it "handles highlights at exact verse boundaries" do
       verse = make_verse(1, "abc")
       highlight = highlight_for(user, "Bible.KJV.John.3.1!0-Bible.KJV.John.3.1!end")
       html = helper.render_verse_with_highlights(verse, [ highlight ])
-      expect(html).to eq(%(<span class="highlight-gold" data-highlight-ids="#{highlight.id}">abc</span>))
+      expect(html).to eq(%(<span class="highlight-gold" data-highlight-ids="#{highlight.id}" data-note-count="0">abc</span>))
     end
 
     it "escapes HTML in verse text" do

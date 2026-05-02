@@ -174,6 +174,76 @@ RSpec.describe "Highlights", type: :system, js: true do
     expect(page).not_to have_css("[data-highlight-target='toolbar']", visible: :all)
   end
 
+  describe "color-toggle removes the active highlight" do
+    # Sprint 16.5 PR C — clicking the swatch that's already pressed
+    # (active) DELETEs the dominant highlight under selection.
+    # Q1 Option A: auto-destroy orphaned notes with a confirmation
+    # gate when noteCount > 0; skip the dialog for noteCount == 0.
+
+    it "removes the highlight on a single swatch click when noteCount is 0" do
+      v16 = Verse.find_by!(osis_ref: "Bible.KJV.John.3.16")
+      highlight = create(:highlight, user: user, translation: translation,
+                                     osis_ref: "Bible.KJV.John.3.16!0-Bible.KJV.John.3.16!3",
+                                     color: "gold")
+      visit "/bible/kjv/john/3"
+      expect(page).to have_css("span.highlight-gold", text: "For")
+
+      select_within_verse(v16.id, "For", start_offset: 0, length: 3)
+      # Swatch is now aria-pressed=true (PR A); clicking it triggers
+      # the toggle-remove branch in apply().
+      find("[data-highlight-target='toolbar'] button[data-color='gold'][aria-pressed='true']", visible: :all).click
+
+      expect(page).not_to have_css("span.highlight-gold")
+      expect(Highlight.exists?(highlight.id)).to be false
+    end
+
+    it "asks for confirmation when noteCount > 0 and removes both highlight and note on accept" do
+      v16 = Verse.find_by!(osis_ref: "Bible.KJV.John.3.16")
+      highlight = create(:highlight, user: user, translation: translation,
+                                     osis_ref: "Bible.KJV.John.3.16!0-Bible.KJV.John.3.16!3",
+                                     color: "gold")
+      note = create(:note, user: user, body: "test")
+      create(:highlight_note, highlight: highlight, note: note)
+
+      visit "/bible/kjv/john/3"
+      expect(page).to have_css("span.highlight-gold", text: "For")
+
+      select_within_verse(v16.id, "For", start_offset: 0, length: 3)
+
+      # Capybara's accept_confirm captures and accepts the
+      # window.confirm dialog; the message includes the note count
+      # via the bilingual I18n template's %{count} interpolation.
+      page.accept_confirm(/1 note/) do
+        find("[data-highlight-target='toolbar'] button[data-color='gold'][aria-pressed='true']", visible: :all).click
+      end
+
+      expect(page).not_to have_css("span.highlight-gold")
+      expect(Highlight.exists?(highlight.id)).to be false
+      expect(Note.exists?(note.id)).to be false
+    end
+
+    it "preserves both highlight and note when the user cancels the confirm" do
+      v16 = Verse.find_by!(osis_ref: "Bible.KJV.John.3.16")
+      highlight = create(:highlight, user: user, translation: translation,
+                                     osis_ref: "Bible.KJV.John.3.16!0-Bible.KJV.John.3.16!3",
+                                     color: "gold")
+      note = create(:note, user: user, body: "test")
+      create(:highlight_note, highlight: highlight, note: note)
+
+      visit "/bible/kjv/john/3"
+      select_within_verse(v16.id, "For", start_offset: 0, length: 3)
+
+      page.dismiss_confirm do
+        find("[data-highlight-target='toolbar'] button[data-color='gold'][aria-pressed='true']", visible: :all).click
+      end
+
+      # Both survive the cancel — atomic preserve-or-cascade contract.
+      expect(page).to have_css("span.highlight-gold", text: "For")
+      expect(Highlight.exists?(highlight.id)).to be true
+      expect(Note.exists?(note.id)).to be true
+    end
+  end
+
   describe "active-state on toolbar swatches" do
     # When the toolbar opens over an existing highlight, the swatch
     # matching that highlight's color renders as visually-pressed

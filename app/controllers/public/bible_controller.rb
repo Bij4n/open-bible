@@ -41,7 +41,11 @@ module Public
 
     def highlights_for(notes)
       ids = notes.flat_map(&:highlights).map(&:id).uniq
-      Highlight.where(id: ids).to_a
+      # includes(:notes) — render_verse_with_highlights reads
+      # highlight.notes.size to emit data-note-count on the dominant
+      # highlight span (Sprint 16.5 PR C). Same eager-load guard as
+      # the signed-in reader so the renderer's contract is uniform.
+      Highlight.where(id: ids).includes(:notes).to_a
     end
 
     def osis_refs_for(prefix)

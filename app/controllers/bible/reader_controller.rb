@@ -51,7 +51,12 @@ module Bible
       return [] unless user_signed_in?
 
       prefix = "Bible.#{@translation.code}.#{@book.osis_code}.#{@chapter.number}."
-      current_user.highlights.for_chapter(prefix).to_a
+      # includes(:notes) so render_verse_with_highlights can read
+      # highlight.notes.size without an N+1 — the renderer emits
+      # data-note-count on the dominant highlight span (Sprint 16.5
+      # PR C: drives the confirm-or-instant-remove branch on the
+      # color-toggle removal pattern).
+      current_user.highlights.includes(:notes).for_chapter(prefix).to_a
     end
 
     def resolved_default_translation_code

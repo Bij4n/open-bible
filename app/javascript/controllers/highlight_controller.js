@@ -154,21 +154,35 @@ export default class extends Controller {
     }
   }
 
-  // Marks the swatch matching the existing highlight color under the
-  // selection's anchor. Reads the dominant color from the
-  // [data-highlight-ids] span's class list — the renderer already
-  // encodes "highest-id wins" as the visible class. Anchor-based
-  // detection is deliberate (codified in highlights_spec): if the
-  // selection STARTS in plain text, no swatch is active even if the
-  // selection extends into a highlighted span.
-  markActiveSwatch(range) {
-    if (!this.hasToolbarTarget) return
+  // Returns the dominant highlight under the selection's anchor, or
+  // null when the selection STARTS in plain text. The renderer's
+  // "highest-id wins" precedence is encoded as the visible
+  // highlight-{color} class; the data-highlight-ids attribute lists
+  // every touching id; data-note-count is the dominant highlight's
+  // note count (eager-loaded via reader_controller's includes(:notes)).
+  // Anchor-based detection is deliberate — codified in highlights_spec.
+  // Shared by markActiveSwatch (PR A) and removeViaToggle (PR C).
+  dominantHighlightUnderSelection(range) {
     const startNode = range.startContainer
     const startEl = startNode.nodeType === Node.ELEMENT_NODE ? startNode : startNode.parentElement
-    const highlightSpan = startEl?.closest("[data-highlight-ids]")
-    const activeColor = highlightSpan
-      ? Array.from(highlightSpan.classList).find((c) => c.startsWith("highlight-"))?.replace("highlight-", "")
-      : null
+    const span = startEl?.closest("[data-highlight-ids]")
+    if (!span) return null
+    const color = Array.from(span.classList).find((c) => c.startsWith("highlight-"))?.replace("highlight-", "")
+    const ids = (span.dataset.highlightIds || "").split(",").filter(Boolean).map(Number)
+    if (ids.length === 0) return null
+    return {
+      span,
+      color,
+      ids,
+      dominantId: Math.max(...ids),
+      noteCount: parseInt(span.dataset.noteCount || "0", 10),
+    }
+  }
+
+  markActiveSwatch(range) {
+    if (!this.hasToolbarTarget) return
+    const dominant = this.dominantHighlightUnderSelection(range)
+    const activeColor = dominant?.color ?? null
     this.toolbarTarget.querySelectorAll("button[data-color]").forEach((btn) => {
       btn.setAttribute("aria-pressed", btn.dataset.color === activeColor ? "true" : "false")
     })
@@ -193,8 +207,20 @@ export default class extends Controller {
   }
 
   async apply(event) {
-    const color = event.currentTarget.dataset.color
-    if (!color || !this.currentRef) return
+    const swatch = event.currentTarget
+    const color = swatch.dataset.color
+    if (!color) return
+
+    // Color toggle = highlight removal. The aria-pressed state was
+    // set by markActiveSwatch when the toolbar opened over an
+    // existing highlight; clicking the active swatch is the user
+    // saying "undo this highlight." Apply path stays for new
+    // highlights or for adding a different color over an existing one.
+    if (swatch.getAttribute("aria-pressed") === "true") {
+      return this.removeViaToggle()
+    }
+
+    if (!this.currentRef) return
     const csrfMeta = document.querySelector('meta[name="csrf-token"]')
     const csrf = csrfMeta ? csrfMeta.content : ""
 
@@ -207,6 +233,39 @@ export default class extends Controller {
         "Accept": "text/vnd.turbo-stream.html"
       },
       body: JSON.stringify({ highlight: { osis_ref: this.currentRef, color } })
+    })
+
+    if (response.ok) {
+      window.Turbo?.visit(window.location.href, { action: "replace" }) || window.location.reload()
+    }
+  }
+
+  // Color-toggle removal path. Confirms with the user when the
+  // highlight has notes attached (Q1 Option A: auto-destroy with
+  // confirmation gate); skips the dialog when noteCount is 0. The
+  // pluralized confirm templates are rendered server-side as data
+  // attributes on the toolbar; we substitute %{count} client-side.
+  async removeViaToggle() {
+    const sel = window.getSelection()
+    if (!sel || sel.rangeCount === 0) return
+    const range = sel.getRangeAt(0)
+    const dominant = this.dominantHighlightUnderSelection(range)
+    if (!dominant) return
+
+    if (dominant.noteCount > 0) {
+      const tmpl = dominant.noteCount === 1
+        ? this.toolbarTarget.dataset.confirmRemoveSingular
+        : this.toolbarTarget.dataset.confirmRemovePlural
+      const message = (tmpl || "").replace("%{count}", String(dominant.noteCount))
+      if (!window.confirm(message)) return
+    }
+
+    const csrfMeta = document.querySelector('meta[name="csrf-token"]')
+    const csrf = csrfMeta ? csrfMeta.content : ""
+    const response = await fetch(`/highlights/${dominant.dominantId}`, {
+      method: "DELETE",
+      credentials: "same-origin",
+      headers: { "X-CSRF-Token": csrf, "Accept": "text/vnd.turbo-stream.html" },
     })
 
     if (response.ok) {

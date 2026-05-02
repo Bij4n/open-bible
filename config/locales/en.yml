@@ -83,6 +83,16 @@ en:
       translation_picker: Translation
       cross_translation_badge_title: "You've annotated this verse in %{translation} — click to jump there."
       dismiss_toolbar: Dismiss
+      # Sprint 16.5 PR C: confirm dialog when color-toggle removes a
+      # highlight that has notes attached. Q1 Option A — auto-destroy
+      # cascade with a confirmation gate. Two forms via Rails I18n
+      # pluralization so the singular doesn't read as broken English.
+      # The %{count} placeholder is interpolated server-side (the
+      # toolbar renders both forms as data attributes; JS picks one
+      # based on the dominant highlight's data-note-count).
+      confirm_remove_with_notes:
+        one: "This highlight has %{count} note. Removing it will delete the note. Continue?"
+        other: "This highlight has %{count} notes. Removing it will delete the notes. Continue?"
   settings:
     title: Settings
     updated: Preferences saved.

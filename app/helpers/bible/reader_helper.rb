@@ -48,7 +48,12 @@ module Bible
           dominant = sorted_highlights.last
           classes << "highlight-#{dominant[:color]}"
           ids = sorted_highlights.map { |r| r[:id] }.join(",")
-          out << %(<span class="#{classes.join(" ")}" data-highlight-ids="#{ids}">#{fragment}</span>)
+          # data-note-count is the dominant highlight's note count.
+          # Drives the Sprint 16.5 PR C color-toggle removal flow:
+          # 0 → instant remove on click, ≥1 → confirm dialog with
+          # the count-aware bilingual message. The reader controller
+          # eager-loads :notes on highlights so .size is in-memory.
+          out << %(<span class="#{classes.join(" ")}" data-highlight-ids="#{ids}" data-note-count="#{dominant[:note_count]}">#{fragment}</span>)
         else
           out << %(<span class="#{classes.join(" ")}">#{fragment}</span>)
         end
@@ -73,7 +78,7 @@ module Bible
 
       return nil if start_off >= end_off
 
-      { id: highlight.id, color: highlight.color, start: start_off, end: end_off }
+      { id: highlight.id, color: highlight.color, start: start_off, end: end_off, note_count: highlight.notes.size }
     end
 
     def resolve_end_offset(offset, text_len)

@@ -35,7 +35,20 @@ class HighlightsController < ApplicationController
   end
 
   def destroy
-    @highlight.destroy
+    # Sprint 16.5 PR C — color-toggle removal. The "always attached"
+    # note-vs-highlight invariant in the spec doesn't hold without
+    # this cascade: dependent: :destroy on highlight.highlight_notes
+    # only removes the join rows, leaving the note orphaned in the DB.
+    # Eager-load :notes BEFORE destroy because the cascade clears
+    # highlight_notes out from under us; without the to_a snapshot the
+    # post-destroy reload would return zero. Wrapped in a transaction
+    # so a note destroy failure rolls back the whole operation
+    # (atomic delete-or-don't).
+    ActiveRecord::Base.transaction do
+      notes_to_check = @highlight.notes.to_a
+      @highlight.destroy
+      notes_to_check.each { |n| n.destroy if n.highlight_notes.reload.empty? }
+    end
     respond_to do |format|
       format.turbo_stream { head :no_content }
       format.html         { head :no_content }

@@ -69,10 +69,21 @@
   </div>
 
   <% if user_signed_in? %>
-    <!-- toolbar interaction polish (pencil → note bridge, highlight removal) tracked for Sprint 16.5 -->
-    <div data-highlight-target="toolbar"
-         hidden
-         class="absolute z-20 flex items-center gap-1 rounded-xl border border-surface-200 bg-surface-50 p-1.5 shadow-xl ring-1 ring-surface-900/5 dark:border-surface-800 dark:bg-surface-900 dark:ring-surface-50/10">
+    <!-- toolbar interaction polish (pencil → note bridge) tracked for Sprint 16.5 -->
+    <%# Sprint 16.5 PR C: confirm-remove templates carry the
+        pluralized I18n forms as data attributes. JS picks `singular`
+        when noteCount == 1, `plural` otherwise, then string-replaces
+        the literal `%{count}` placeholder client-side. Rails escapes
+        the attribute values automatically when the data: hash is
+        used (vs raw inline `data-x="..."` which leaves us responsible
+        for the escaping). %>
+    <%= tag.div data: {
+                  highlight_target: "toolbar",
+                  confirm_remove_singular: t("bible.reader.confirm_remove_with_notes.one", count: "%{count}"),
+                  confirm_remove_plural:   t("bible.reader.confirm_remove_with_notes.other", count: "%{count}")
+                },
+                hidden: true,
+                class: "absolute z-20 flex items-center gap-1 rounded-xl border border-surface-200 bg-surface-50 p-1.5 shadow-xl ring-1 ring-surface-900/5 dark:border-surface-800 dark:bg-surface-900 dark:ring-surface-50/10" do %>
       <% Highlight::COLORS.each do |color| %>
         <%# aria-pressed flips to "true" on the swatch matching the
             existing highlight color under the current selection (set
@@ -105,7 +116,7 @@
               class="h-6 rounded-md px-2 font-ui text-xs text-surface-700 transition-colors hover:bg-surface-100 hover:text-surface-900 dark:text-surface-300 dark:hover:bg-surface-800 dark:hover:text-surface-50">
         &times;
       </button>
-    </div>
+    <% end %>
   <% end %>
 
   <nav aria-label="<%= t("bible.reader.chapter_label") %>" class="flex items-center justify-between border-t border-surface-200 pt-6 font-ui text-sm dark:border-surface-800">

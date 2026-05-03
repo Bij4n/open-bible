@@ -410,6 +410,30 @@
   */
 
   /*
+   * Echo cursor — a thin blinking caret used inside the homepage
+   * feature/step demo blocks to suggest live typing. Width 1.5px,
+   * height matches its line, mint-accent color, blinks every 1.1s.
+   * Decorative — wrapped in aria-hidden parents so screen readers
+   * skip it. prefers-reduced-motion at the bottom of this file
+   * already disables the animation by zeroing duration globally.
+   */
+  .echo-cursor {
+    display: inline-block;
+    width: 1.5px;
+    height: 1.05em;
+    background: var(--color-accent-700);
+    vertical-align: text-bottom;
+    margin-left: 1px;
+    animation: echo-cursor-blink 1.1s infinite;
+  }
+  html[data-theme="dark"] .echo-cursor {
+    background: var(--color-accent-400);
+  }
+  @keyframes echo-cursor-blink {
+    50% { opacity: 0; }
+  }
+
+  /*
    * Hero headline em-accent. Ships rendered emphasis on specific words
    * inside the hero h1 — the i18n string carries `<em>` for the words
    * we want lifted (welcome_html in en/es). Em swaps the sans run for

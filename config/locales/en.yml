@@ -37,9 +37,20 @@ en:
       highlights:
         title: Character-level highlighting
         body: Mark the exact words that pierced through. Not just the verse — the line, the phrase, the comma where everything turned.
+        demo:
+          ref: 1 Kings 19 · 12
+          before: "And after the fire "
+          highlight: a still small voice
+          after: "."
       notes:
         title: Private and shared notes
         body: Write what scripture means to you. Keep it between you and God, share it with one person, or open it up.
+        demo:
+          ref: Note · Psalm 46 · 10
+          private: Private
+          friends: Friends
+          public: Public
+          body: "\"Be still\" is not a feeling. It's an instruction."
       groups:
         title: Group Bibles, real-time
         body: Read with the people closest to you. Highlights, notes, and comments update live — like sitting in the same pew, two hundred miles apart.
@@ -52,6 +63,13 @@ en:
       keyword_search:
         title: Keyword search
         body: Find the verse you almost remember. The one your grandmother quoted. The phrase from a sermon ten years ago.
+        demo:
+          ref: Search
+          query: verses about feeling lost
+          result_1_ref: "Psalm 139:7"
+          result_1_text: Whither shall I go from thy spirit?
+          result_2_ref: "Luke 15:4"
+          result_2_text: Doth not leave the ninety and nine...
       semantic_search:
         title: Semantic search (English)
         body: "Search by what you mean, not what's written. Ask for \"verses about feeling lost\" and find Psalms you'd never have looked up. KJV only for now."

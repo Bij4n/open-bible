@@ -1,0 +1,59 @@
+<%# Echo prototype-derived embedded demo per feature card. Only 4
+    cards have Echo equivalents (highlights, notes, keyword_search,
+    bilingual); the 3 Open Bible cards without Echo equivalents
+    (semantic_search, groups, public) intentionally render text-only.
+
+    All demo content is decorative illustration — wrapped in
+    aria-hidden so screen readers skip it. Bilingual demo is
+    naturally bilingual (KJV/RV1909) and skips i18n; the other 3
+    pull demo copy from home.features.<key>.demo i18n keys. %>
+<% case key %>
+<% when "highlights" %>
+  <div aria-hidden="true" class="<%= demo_classes %>">
+    <p class="<%= demo_ref %>"><%= t("home.features.highlights.demo.ref") %></p>
+    <p class="font-reading text-base leading-relaxed text-surface-900 dark:text-surface-100">
+      <%= t("home.features.highlights.demo.before") %><span class="rounded-sm bg-accent-700/25 px-0.5 dark:bg-accent-400/30"><%= t("home.features.highlights.demo.highlight") %></span><%= t("home.features.highlights.demo.after") %>
+    </p>
+  </div>
+
+<% when "notes" %>
+  <div aria-hidden="true" class="<%= demo_classes %>">
+    <p class="<%= demo_ref %>"><%= t("home.features.notes.demo.ref") %></p>
+    <div class="mb-2.5 inline-flex items-center gap-0.5 rounded border border-surface-300 bg-surface-50 p-0.5 font-ui text-xs font-medium dark:border-surface-700 dark:bg-surface-900">
+      <span class="px-2.5 py-1 text-surface-500 dark:text-surface-400"><%= t("home.features.notes.demo.private") %></span>
+      <span class="rounded bg-accent-700 px-2.5 py-1 text-surface-50 dark:bg-accent-400 dark:text-surface-950"><%= t("home.features.notes.demo.friends") %></span>
+      <span class="px-2.5 py-1 text-surface-500 dark:text-surface-400"><%= t("home.features.notes.demo.public") %></span>
+    </div>
+    <p class="font-reading text-sm italic leading-relaxed text-surface-700 dark:text-surface-300">
+      <%= t("home.features.notes.demo.body") %><span class="echo-cursor"></span>
+    </p>
+  </div>
+
+<% when "keyword_search" %>
+  <div aria-hidden="true" class="<%= demo_classes %>">
+    <p class="<%= demo_ref %>"><%= t("home.features.keyword_search.demo.ref") %></p>
+    <div class="mb-2 rounded border border-surface-300 bg-surface-50 px-3 py-2 font-mono text-xs text-surface-900 dark:border-surface-700 dark:bg-surface-900 dark:text-surface-100">
+      <%= t("home.features.keyword_search.demo.query") %>
+    </div>
+    <p class="border-b border-surface-200 py-1.5 font-reading text-sm text-surface-700 dark:border-surface-800 dark:text-surface-300">
+      <strong class="font-medium text-surface-900 dark:text-surface-100"><%= t("home.features.keyword_search.demo.result_1_ref") %></strong> — <%= t("home.features.keyword_search.demo.result_1_text") %>
+    </p>
+    <p class="py-1.5 font-reading text-sm text-surface-700 dark:text-surface-300">
+      <strong class="font-medium text-surface-900 dark:text-surface-100"><%= t("home.features.keyword_search.demo.result_2_ref") %></strong> — <%= t("home.features.keyword_search.demo.result_2_text") %>
+    </p>
+  </div>
+
+<% when "bilingual" %>
+  <%# The bilingual demo is naturally bilingual — both languages
+      always rendered side-by-side, no i18n keys. %>
+  <div aria-hidden="true" class="mt-4 grid grid-cols-2 gap-2 rounded-md bg-surface-100 p-4 dark:bg-surface-950/50">
+    <div class="rounded bg-surface-50 p-3 dark:bg-surface-900">
+      <p class="mb-1.5 font-mono text-[10px] uppercase tracking-widest text-accent-700 dark:text-accent-400">KJV</p>
+      <p class="font-reading text-sm leading-snug text-surface-900 dark:text-surface-100">In the beginning was the Word</p>
+    </div>
+    <div class="rounded bg-surface-50 p-3 dark:bg-surface-900">
+      <p class="mb-1.5 font-mono text-[10px] uppercase tracking-widest text-accent-700 dark:text-accent-400">RV1909</p>
+      <p class="font-reading text-sm leading-snug text-surface-900 dark:text-surface-100">En el principio era el Verbo</p>
+    </div>
+  </div>
+<% end %>

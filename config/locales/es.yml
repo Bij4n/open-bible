@@ -37,9 +37,20 @@ es:
       highlights:
         title: Resaltado a nivel de carácter
         body: Marca las palabras exactas que te atravesaron. No sólo el versículo — la línea, la frase, la coma donde todo cambió.
+        demo:
+          ref: 1 Reyes 19 · 12
+          before: "Y tras el fuego "
+          highlight: un silbo apacible y delicado
+          after: "."
       notes:
         title: Notas privadas y compartidas
         body: Escribe lo que la Escritura significa para ti. Guárdalo entre tú y Dios, compártelo con una persona, o ábrelo al mundo.
+        demo:
+          ref: Nota · Salmo 46 · 10
+          private: Privado
+          friends: Amigos
+          public: Público
+          body: "\"Estad quietos\" no es un sentimiento. Es una instrucción."
       groups:
         title: Biblias en grupo, en tiempo real
         body: Lee con quienes más amas. Los resaltados, las notas y los comentarios se actualizan en vivo — como sentarse en la misma banca, a doscientos kilómetros de distancia.
@@ -52,6 +63,13 @@ es:
       keyword_search:
         title: Búsqueda por palabra clave
         body: Encuentra el versículo que casi recuerdas. El que tu abuela recitaba. La frase del sermón de hace diez años.
+        demo:
+          ref: Buscar
+          query: versículos sobre sentirse perdido
+          result_1_ref: "Salmo 139:7"
+          result_1_text: "¿A dónde me iré de tu espíritu?"
+          result_2_ref: "Lucas 15:4"
+          result_2_text: "¿No deja las noventa y nueve..."
       semantic_search:
         title: Búsqueda semántica (inglés)
         body: "Busca por lo que quieres decir, no por lo que está escrito. Pide \"versículos sobre sentirse perdido\" y encuentra salmos que nunca habrías buscado. Sólo KJV por ahora."

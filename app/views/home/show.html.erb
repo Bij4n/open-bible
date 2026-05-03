@@ -16,6 +16,16 @@
   card_classes = "block h-full rounded-2xl border border-surface-200 bg-surface-50 p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-surface-900 hover:shadow-[0_16px_40px_-16px_rgba(14,20,17,0.14)] dark:border-surface-800 dark:bg-surface-900 dark:hover:border-surface-50 dark:hover:shadow-[0_24px_48px_-16px_rgba(0,0,0,0.4)] sm:p-6"
   section_h2   = "font-ui text-2xl font-semibold tracking-tight text-surface-900 dark:text-surface-50 sm:text-3xl"
   subgroup_h3  = "font-ui text-sm font-semibold uppercase tracking-widest text-surface-500 dark:text-surface-400"
+
+  # Echo prototype demo chrome shared across the 4 demoed feature cards.
+  # paper-deep background, mono ref label, decorative `aria-hidden`.
+  demo_classes = "mt-4 rounded-md bg-surface-100 p-4 dark:bg-surface-950/50"
+  demo_ref     = "mb-2 font-mono text-[10px] uppercase tracking-widest text-surface-500 dark:text-surface-400"
+  # Cards with embedded demos per the Echo prototype's 4-card layout.
+  # The 3 Open Bible cards without Echo equivalents (semantic_search,
+  # groups, public) intentionally render text-only — inventing demo
+  # UI for them would echo the Sprint 15 "no synthetic content" lock.
+  cards_with_demo = %w[highlights notes keyword_search bilingual]
 %>
 
 <div class="space-y-24 sm:space-y-28">
@@ -70,6 +80,9 @@
               <p class="mt-2 font-reading text-sm leading-relaxed text-surface-600 dark:text-surface-400">
                 <%= t("home.features.#{key}.body") %>
               </p>
+              <% if cards_with_demo.include?(key) %>
+                <%= render partial: "home/feature_demo", locals: { key: key, demo_classes: demo_classes, demo_ref: demo_ref } %>
+              <% end %>
             <% end %>
           </li>
         <% end %>
@@ -90,6 +103,9 @@
               <p class="mt-2 font-reading text-sm leading-relaxed text-surface-600 dark:text-surface-400">
                 <%= t("home.features.#{key}.body") %>
               </p>
+              <% if cards_with_demo.include?(key) %>
+                <%= render partial: "home/feature_demo", locals: { key: key, demo_classes: demo_classes, demo_ref: demo_ref } %>
+              <% end %>
             <% end %>
           </li>
         <% end %>

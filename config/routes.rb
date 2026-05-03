@@ -73,4 +73,22 @@ Rails.application.routes.draw do
     end
     resources :bitcoin_addresses, only: [ :index, :new, :create ]
   end
+
+  # Branded error pages — wired up via config.exceptions_app in
+  # production.rb. Rails dispatches to these paths when an exception
+  # bubbles out of the app; ErrorsController#show renders the Echo-
+  # branded view through application.html.erb so the error page gets
+  # the full chrome (header + footer). via: :all so non-GET requests
+  # that hit a 404 path also surface the branded view, not blank
+  # routing-error JSON.
+  # Preview/test route for branded error pages — bypasses Rack::Static
+  # which serves public/{404,...}.html directly at the canonical paths.
+  # Useful for design eyeball verification of the dynamic view.
+  get "/__error/:code", to: "errors#show", as: :error_preview, constraints: { code: /\d+/ }
+
+  match "/404", to: "errors#show", via: :all, defaults: { code: 404 }, as: :error_404
+  match "/422", to: "errors#show", via: :all, defaults: { code: 422 }, as: :error_422
+  match "/500", to: "errors#show", via: :all, defaults: { code: 500 }, as: :error_500
+  match "/400", to: "errors#show", via: :all, defaults: { code: 400 }, as: :error_400
+  match "/406-unsupported-browser", to: "errors#show", via: :all, defaults: { code: 406 }, as: :error_406
 end

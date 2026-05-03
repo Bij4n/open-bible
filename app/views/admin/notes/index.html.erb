@@ -2,7 +2,7 @@
 <%
   nav_link       = "transition-colors hover:text-accent-700 dark:hover:text-accent-400"
   nav_link_active = "text-accent-700 dark:text-accent-400 underline underline-offset-4 decoration-accent-700 dark:decoration-accent-400"
-  neutral_sm_btn = "rounded-md border border-surface-300 bg-transparent px-2.5 py-0.5 font-ui text-xs font-medium text-surface-700 transition-colors hover:bg-surface-100 hover:text-surface-900 dark:border-surface-700 dark:text-surface-300 dark:hover:bg-surface-800 dark:hover:text-surface-50"
+  neutral_sm_btn = "rounded-full border border-surface-300 bg-transparent px-2.5 py-0.5 font-ui text-xs font-medium text-surface-700 transition-colors hover:bg-surface-100 hover:text-surface-900 dark:border-surface-700 dark:text-surface-300 dark:hover:bg-surface-800 dark:hover:text-surface-50"
   danger_sm_btn  = "rounded-md border border-red-500/40 bg-transparent px-2.5 py-0.5 font-ui text-xs font-medium text-red-700 transition-colors hover:bg-red-500 hover:text-surface-50 dark:border-red-400/40 dark:text-red-300 dark:hover:bg-red-500 dark:hover:text-surface-50"
 %>
 
@@ -48,10 +48,10 @@
             <td class="py-2 pr-3 text-center"><%= note.flags.unresolved.size %></td>
             <td class="py-2 pr-3 space-x-1 text-xs">
               <% if note.featured? %>
-                <span class="rounded-md bg-accent-700/10 px-2 py-0.5 font-medium tracking-wide text-accent-700 dark:bg-accent-400/10 dark:text-accent-400"><%= t("public_bible.featured") %></span>
+                <span class="rounded-full bg-accent-700/10 px-2.5 py-0.5 font-medium tracking-wide text-accent-700 dark:bg-accent-400/10 dark:text-accent-400"><%= t("public_bible.featured") %></span>
               <% end %>
               <% if note.hidden? %>
-                <span class="rounded-md bg-red-500/10 px-2 py-0.5 font-medium tracking-wide text-red-700 dark:text-red-300"><%= t("public_bible.hidden") %></span>
+                <span class="rounded-full bg-red-500/10 px-2.5 py-0.5 font-medium tracking-wide text-red-700 dark:text-red-300"><%= t("public_bible.hidden") %></span>
               <% end %>
             </td>
             <td class="py-2 pr-0 text-right space-x-1">

@@ -77,10 +77,21 @@ es:
       heading: Cómo funciona
       step_1_title: Abre la Escritura
       step_1_body: Elige una traducción. Abre un capítulo.
+      step_1_demo:
+        ref: Mateo 5
+        text: "Bienaventurados los pobres en espíritu: porque de ellos es el reino de los cielos. Bienaventurados los que lloran..."
       step_2_title: Marca lo que importa
       step_2_body: Selecciona lo que te impactó. Escribe lo que significó. Privado por defecto.
+      step_2_demo:
+        ref: Mateo 5 · 4
+        before: "Bienaventurados "
+        highlight: "los que lloran: porque ellos recibirán consolación"
+        after: "."
       step_3_title: Comparte tu historia
       step_3_body: Con una persona. Con un grupo. Con todos.
+      step_3_demo:
+        ref: Compartiendo con
+        group: Grupo pequeño del domingo · 4 lectores
     about:
       heading: Acerca de
       para_1: "Open Bible se basa en una idea sencilla: la Escritura está hecha para leerse en compañía."

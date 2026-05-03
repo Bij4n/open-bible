@@ -1,0 +1,41 @@
+<%# Echo prototype-derived `.step-screen` mini-screens for the
+    how-it-works section. One per step (n = 1..3). Decorative;
+    aria-hidden so screen readers consume the title + body text only.
+
+    Visual chrome reuses demo_classes / demo_ref from show.html.erb
+    (the same paper-deep + mono-ref vocabulary used by the feature
+    demos in PR #52). %>
+<% case n %>
+<% when 1 %>
+  <div aria-hidden="true" class="<%= demo_classes %>">
+    <p class="<%= demo_ref %>"><%= t("home.how.step_1_demo.ref") %></p>
+    <p class="font-reading text-sm leading-relaxed text-surface-900 dark:text-surface-100">
+      <%= t("home.how.step_1_demo.text") %>
+    </p>
+  </div>
+
+<% when 2 %>
+  <div aria-hidden="true" class="<%= demo_classes %>">
+    <p class="<%= demo_ref %>"><%= t("home.how.step_2_demo.ref") %></p>
+    <p class="font-reading text-sm leading-relaxed text-surface-900 dark:text-surface-100">
+      <%= t("home.how.step_2_demo.before") %><span class="rounded-sm bg-accent-700/25 px-0.5 dark:bg-accent-400/30"><%= t("home.how.step_2_demo.highlight") %></span><%= t("home.how.step_2_demo.after") %><span class="echo-cursor"></span>
+    </p>
+  </div>
+
+<% when 3 %>
+  <div aria-hidden="true" class="<%= demo_classes %>">
+    <p class="<%= demo_ref %>"><%= t("home.how.step_3_demo.ref") %></p>
+    <p class="font-reading text-sm italic leading-relaxed text-surface-700 dark:text-surface-300">
+      <%= t("home.how.step_3_demo.group") %>
+    </p>
+    <%# 4 face avatars with -8px overlap. Mint, deep-mint, warm-brown,
+        dark-mint — same palette as the prototype's .face-1..4. Letters
+        are stylized initials, locale-independent. %>
+    <div class="mt-3 flex">
+      <div class="grid h-7 w-7 place-items-center rounded-full border-2 border-surface-100 bg-accent-700 font-ui text-xs font-semibold text-surface-50 dark:border-surface-950">M</div>
+      <div class="-ml-2 grid h-7 w-7 place-items-center rounded-full border-2 border-surface-100 bg-[#4A6B5C] font-ui text-xs font-semibold text-surface-50 dark:border-surface-950">J</div>
+      <div class="-ml-2 grid h-7 w-7 place-items-center rounded-full border-2 border-surface-100 bg-[#6B4423] font-ui text-xs font-semibold text-surface-50 dark:border-surface-950">A</div>
+      <div class="-ml-2 grid h-7 w-7 place-items-center rounded-full border-2 border-surface-100 bg-[#2F4A3F] font-ui text-xs font-semibold text-surface-50 dark:border-surface-950">+1</div>
+    </div>
+  </div>
+<% end %>

@@ -147,6 +147,7 @@
           <p class="font-reading text-sm leading-relaxed text-surface-600 dark:text-surface-400">
             <%= t("home.how.step_#{n}_body") %>
           </p>
+          <%= render partial: "home/step_screen", locals: { n: n, demo_classes: demo_classes, demo_ref: demo_ref } %>
         </li>
       <% end %>
     </ol>

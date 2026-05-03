@@ -77,10 +77,21 @@ en:
       heading: How it works
       step_1_title: Open scripture
       step_1_body: Pick a translation. Open a chapter.
+      step_1_demo:
+        ref: Matthew 5
+        text: "Blessed are the poor in spirit: for theirs is the kingdom of heaven. Blessed are they that mourn..."
       step_2_title: Mark what matters
       step_2_body: Select what struck you. Write what it meant. Yours by default.
+      step_2_demo:
+        ref: Matthew 5 · 4
+        before: "Blessed are "
+        highlight: "they that mourn: for they shall be comforted"
+        after: "."
       step_3_title: Share your story
       step_3_body: With one person. With a group. With everyone.
+      step_3_demo:
+        ref: Sharing with
+        group: Sunday small group · 4 readers
     about:
       heading: About
       para_1: "Open Bible is built on a simple belief: scripture is meant to be read with someone."

@@ -1,0 +1,53 @@
+<% content_for :title, t("home.about.heading") %>
+
+<article class="mx-auto max-w-3xl space-y-12 py-8">
+  <header class="space-y-2 border-b border-surface-200 pb-6 dark:border-surface-800">
+    <p class="font-mono text-xs font-semibold uppercase tracking-widest text-surface-500 dark:text-surface-400">
+      <%= t("app.name") %>
+    </p>
+    <h1 class="hero-emphasis font-ui text-4xl font-semibold leading-[1.05] tracking-[-0.035em] text-surface-900 dark:text-surface-50 sm:text-5xl">
+      <%= t("home.about.heading") %>
+    </h1>
+  </header>
+
+  <%# Same 2-col pull-quote layout as the homepage About section
+      (Sprint 18.3a, PR #55) — quote LEFT (1fr) as a large
+      Instrument Serif italic statement, prose RIGHT (1.4fr).
+      Mobile collapses to single column with p2 inline between
+      p1 and p3 to preserve reading order. %>
+  <div class="grid gap-7 md:grid-cols-[1fr_1.4fr] md:items-start md:gap-16">
+    <aside aria-hidden="true" class="hidden md:block">
+      <blockquote class="font-reading text-[clamp(28px,4vw,40px)] font-normal italic leading-[1.2] tracking-tight text-surface-900 text-balance dark:text-surface-50">
+        <%= t("home.about.para_2") %>
+      </blockquote>
+    </aside>
+
+    <div class="space-y-4">
+      <p class="max-w-2xl font-reading text-base leading-[1.7] text-pretty text-surface-700 dark:text-surface-300">
+        <%= t("home.about.para_1") %>
+      </p>
+      <p class="max-w-2xl font-reading text-base leading-[1.7] text-pretty text-surface-700 dark:text-surface-300 md:hidden">
+        <%= t("home.about.para_2") %>
+      </p>
+      <% (3..5).each do |n| %>
+        <p class="max-w-2xl font-reading text-base leading-[1.7] text-pretty text-surface-700 dark:text-surface-300">
+          <%= t("home.about.para_#{n}") %>
+        </p>
+      <% end %>
+    </div>
+  </div>
+
+  <%# CTAs back to action %>
+  <div class="flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-surface-200 pt-8 dark:border-surface-800">
+    <%= link_to t("home.cta_public_bible"),
+                public_bible_chapter_path(translation: "kjv", book: "gen", chapter: 1),
+                class: "inline-flex items-center gap-2 rounded-full bg-surface-950 px-7 py-3.5 font-ui text-base font-medium text-surface-50 transition-colors hover:bg-accent-700 hover:-translate-y-px dark:bg-surface-50 dark:text-surface-950 dark:hover:bg-accent-400" %>
+    <% if donate_link_visible? %>
+      <%= link_to donate_path,
+                  class: "inline-flex items-center gap-1.5 font-ui text-base font-medium text-surface-900 transition-colors hover:text-accent-700 dark:text-surface-50 dark:hover:text-accent-400" do %>
+        <%= t("layout.donate_link") %>
+        <span aria-hidden="true">&rarr;</span>
+      <% end %>
+    <% end %>
+  </div>
+</article>

@@ -53,6 +53,9 @@ Rails.application.routes.draw do
 
   get "/search", to: "search#index", as: :search
 
+  get  "/about",             to: "about#show",             as: :about
+  get  "/sitemap.xml",       to: "sitemap#show",           as: :sitemap, defaults: { format: :xml }
+
   get  "/donate",            to: "donations#show",         as: :donate
   post "/donate/confirm",    to: "donations#create_report", as: :donate_confirm
   get  "/donate/thank_you",  to: "donations#thanks",       as: :donate_thank_you

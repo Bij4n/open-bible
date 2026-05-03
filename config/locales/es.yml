@@ -2,6 +2,7 @@ es:
   app:
     name: Open Bible
     tagline: Lee, anota y comparte las Escrituras.
+    meta_description: Lector bíblico bilingüe con resaltados a nivel de carácter y notas — KJV inglés y Reina-Valera 1909 español, ambos de dominio público. Sin rastreo, sostenido por donaciones.
   errors:
     cta_home: Volver al inicio
     cta_read: Abrir la Biblia

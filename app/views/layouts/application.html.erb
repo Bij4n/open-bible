@@ -5,11 +5,37 @@
     who've saved a preference. %>
 <html lang="<%= I18n.locale %>"<%= " data-theme=\"#{resolved_theme}\"".html_safe if resolved_theme %> data-controller="theme">
   <head>
-    <title><%= content_for(:title) || t("app.name") %></title>
+    <% page_title = content_for?(:title) ? "#{content_for(:title)} · #{t("app.name")}" : t("app.name") %>
+    <% page_description = content_for?(:meta_description) ? content_for(:meta_description) : t("app.meta_description") %>
+    <% canonical_url = request.original_url.split("?").first %>
+    <title><%= page_title %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="application-name" content="<%= t("app.name") %>">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="description" content="<%= page_description %>">
+
+    <%# Open Graph + Twitter card meta — used by Facebook, LinkedIn,
+        Slack, iMessage, Twitter, etc. when a URL is shared. og:image
+        falls back to /icon.png (the 512x512 brand glyph) since we
+        don't ship a per-page social-card image yet. twitter:card =
+        "summary" renders the small square card variant which fits
+        the icon's aspect ratio; upgrade to "summary_large_image"
+        once a 1200×630 social card asset is generated. %>
+    <meta property="og:site_name" content="<%= t("app.name") %>">
+    <meta property="og:title" content="<%= page_title %>">
+    <meta property="og:description" content="<%= page_description %>">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="<%= canonical_url %>">
+    <meta property="og:image" content="<%= request.base_url %>/icon.png">
+    <meta property="og:locale" content="<%= I18n.locale == :es ? "es_ES" : "en_US" %>">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="<%= page_title %>">
+    <meta name="twitter:description" content="<%= page_description %>">
+    <meta name="twitter:image" content="<%= request.base_url %>/icon.png">
+
+    <link rel="canonical" href="<%= canonical_url %>">
+
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 

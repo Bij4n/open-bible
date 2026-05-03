@@ -1,1 +1,16 @@
-# See https://www.robotstxt.org/robotstxt.html for documentation on how to use the robots.txt file
+# Open Bible — bible-together.org
+# https://www.robotstxt.org/robotstxt.html
+
+User-agent: *
+Allow: /
+
+# Authentication, account, and write paths — no crawl value, and
+# avoids signed-out crawlers wasting cycles on Devise redirects.
+Disallow: /users/
+Disallow: /settings
+Disallow: /admin/
+
+# Internal preview / debug routes
+Disallow: /__error/
+
+Sitemap: https://bible-together.org/sitemap.xml

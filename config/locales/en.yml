@@ -2,6 +2,7 @@ en:
   app:
     name: Open Bible
     tagline: Read, annotate, and share the scriptures.
+    meta_description: A bilingual Bible reader with character-level highlights and notes — public-domain KJV English and Reina-Valera 1909 Spanish. No tracking, donation-supported.
   errors:
     cta_home: Back to home
     cta_read: Open the Bible

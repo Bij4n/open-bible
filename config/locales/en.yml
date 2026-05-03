@@ -24,7 +24,10 @@ en:
     switch_to: "Switch to %{name}"
     dismiss: Dismiss
   home:
-    hero_chip: A bilingual reader · KJV + RV1909
+    hero_meta:
+      kjv: KJV English
+      rv1909: RV1909 Español
+      public_domain: Public domain
     welcome_html: Where <em>verses</em> meet <em>voices</em>.
     subhead: Highlight the words that pierced through. Share what they meant to you. Read what the same verse meant to someone else.
     cta_public_bible: Read the Bible

@@ -24,7 +24,10 @@ es:
     switch_to: "Cambiar a %{name}"
     dismiss: Descartar
   home:
-    hero_chip: Un lector bilingüe · KJV + RV1909
+    hero_meta:
+      kjv: KJV inglés
+      rv1909: RV1909 español
+      public_domain: Dominio público
     welcome_html: Donde los <em>versículos</em> encuentran <em>voz</em>.
     subhead: Resalta las palabras que te atravesaron. Comparte lo que significaron para ti. Lee lo que el mismo versículo significó para otro.
     cta_public_bible: Leer la Biblia

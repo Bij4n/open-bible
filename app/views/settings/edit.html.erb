@@ -1,7 +1,13 @@
 <% content_for :title, t("settings.title") %>
 <%
-  section_h2     = "font-ui text-xl font-semibold tracking-tight text-surface-900 dark:text-surface-50"
-  section_p      = "font-ui text-sm text-surface-600 dark:text-surface-400"
+  # Each settings section renders as an Echo-style rounded-2xl card —
+  # same chrome vocabulary as homepage feature cards + Devise auth
+  # shell. The cards give the page visual containment that the prior
+  # bare-stack layout lacked; preferences read as discrete settings
+  # rather than a wall of forms.
+  section_card   = "block rounded-2xl border border-surface-200 bg-surface-50 p-6 sm:p-8 dark:border-surface-800 dark:bg-surface-900"
+  section_h2     = "font-ui text-lg font-semibold tracking-tight text-surface-900 dark:text-surface-50"
+  section_p      = "mt-1.5 font-ui text-sm text-surface-600 dark:text-surface-400"
   label_classes  = "flex items-center gap-2 font-ui text-sm text-surface-700 dark:text-surface-300"
   radio_classes  = "h-4 w-4 accent-accent-700 dark:accent-accent-400"
   input_classes  = "w-full rounded-md border border-surface-300 bg-surface-50 px-3 py-2 font-ui text-sm text-surface-900 transition-colors placeholder:text-surface-500 focus:border-accent-700 focus:outline-none focus:ring-2 focus:ring-accent-700/20 dark:border-surface-700 dark:bg-surface-900 dark:text-surface-100 dark:focus:border-accent-400 dark:focus:ring-accent-400/20"
@@ -13,80 +19,92 @@
     <p class="font-ui text-xs font-medium uppercase tracking-wider text-surface-500 dark:text-surface-400">
       <%= current_user.email %>
     </p>
-    <h1 class="font-ui text-4xl font-semibold tracking-tight text-surface-900 dark:text-surface-50">
+    <h1 class="font-ui text-4xl font-semibold tracking-tight text-surface-900 dark:text-surface-50 sm:text-5xl">
       <%= t("settings.title") %>
     </h1>
   </header>
 
-  <%# ----------  Language  ---------- %>
-  <%= turbo_frame_tag "settings_language", class: "block space-y-3" do %>
-    <h2 class="<%= section_h2 %>"><%= t("settings.sections.language.title") %></h2>
-    <p class="<%= section_p %>"><%= t("settings.sections.language.description") %></p>
-    <%= form_with model: current_user, url: settings_path, method: :patch, data: { turbo_frame: "settings_language", controller: "preference-form" }, class: "space-y-3" do |f| %>
-      <div class="flex flex-col gap-2">
-        <% User::UI_LOCALES.each do |code| %>
-          <label class="<%= label_classes %>">
-            <%= f.radio_button :ui_locale, code, data: { action: "change->preference-form#submit" }, class: radio_classes %>
-            <%= t("layout.language_#{code}") %>
-          </label>
-        <% end %>
+  <div class="space-y-6">
+    <%# ----------  Language  ---------- %>
+    <%= turbo_frame_tag "settings_language", class: "#{section_card} space-y-4" do %>
+      <div>
+        <h2 class="<%= section_h2 %>"><%= t("settings.sections.language.title") %></h2>
+        <p class="<%= section_p %>"><%= t("settings.sections.language.description") %></p>
       </div>
-      <noscript>
-        <%= f.submit t("settings.save"), class: submit_classes %>
-      </noscript>
+      <%= form_with model: current_user, url: settings_path, method: :patch, data: { turbo_frame: "settings_language", controller: "preference-form" }, class: "space-y-3" do |f| %>
+        <div class="flex flex-col gap-2">
+          <% User::UI_LOCALES.each do |code| %>
+            <label class="<%= label_classes %>">
+              <%= f.radio_button :ui_locale, code, data: { action: "change->preference-form#submit" }, class: radio_classes %>
+              <%= t("layout.language_#{code}") %>
+            </label>
+          <% end %>
+        </div>
+        <noscript>
+          <%= f.submit t("settings.save"), class: submit_classes %>
+        </noscript>
+      <% end %>
+      <%= render "shared/settings_flash" %>
     <% end %>
-    <%= render "shared/settings_flash" %>
-  <% end %>
 
-  <%# ----------  Theme  ---------- %>
-  <%= turbo_frame_tag "settings_theme", class: "block space-y-3" do %>
-    <h2 class="<%= section_h2 %>"><%= t("settings.sections.theme.title") %></h2>
-    <p class="<%= section_p %>"><%= t("settings.sections.theme.description") %></p>
-    <%= form_with model: current_user, url: settings_path, method: :patch, data: { turbo_frame: "settings_theme", controller: "preference-form" }, class: "space-y-3" do |f| %>
-      <div class="flex flex-col gap-2">
-        <% User::THEMES.each do |theme| %>
-          <label class="<%= label_classes %>">
-            <%= f.radio_button :theme, theme, data: { action: "change->preference-form#submit" }, class: radio_classes %>
-            <%= t("settings.sections.theme.#{theme}") %>
-          </label>
-        <% end %>
+    <%# ----------  Theme  ---------- %>
+    <%= turbo_frame_tag "settings_theme", class: "#{section_card} space-y-4" do %>
+      <div>
+        <h2 class="<%= section_h2 %>"><%= t("settings.sections.theme.title") %></h2>
+        <p class="<%= section_p %>"><%= t("settings.sections.theme.description") %></p>
       </div>
-      <noscript>
-        <%= f.submit t("settings.save"), class: submit_classes %>
-      </noscript>
+      <%= form_with model: current_user, url: settings_path, method: :patch, data: { turbo_frame: "settings_theme", controller: "preference-form" }, class: "space-y-3" do |f| %>
+        <div class="flex flex-col gap-2">
+          <% User::THEMES.each do |theme| %>
+            <label class="<%= label_classes %>">
+              <%= f.radio_button :theme, theme, data: { action: "change->preference-form#submit" }, class: radio_classes %>
+              <%= t("settings.sections.theme.#{theme}") %>
+            </label>
+          <% end %>
+        </div>
+        <noscript>
+          <%= f.submit t("settings.save"), class: submit_classes %>
+        </noscript>
+      <% end %>
+      <%= render "shared/settings_flash" %>
     <% end %>
-    <%= render "shared/settings_flash" %>
-  <% end %>
 
-  <%# ----------  Default translation  ---------- %>
-  <%= turbo_frame_tag "settings_default_translation", class: "block space-y-3" do %>
-    <h2 class="<%= section_h2 %>"><%= t("settings.sections.default_translation.title") %></h2>
-    <p class="<%= section_p %>"><%= t("settings.sections.default_translation.description") %></p>
-    <%= form_with model: current_user, url: settings_path, method: :patch, data: { turbo_frame: "settings_default_translation", controller: "preference-form" }, class: "space-y-3" do |f| %>
-      <%= f.select :default_translation_id,
-                   Translation.order(:name).pluck(:name, :id),
-                   { include_blank: t("settings.sections.default_translation.none") },
-                   data: { action: "change->preference-form#submit" },
-                   "aria-label": t("settings.sections.default_translation.title"),
-                   class: "#{input_classes} [&>option]:bg-surface-50 [&>option]:text-surface-900 dark:[&>option]:bg-surface-900 dark:[&>option]:text-surface-100" %>
-      <noscript>
-        <%= f.submit t("settings.save"), class: submit_classes %>
-      </noscript>
+    <%# ----------  Default translation  ---------- %>
+    <%= turbo_frame_tag "settings_default_translation", class: "#{section_card} space-y-4" do %>
+      <div>
+        <h2 class="<%= section_h2 %>"><%= t("settings.sections.default_translation.title") %></h2>
+        <p class="<%= section_p %>"><%= t("settings.sections.default_translation.description") %></p>
+      </div>
+      <%= form_with model: current_user, url: settings_path, method: :patch, data: { turbo_frame: "settings_default_translation", controller: "preference-form" }, class: "space-y-3" do |f| %>
+        <%= f.select :default_translation_id,
+                     Translation.order(:name).pluck(:name, :id),
+                     { include_blank: t("settings.sections.default_translation.none") },
+                     data: { action: "change->preference-form#submit" },
+                     "aria-label": t("settings.sections.default_translation.title"),
+                     class: "#{input_classes} [&>option]:bg-surface-50 [&>option]:text-surface-900 dark:[&>option]:bg-surface-900 dark:[&>option]:text-surface-100" %>
+        <noscript>
+          <%= f.submit t("settings.save"), class: submit_classes %>
+        </noscript>
+      <% end %>
+      <%= render "shared/settings_flash" %>
     <% end %>
-    <%= render "shared/settings_flash" %>
-  <% end %>
 
-  <%# ----------  Display name  ---------- %>
-  <%= turbo_frame_tag "settings_display_name", class: "block space-y-3" do %>
-    <h2 class="<%= section_h2 %>"><%= t("settings.sections.display_name.title") %></h2>
-    <p class="<%= section_p %>"><%= t("settings.sections.display_name.description") %></p>
-    <%= form_with model: current_user, url: settings_path, method: :patch, data: { turbo_frame: "settings_display_name" }, class: "space-y-3" do |f| %>
-      <%= f.text_field :display_name,
-                       maxlength: User::DISPLAY_NAME_MAX,
-                       "aria-label": t("settings.sections.display_name.title"),
-                       class: input_classes %>
-      <%= f.submit t("settings.save"), class: submit_classes %>
+    <%# ----------  Display name  ---------- %>
+    <%= turbo_frame_tag "settings_display_name", class: "#{section_card} space-y-4" do %>
+      <div>
+        <h2 class="<%= section_h2 %>"><%= t("settings.sections.display_name.title") %></h2>
+        <p class="<%= section_p %>"><%= t("settings.sections.display_name.description") %></p>
+      </div>
+      <%= form_with model: current_user, url: settings_path, method: :patch, data: { turbo_frame: "settings_display_name" }, class: "flex items-end gap-3" do |f| %>
+        <div class="flex-1">
+          <%= f.text_field :display_name,
+                           maxlength: User::DISPLAY_NAME_MAX,
+                           "aria-label": t("settings.sections.display_name.title"),
+                           class: input_classes %>
+        </div>
+        <%= f.submit t("settings.save"), class: submit_classes %>
+      <% end %>
+      <%= render "shared/settings_flash" %>
     <% end %>
-    <%= render "shared/settings_flash" %>
-  <% end %>
+  </div>
 </article>

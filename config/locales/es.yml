@@ -220,7 +220,8 @@ es:
     share_with_users: Compartir con personas específicas
     share_with_groups: Compartir con grupos
     emails_placeholder: amigo@ejemplo.com, otro@ejemplo.com
-    public_coming_soon: Disponible en el Sprint 7
+    visibility_legend: Visibilidad
+    confirm_make_public: "¿Hacer esta nota pública? Cualquiera que lea este versículo la verá, atribuida a tu nombre público. Puedes editarla o eliminarla en cualquier momento."
     visibility:
       private_note: Privada
       shared_users: Compartir con personas

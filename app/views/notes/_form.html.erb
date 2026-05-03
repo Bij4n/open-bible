@@ -48,20 +48,23 @@
 
       <fieldset class="space-y-2 font-ui text-sm text-surface-700 dark:text-surface-300">
         <legend class="<%= eyebrow_classes %>">
-          <%= t("settings.sections.theme.title", default: "Visibility") %>
+          <%= t("notes.visibility_legend", default: "Visibility") %>
         </legend>
 
+        <%# All four ACTIVE_VISIBILITIES (Sprint 22.1, public_note now
+            live). public_note carries data-action="change->note-panel
+            #confirmPublic" so the panel controller can fire a confirm
+            dialog on the radio change — making a note public broadcasts
+            it to anyone, friction at choice-time is desirable. %>
         <% NotesController::ACTIVE_VISIBILITIES.each do |v| %>
           <label class="flex items-center gap-2">
-            <%= f.radio_button :visibility, v, checked: (note.visibility || "private_note") == v, class: "h-4 w-4 accent-accent-700 dark:accent-accent-400" %>
+            <%= f.radio_button :visibility, v,
+                               checked: (note.visibility || "private_note") == v,
+                               data: (v == "public_note" ? { action: "change->note-panel#confirmPublic", confirm_message: t("notes.confirm_make_public") } : {}),
+                               class: "h-4 w-4 accent-accent-700 dark:accent-accent-400" %>
             <%= t("notes.visibility.#{v}", default: v.humanize) %>
           </label>
         <% end %>
-        <label class="flex items-center gap-2 opacity-50" title="<%= t("notes.public_coming_soon") %>">
-          <%= f.radio_button :visibility, "public_note", disabled: true, class: "h-4 w-4" %>
-          <%= t("notes.visibility.public_note") %>
-          <span class="ml-1 text-xs italic text-surface-500 dark:text-surface-400">(<%= t("notes.public_coming_soon") %>)</span>
-        </label>
       </fieldset>
 
       <div data-note-panel-target="shareSection" data-visibility-dependent="shared_users">

@@ -2,7 +2,11 @@ class NotesController < ApplicationController
   before_action :authenticate_user!
   before_action :load_note, only: %i[show edit update destroy]
 
-  ACTIVE_VISIBILITIES = %w[private_note shared_users shared_groups].freeze
+  # All four Note::VISIBILITIES are now active (Sprint 22.1, 2026-05-02
+  # — public_note enabled). The constant remains as the form's
+  # canonical list + a bidirectional gate so a future deprecation
+  # reverses cleanly.
+  ACTIVE_VISIBILITIES = %w[private_note shared_users shared_groups public_note].freeze
 
   def show
     respond_to do |format|
@@ -78,9 +82,10 @@ class NotesController < ApplicationController
     params.require(:note).permit(:body)
   end
 
-  # public_note is accepted in the form (Sprint 7 makes it real), but
-  # the Sprint 4 UI labels it "Coming in Sprint 7". If the client sends
-  # an unknown visibility, fall back to private_note.
+  # All 4 Note visibilities (private_note, shared_users, shared_groups,
+  # public_note) are now active per Sprint 22.1. If the client sends an
+  # unknown visibility (forged form, future deprecation), fall back to
+  # private_note as the safest default.
   def resolved_visibility
     v = params.dig(:note, :visibility).to_s
     Note.visibilities.key?(v) ? v : "private_note"

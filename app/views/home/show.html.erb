@@ -28,10 +28,15 @@
       <%= t("home.subhead") %>
     </p>
 
-    <div class="pt-2">
+    <div class="flex flex-wrap items-center gap-x-6 gap-y-3 pt-2">
       <%= link_to t("home.cta_public_bible"),
                   public_bible_chapter_path(translation: "kjv", book: "gen", chapter: 1),
                   class: hero_btn %>
+      <%= link_to "#how-it-works",
+                  class: "inline-flex items-center gap-1.5 font-ui text-base font-medium text-surface-900 transition-colors hover:text-accent-700 dark:text-surface-50 dark:hover:text-accent-400" do %>
+        <%= t("home.cta_how_it_works") %>
+        <span aria-hidden="true">&rarr;</span>
+      <% end %>
     </div>
 
     <p class="font-ui text-xs text-surface-500 dark:text-surface-400">
@@ -90,7 +95,7 @@
   </section>
 
   <%# How it works %>
-  <section class="space-y-8">
+  <section id="how-it-works" class="space-y-8 scroll-mt-20">
     <h2 class="<%= section_h2 %>">
       <%= t("home.how.heading") %>
     </h2>

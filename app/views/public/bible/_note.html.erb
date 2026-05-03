@@ -6,7 +6,7 @@
     data-flag-prompt-value="<%= t("public_bible.flag_reason_prompt") %>"
     data-flag-success-value="<%= t("public_bible.flag_submitted") %>"
     data-flag-failure-value="<%= t("public_bible.flag_failed") %>"
-    class="rounded-lg border <%= note.featured? ? "border-accent-400/60" : "border-surface-200" %> bg-surface-50 p-4 dark:border-surface-800 dark:bg-surface-900 <%= "ring-1 ring-accent-400/30" if note.featured? %> <%= "opacity-60" if note.hidden? %>">
+    class="rounded-2xl border <%= note.featured? ? "border-accent-400/60" : "border-surface-200" %> bg-surface-50 p-4 dark:border-surface-800 dark:bg-surface-900 <%= "ring-1 ring-accent-400/30" if note.featured? %> <%= "opacity-60" if note.hidden? %>">
   <header class="flex items-start justify-between gap-3">
     <div>
       <p class="font-ui text-xs uppercase tracking-wider text-surface-500 dark:text-surface-400">
@@ -16,12 +16,12 @@
         </span>
       </p>
       <% if note.featured? %>
-        <span class="mt-1 inline-block rounded-md bg-accent-700/10 px-2 py-0.5 font-ui text-xs font-medium tracking-wide text-accent-700 dark:bg-accent-400/10 dark:text-accent-400">
+        <span class="mt-1 inline-block rounded-full bg-accent-700/10 px-2.5 py-0.5 font-ui text-xs font-medium tracking-wide text-accent-700 dark:bg-accent-400/10 dark:text-accent-400">
           ★ <%= t("public_bible.featured") %>
         </span>
       <% end %>
       <% if note.hidden? %>
-        <span class="mt-1 inline-block rounded-md bg-red-500/10 px-2 py-0.5 font-ui text-xs font-medium tracking-wide text-red-700 dark:text-red-300">
+        <span class="mt-1 inline-block rounded-full bg-red-500/10 px-2.5 py-0.5 font-ui text-xs font-medium tracking-wide text-red-700 dark:text-red-300">
           <%= t("public_bible.hidden") %>
         </span>
       <% end %>
@@ -32,7 +32,7 @@
         <button type="button"
                 data-upvote-target="button"
                 data-action="upvote#toggle"
-                class="rounded-md border border-surface-300 px-2 py-1 transition-colors hover:border-surface-500 dark:border-surface-700 dark:hover:border-surface-500 <%= "bg-accent-700 text-surface-50 dark:bg-accent-400 dark:text-surface-950" if note.upvoted_by?(current_user) %>">
+                class="rounded-full border border-surface-300 px-2.5 py-1 transition-colors hover:border-surface-500 dark:border-surface-700 dark:hover:border-surface-500 <%= "bg-accent-700 text-surface-50 dark:bg-accent-400 dark:text-surface-950" if note.upvoted_by?(current_user) %>">
           <span>&#9650;</span>
           <span data-upvote-target="count"><%= note.upvote_count %></span>
         </button>

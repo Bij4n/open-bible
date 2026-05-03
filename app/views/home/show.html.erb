@@ -159,20 +159,27 @@
       (p4) and maintainer/funding (p5) split apart so the practical
       content doesn't run together in one breath.
 
-      Sprint 18.3: 2-col pull-quote layout at md+. Prose (p1, p3, p4,
-      p5) flows in the left col; p2 pulls into a right-col Instrument
-      Serif blockquote. On mobile, p2 stays in-flow between p1 and p3
-      (md:hidden on the inline copy, hidden md:block on the aside) so
-      the original reading order is preserved at every breakpoint.
-      Both copies render the same i18n key; CSS controls which is
-      visible at each breakpoint. %>
-  <section id="about" class="space-y-6">
-    <h2 class="<%= section_h2 %>">
-      <%= t("home.about.heading") %>
-    </h2>
+      Sprint 18.3a (Echo prototype alignment): quote-LEFT / prose-RIGHT
+      at md+, mirroring the prototype's `.about-block` (1fr 1.4fr,
+      gap-16). The quote is large Instrument Serif italic with no
+      border accent — it serves as the section opener, so the
+      explicit "About" h2 is dropped (heading would compete with the
+      quote's visual weight). The section keeps id="about" so the
+      footer's #about anchor still resolves.
 
-    <div class="grid gap-y-4 md:grid-cols-3 md:gap-x-12 md:gap-y-0">
-      <div class="space-y-4 md:col-span-2">
+      On mobile the layout collapses to a single column; p2 stays
+      in-flow between p1 and p3 (md:hidden on inline copy, hidden
+      md:block on the quote aside) so reading order is preserved at
+      every breakpoint. %>
+  <section id="about" class="scroll-mt-20">
+    <div class="grid gap-7 md:grid-cols-[1fr_1.4fr] md:items-start md:gap-16">
+      <aside aria-hidden="true" class="hidden md:block">
+        <blockquote class="font-reading text-[clamp(28px,4vw,40px)] font-normal italic leading-[1.2] tracking-tight text-surface-900 text-balance dark:text-surface-50">
+          <%= t("home.about.para_2") %>
+        </blockquote>
+      </aside>
+
+      <div class="space-y-4">
         <p class="max-w-2xl font-reading text-base leading-[1.7] text-pretty text-surface-700 dark:text-surface-300">
           <%= t("home.about.para_1") %>
         </p>
@@ -185,12 +192,6 @@
           </p>
         <% end %>
       </div>
-
-      <aside aria-hidden="true" class="hidden md:block">
-        <blockquote class="border-l-2 border-accent-700 pl-5 font-reading text-2xl italic leading-snug text-surface-900 dark:border-accent-400 dark:text-surface-50">
-          <%= t("home.about.para_2") %>
-        </blockquote>
-      </aside>
     </div>
   </section>
 

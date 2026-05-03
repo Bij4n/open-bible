@@ -13,7 +13,7 @@
     <p class="font-ui text-xs font-medium uppercase tracking-wider text-surface-500 dark:text-surface-400">
       <%= t("groups.privacy.#{@group.privacy}") %>
     </p>
-    <h1 class="font-ui text-4xl font-semibold tracking-tight text-surface-900 dark:text-surface-50">
+    <h1 class="font-ui text-4xl font-semibold tracking-tight text-surface-900 dark:text-surface-50 sm:text-5xl">
       <%= @group.name %>
     </h1>
     <% if @group.description.present? %>
@@ -46,7 +46,7 @@
   </div>
 
   <% if is_owner && @group.invitation_code.present? %>
-    <section class="rounded-2xl border border-surface-200 bg-surface-50 p-5 dark:border-surface-800 dark:bg-surface-900">
+    <section class="rounded-2xl border border-surface-200 bg-surface-50 p-5 dark:border-surface-800 dark:bg-surface-900 sm:p-6">
       <h2 class="font-ui text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400">
         <%= t("groups.invitation_code") %>
       </h2>
@@ -56,13 +56,13 @@
     </section>
   <% end %>
 
-  <section>
+  <section class="rounded-2xl border border-surface-200 bg-surface-50 p-5 dark:border-surface-800 dark:bg-surface-900 sm:p-6">
     <h2 class="font-ui text-lg font-semibold tracking-tight text-surface-900 dark:text-surface-50">
       <%= t("groups.members") %>
     </h2>
     <ul class="mt-3 space-y-2">
       <% @memberships.each do |m| %>
-        <li class="flex items-center justify-between rounded-md border border-surface-200 bg-surface-50 px-4 py-2 dark:border-surface-800 dark:bg-surface-900">
+        <li class="flex items-center justify-between rounded-md border border-surface-200 bg-surface-100 px-4 py-2 dark:border-surface-800 dark:bg-surface-950/50">
           <span class="font-ui text-sm text-surface-900 dark:text-surface-100">
             <%= m.user.author_name %>
           </span>

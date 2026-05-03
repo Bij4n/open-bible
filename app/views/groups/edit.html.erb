@@ -1,9 +1,13 @@
 <% content_for :title, t("groups.edit") %>
 
-<article class="mx-auto max-w-xl space-y-6">
-  <h1 class="font-ui text-3xl font-semibold tracking-tight text-surface-900 dark:text-surface-50">
-    <%= t("groups.edit") %>
-  </h1>
+<article class="mx-auto max-w-xl space-y-8">
+  <header class="border-b border-surface-200 pb-6 dark:border-surface-800">
+    <h1 class="font-ui text-3xl font-semibold tracking-tight text-surface-900 dark:text-surface-50 sm:text-4xl">
+      <%= t("groups.edit") %>
+    </h1>
+  </header>
 
-  <%= render "form", group: @group %>
+  <div class="rounded-2xl border border-surface-200 bg-surface-50 p-6 dark:border-surface-800 dark:bg-surface-900 sm:p-8">
+    <%= render "form", group: @group %>
+  </div>
 </article>

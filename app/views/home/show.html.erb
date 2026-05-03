@@ -20,7 +20,9 @@
   # Echo prototype demo chrome shared across the 4 demoed feature cards.
   # paper-deep background, mono ref label, decorative `aria-hidden`.
   demo_classes = "mt-4 rounded-md bg-surface-100 p-4 dark:bg-surface-950/50"
-  demo_ref     = "mb-2 font-mono text-[10px] uppercase tracking-widest text-surface-500 dark:text-surface-400"
+  # text-surface-700 on bg-surface-100 = 6.69:1 (WCAG AA — at 10px
+  # we need 4.5:1; surface-500 hit 4.19 and tripped axe).
+  demo_ref     = "mb-2 font-mono text-[10px] uppercase tracking-widest text-surface-700 dark:text-surface-300"
   # Cards with embedded demos per the Echo prototype's 4-card layout.
   # The 3 Open Bible cards without Echo equivalents (semantic_search,
   # groups, public) intentionally render text-only — inventing demo

@@ -7,12 +7,12 @@
   cancel_classes = "font-ui text-sm text-surface-600 transition-colors hover:text-accent-700 dark:text-surface-400 dark:hover:text-accent-400"
 %>
 
-<article class="mx-auto max-w-xl space-y-6">
-  <header class="space-y-2 border-b border-surface-200 pb-4 dark:border-surface-800">
+<article class="mx-auto max-w-xl space-y-8">
+  <header class="space-y-2 border-b border-surface-200 pb-6 dark:border-surface-800">
     <p class="font-ui text-xs font-medium uppercase tracking-wider text-surface-500 dark:text-surface-400">
       <%= t("admin.title") %>
     </p>
-    <h1 class="font-ui text-2xl font-semibold tracking-tight text-surface-900 dark:text-surface-50">
+    <h1 class="font-ui text-3xl font-semibold tracking-tight text-surface-900 dark:text-surface-50 sm:text-4xl">
       <%= t("admin.bitcoin_addresses.new") %>
     </h1>
     <p class="font-ui text-sm text-surface-600 dark:text-surface-400">
@@ -20,7 +20,7 @@
     </p>
   </header>
 
-  <%= form_with model: @address, url: admin_bitcoin_addresses_path, scope: :bitcoin_address, class: "space-y-5" do |f| %>
+  <%= form_with model: @address, url: admin_bitcoin_addresses_path, scope: :bitcoin_address, class: "rounded-2xl border border-surface-200 bg-surface-50 p-6 space-y-5 dark:border-surface-800 dark:bg-surface-900 sm:p-8" do |f| %>
     <% if @address.errors.any? %>
       <div role="alert" class="rounded-md border border-red-200 bg-red-50 px-4 py-3 font-ui text-sm text-red-800 dark:border-red-900 dark:bg-red-950/50 dark:text-red-200">
         <ul class="list-inside list-disc space-y-1">

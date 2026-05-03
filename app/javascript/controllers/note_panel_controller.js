@@ -53,6 +53,22 @@ export default class extends Controller {
     if (event.target.name === "note[visibility]") this.syncVisibility()
   }
 
+  // Sprint 22.1 — public_note radio carries a data-action change
+  // handler so we can prompt before the visibility flips to Public.
+  // Making a note public broadcasts it to anyone reading the public
+  // bible reader; friction at choice-time prevents accidental
+  // publication. If the user declines, we revert to private_note (the
+  // safest default) and re-sync the share-section visibility.
+  confirmPublic(event) {
+    const message = event.target.dataset.confirmMessage || "Make this note public?"
+    if (window.confirm(message)) return
+
+    event.target.checked = false
+    const privateRadio = this.element.querySelector('input[name="note[visibility]"][value="private_note"]')
+    if (privateRadio) privateRadio.checked = true
+    this.syncVisibility()
+  }
+
   syncVisibility() {
     const selected = this.element.querySelector('input[name="note[visibility]"]:checked')?.value
     this.shareSectionTargets.forEach((section) => {

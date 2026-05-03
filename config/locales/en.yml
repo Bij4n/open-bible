@@ -227,7 +227,8 @@ en:
     share_with_users: Share with specific people
     share_with_groups: Share with groups
     emails_placeholder: friend@example.com, another@example.com
-    public_coming_soon: Coming in Sprint 7
+    visibility_legend: Visibility
+    confirm_make_public: Make this note public? Anyone reading this verse will see it, attributed to your display name. You can edit or delete it anytime.
     visibility:
       private_note: Private
       shared_users: Share with people

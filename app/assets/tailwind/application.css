@@ -317,6 +317,56 @@
   }
 
   /*
+   * Highlight toolbar shape per viewport (Sprint 16.5 PR F). Below
+   * 640px the toolbar renders as a bottom-sheet (full-width, anchored
+   * to the bottom of the viewport, rounded only at the top, dimmed
+   * backdrop via :has() pseudo-element on body — mirroring the
+   * .account-sheet pattern above). At 640px+ the floating popover
+   * shape from PR D stays — JS-positioned via inline style.top/left
+   * relative to the user's text selection. The shape change is pure
+   * CSS, gated by viewport width; highlight_controller.js is
+   * mechanically untouched. !important on the mobile positioning
+   * props beats the JS-set inline styles so a selection made before
+   * an orientation change to mobile-width still surfaces the toolbar
+   * as a bottom-sheet (and vice versa back to popover).
+   *
+   * To revert the bottom-sheet UX entirely (return to the floating
+   * popover at every viewport width):
+   *   1. Delete this .toolbar-sheet block AND the body:has() backdrop
+   *      rule below.
+   *   2. In app/views/bible/reader/show.html.erb, remove the
+   *      `toolbar-sheet` class from the toolbar element's class list.
+   *
+   * Backdrop uses pointer-events: none so the highlight_controller's
+   * outside-click handler still fires and dismisses the toolbar — no
+   * controller changes needed.
+   */
+  @media (max-width: 639px) {
+    .toolbar-sheet {
+      position: fixed !important;
+      inset-inline: 0 !important;
+      top: auto !important;
+      bottom: 0 !important;
+      z-index: 30 !important;
+      border-radius: 1rem 1rem 0 0 !important;
+      border-bottom: none !important;
+      justify-content: center !important;
+      padding: 0.75rem !important;
+      gap: 0.5rem !important;
+      box-shadow: 0 -10px 30px -10px rgba(0, 0, 0, 0.18) !important;
+    }
+
+    body:has(.toolbar-sheet:not([hidden]))::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 25;
+      background: rgba(14, 20, 17, 0.4);
+      pointer-events: none;
+    }
+  }
+
+  /*
    * Wordmark mark. The mint disc next to "Open Bible" in the header
    * and footer is the brand glyph — a 20x20 accent-700 disc with two
    * concentric outline rings (4px @ 25% accent, 9px @ 10% accent)

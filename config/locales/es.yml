@@ -31,7 +31,7 @@ es:
     cta_how_it_works: Ver cómo funciona
     tertiary: Sin rastreo. Sostenido por donaciones.
     features:
-      heading: Características
+      heading_html: Hecho para la forma en que <em>realmente</em> lees.
       for_yourself: Para ti
       with_others: Con otros
       highlights:
@@ -74,7 +74,7 @@ es:
         title: Búsqueda semántica (inglés)
         body: "Busca por lo que quieres decir, no por lo que está escrito. Pide \"versículos sobre sentirse perdido\" y encuentra salmos que nunca habrías buscado. Sólo KJV por ahora."
     how:
-      heading: Cómo funciona
+      heading_html: Tres pasos. <em>Eso es todo.</em>
       step_1_title: Abre la Escritura
       step_1_body: Elige una traducción. Abre un capítulo.
       step_1_demo:

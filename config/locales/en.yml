@@ -31,7 +31,7 @@ en:
     cta_how_it_works: See how it works
     tertiary: No tracking. Donation-supported.
     features:
-      heading: Features
+      heading_html: Built around the way you <em>actually</em> read.
       for_yourself: For yourself
       with_others: With others
       highlights:
@@ -74,7 +74,7 @@ en:
         title: Semantic search (English)
         body: "Search by what you mean, not what's written. Ask for \"verses about feeling lost\" and find Psalms you'd never have looked up. KJV only for now."
     how:
-      heading: How it works
+      heading_html: Three steps. <em>That's it.</em>
       step_1_title: Open scripture
       step_1_body: Pick a translation. Open a chapter.
       step_1_demo:

@@ -2,6 +2,34 @@ es:
   app:
     name: Open Bible
     tagline: Lee, anota y comparte las Escrituras.
+  errors:
+    cta_home: Volver al inicio
+    cta_read: Abrir la Biblia
+    "404":
+      eyebrow: 404 — No encontrada
+      heading_html: Esta página <em>no existe.</em>
+      title: Página no encontrada
+      body: Quizás escribiste mal la dirección, o la página se movió. La Escritura sigue donde la dejaste.
+    "422":
+      eyebrow: 422 — No procesable
+      heading_html: Algo <em>no se completó.</em>
+      title: No se pudo procesar
+      body: El cambio que intentaste hacer no se pudo procesar. Inténtalo de nuevo o vuelve a donde estabas.
+    "500":
+      eyebrow: 500 — Error del servidor
+      heading_html: Algo <em>se rompió de nuestro lado.</em>
+      title: Error del servidor
+      body: Lo sentimos — encontramos un error inesperado. Inténtalo de nuevo en un momento o vuelve al inicio.
+    "400":
+      eyebrow: 400 — Petición incorrecta
+      heading_html: Esa petición <em>no era válida.</em>
+      title: Petición incorrecta
+      body: Algo en esa petición no tenía sentido. Inténtalo de nuevo o vuelve al inicio.
+    "406":
+      eyebrow: 406 — Navegador no compatible
+      heading_html: Tu navegador es <em>demasiado antiguo.</em>
+      title: Navegador no compatible
+      body: Open Bible necesita un navegador moderno para renderizar el lector. Actualízalo e inténtalo de nuevo.
   layout:
     theme_switch: Cambiar tema
     theme_light: Claro

@@ -12,6 +12,14 @@ Rails.application.configure do
   # Full error reports are disabled.
   config.consider_all_requests_local = false
 
+  # Branded error pages — dispatch exceptions through the routes table
+  # to ErrorsController#show (see config/routes.rb), which renders the
+  # Echo-styled error view inside application.html.erb so the page
+  # carries the full chrome (header, footer, theme). Falls back to
+  # public/{404,422,500,400}.html if Rails itself can't boot or the
+  # routing dispatch fails.
+  config.exceptions_app = self.routes
+
   # Turn on fragment caching in view templates.
   config.action_controller.perform_caching = true
 

@@ -1,0 +1,26 @@
+<% content_for :title, t("errors.#{@code}.title", default: t("errors.404.title")) %>
+
+<article class="mx-auto max-w-xl space-y-8 py-12 text-center sm:py-20">
+  <p class="font-mono text-xs font-semibold uppercase tracking-widest text-surface-500 dark:text-surface-400">
+    <%= t("errors.#{@code}.eyebrow", default: "Error #{@code}") %>
+  </p>
+
+  <h1 class="hero-emphasis font-ui text-[clamp(40px,7vw,72px)] font-semibold leading-[1.05] tracking-[-0.035em] text-surface-900 dark:text-surface-50">
+    <%= raw t("errors.#{@code}.heading_html", default: t("errors.404.heading_html")) %>
+  </h1>
+
+  <p class="mx-auto max-w-md font-reading text-lg leading-[1.6] text-pretty text-surface-700 dark:text-surface-300">
+    <%= t("errors.#{@code}.body", default: t("errors.404.body")) %>
+  </p>
+
+  <div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 pt-2">
+    <%= link_to t("errors.cta_home"),
+                root_path,
+                class: "inline-flex items-center gap-2 rounded-full bg-surface-950 px-7 py-3.5 font-ui text-base font-medium text-surface-50 transition-colors hover:bg-accent-700 hover:-translate-y-px dark:bg-surface-50 dark:text-surface-950 dark:hover:bg-accent-400" %>
+    <%= link_to public_bible_chapter_path(translation: "kjv", book: "gen", chapter: 1),
+                class: "inline-flex items-center gap-1.5 font-ui text-base font-medium text-surface-900 transition-colors hover:text-accent-700 dark:text-surface-50 dark:hover:text-accent-400" do %>
+      <%= t("errors.cta_read") %>
+      <span aria-hidden="true">&rarr;</span>
+    <% end %>
+  </div>
+</article>

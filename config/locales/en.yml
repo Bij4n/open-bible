@@ -2,6 +2,34 @@ en:
   app:
     name: Open Bible
     tagline: Read, annotate, and share the scriptures.
+  errors:
+    cta_home: Back to home
+    cta_read: Open the Bible
+    "404":
+      eyebrow: 404 — Not found
+      heading_html: This page <em>doesn't exist.</em>
+      title: Page not found
+      body: You may have mistyped the address, or the page may have moved. Scripture is still where you left it.
+    "422":
+      eyebrow: 422 — Unprocessable
+      heading_html: Something <em>didn't go through.</em>
+      title: Couldn't process that request
+      body: The change you tried to make couldn't be processed. Try again, or head back to where you were.
+    "500":
+      eyebrow: 500 — Server error
+      heading_html: Something <em>broke on our end.</em>
+      title: Server error
+      body: Sorry — we hit an unexpected error. Try again in a moment, or head back to home.
+    "400":
+      eyebrow: 400 — Bad request
+      heading_html: That request <em>wasn't quite right.</em>
+      title: Bad request
+      body: Something about that request didn't make sense. Try again, or head back to home.
+    "406":
+      eyebrow: 406 — Unsupported browser
+      heading_html: Your browser is <em>too old for this.</em>
+      title: Unsupported browser
+      body: Open Bible needs a modern browser to render the reader. Update your browser and try again.
   layout:
     theme_switch: Switch theme
     theme_light: Light

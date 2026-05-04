@@ -1,0 +1,34 @@
+<%# Hero verse card — Sprint 19+ Category A.1. Shows a featured
+    public note as a spotlight on the homepage hero. The verse text
+    has the note's highlight rendered inline; below it sits the note
+    body (Trix rich text) + author attribution. Whole card is a link
+    to the public bible chapter where the note lives.
+
+    Locals: note (Note), verse (Verse). Caller (home/show.html.erb)
+    only renders this partial when both are present. %>
+<% chapter = verse.chapter %>
+<% book = chapter.book %>
+<% translation = book.translation %>
+
+<%= link_to public_bible_chapter_path(translation: translation.code.downcase, book: book.osis_code.downcase, chapter: chapter.number),
+            class: "block rounded-2xl border border-surface-200 bg-surface-50 p-7 transition-all duration-200 hover:-translate-y-0.5 hover:border-surface-900 hover:shadow-[0_24px_60px_-20px_rgba(14,20,17,0.18)] dark:border-surface-800 dark:bg-surface-900 dark:hover:border-surface-50 dark:hover:shadow-[0_30px_60px_-30px_rgba(0,0,0,0.6)] sm:p-8" do %>
+  <div class="flex items-start justify-between gap-3">
+    <p class="font-mono text-[11px] font-semibold uppercase tracking-widest text-surface-500 dark:text-surface-400">
+      <%= I18n.locale == :es ? book.name_es : book.name_en %> <%= chapter.number %> · <%= verse.number %>
+    </p>
+    <p class="font-mono text-[11px] font-semibold uppercase tracking-widest text-surface-500 dark:text-surface-400">
+      <%= translation.code.upcase %>
+    </p>
+  </div>
+
+  <p class="mt-4 font-reading text-2xl leading-snug text-surface-900 text-pretty dark:text-surface-100">
+    <%= render_verse_with_highlights(verse, Array(note.highlights)) %>
+  </p>
+
+  <div class="mt-5 rounded-md bg-surface-100 p-4 font-reading text-base italic leading-relaxed text-surface-700 dark:bg-surface-950/50 dark:text-surface-300">
+    <%= note.body %>
+    <p class="mt-2 font-ui text-xs not-italic font-medium text-surface-600 dark:text-surface-400">
+      — <%= note.user.author_name %>
+    </p>
+  </div>
+<% end %>

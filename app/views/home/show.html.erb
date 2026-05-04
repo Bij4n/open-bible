@@ -39,37 +39,51 @@
       (values statement). The 18.2 chip-above-h1 was deliberately
       replaced with the prototype's 3-chip row below the CTAs in 18.7
       so the chips read as informational metadata rather than as an
-      eyebrow competing with the h1 for attention. %>
-  <section class="space-y-5 pt-2 sm:space-y-6 sm:pt-4">
-    <h1 class="hero-emphasis font-ui text-[clamp(56px,9vw,96px)] font-semibold leading-[1.05] tracking-[-0.035em] text-surface-900 dark:text-surface-50">
-      <%= t("home.welcome_html") %>
-    </h1>
-    <p class="max-w-2xl font-reading text-lg leading-[1.6] text-pretty text-surface-700 dark:text-surface-300 sm:text-xl">
-      <%= t("home.subhead") %>
-    </p>
+      eyebrow competing with the h1 for attention.
 
-    <div class="flex flex-wrap items-center gap-x-6 gap-y-3 pt-2">
-      <%= link_to t("home.cta_public_bible"),
-                  public_bible_chapter_path(translation: "kjv", book: "gen", chapter: 1),
-                  class: hero_btn %>
-      <%= link_to "#how-it-works",
-                  class: "inline-flex items-center gap-1.5 font-ui text-base font-medium text-surface-900 transition-colors hover:text-accent-700 dark:text-surface-50 dark:hover:text-accent-400" do %>
-        <%= t("home.cta_how_it_works") %>
-        <span aria-hidden="true">&rarr;</span>
-      <% end %>
+      Sprint 22.2 — when an admin features a public note, the hero
+      becomes a 2-col grid at md+ (1.1fr 1fr per Echo prototype) with
+      the verse card spotlight on the right. With no featured note the
+      text content takes the full container width and the verse-card
+      slot is omitted (graceful degradation). %>
+  <section class="pt-2 sm:pt-4<%= " md:grid md:grid-cols-[1.1fr_1fr] md:items-center md:gap-x-12 md:gap-y-0" if @hero_verse %>">
+    <div class="space-y-5 sm:space-y-6">
+      <h1 class="hero-emphasis font-ui text-[clamp(56px,9vw,96px)] font-semibold leading-[1.05] tracking-[-0.035em] text-surface-900 dark:text-surface-50">
+        <%= t("home.welcome_html") %>
+      </h1>
+      <p class="max-w-2xl font-reading text-lg leading-[1.6] text-pretty text-surface-700 dark:text-surface-300 sm:text-xl">
+        <%= t("home.subhead") %>
+      </p>
+
+      <div class="flex flex-wrap items-center gap-x-6 gap-y-3 pt-2">
+        <%= link_to t("home.cta_public_bible"),
+                    public_bible_chapter_path(translation: "kjv", book: "gen", chapter: 1),
+                    class: hero_btn %>
+        <%= link_to "#how-it-works",
+                    class: "inline-flex items-center gap-1.5 font-ui text-base font-medium text-surface-900 transition-colors hover:text-accent-700 dark:text-surface-50 dark:hover:text-accent-400" do %>
+          <%= t("home.cta_how_it_works") %>
+          <span aria-hidden="true">&rarr;</span>
+        <% end %>
+      </div>
+
+      <ul role="list" class="mt-8 flex flex-wrap gap-2.5 border-t border-surface-200 pt-5 font-ui text-xs font-medium text-surface-700 dark:border-surface-800 dark:text-surface-300">
+        <% %i[kjv rv1909 public_domain].each do |k| %>
+          <li class="inline-flex items-center rounded-full border border-surface-200 bg-surface-50 px-3 py-1.5 dark:border-surface-800 dark:bg-surface-900">
+            <%= t("home.hero_meta.#{k}") %>
+          </li>
+        <% end %>
+      </ul>
+
+      <p class="font-ui text-xs text-surface-500 dark:text-surface-400">
+        <%= t("home.tertiary") %>
+      </p>
     </div>
 
-    <ul role="list" class="mt-8 flex flex-wrap gap-2.5 border-t border-surface-200 pt-5 font-ui text-xs font-medium text-surface-700 dark:border-surface-800 dark:text-surface-300">
-      <% %i[kjv rv1909 public_domain].each do |k| %>
-        <li class="inline-flex items-center rounded-full border border-surface-200 bg-surface-50 px-3 py-1.5 dark:border-surface-800 dark:bg-surface-900">
-          <%= t("home.hero_meta.#{k}") %>
-        </li>
-      <% end %>
-    </ul>
-
-    <p class="font-ui text-xs text-surface-500 dark:text-surface-400">
-      <%= t("home.tertiary") %>
-    </p>
+    <% if @hero_verse %>
+      <div class="mt-12 md:mt-0">
+        <%= render "hero_verse_card", note: @hero_note, verse: @hero_verse %>
+      </div>
+    <% end %>
   </section>
 
   <%# Features — split into two subgroups for visual rhythm and to

@@ -231,6 +231,11 @@ es:
       shared_groups: Compartir con grupos
       public_note: Pública
   group_invitations:
+    invite_button: Enviar invitación
+    pending_heading: Invitaciones pendientes
+    pending_intro: Estas invitaciones son válidas por 14 días. Cancela una para liberar el correo y enviar una nueva.
+    cancel: Cancelar
+    cancel_confirm: "¿Cancelar invitación a %{email}?"
     create:
       sent: "Invitación enviada a %{email}."
       already_member: "%{email} ya es miembro de este grupo."

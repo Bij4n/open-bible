@@ -86,6 +86,10 @@
     <% end %>
   </section>
 
+  <% if @community_entries.any? %>
+    <%= render "community_section", section_h2: section_h2 %>
+  <% end %>
+
   <%# Features — split into two subgroups for visual rhythm and to
       mirror the product's two arcs (personal experience vs. shared
       experience). Bilingual lands in "With others" because the heart-

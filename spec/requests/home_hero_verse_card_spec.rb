@@ -24,7 +24,7 @@ RSpec.describe "Homepage hero verse card", type: :request do
       expect(response.body).not_to include("Apollos")
     end
 
-    it "renders even when a non-featured public note exists" do
+    it "leaves the hero text-only when a non-featured public note exists (note still surfaces in community section, just not the hero)" do
       note = create(:note, user: author, body: "<p>The hinge of the gospel.</p>", visibility: :public_note)
       highlight = create(:highlight, user: author, translation: translation,
                                      osis_ref: "Bible.KJV.John.3.16!4-Bible.KJV.John.3.16!7",
@@ -33,8 +33,10 @@ RSpec.describe "Homepage hero verse card", type: :request do
 
       get "/"
       expect(response).to have_http_status(:ok)
-      expect(response.body).not_to include("Apollos")
-      expect(response.body).not_to include("hinge of the gospel")
+      # Hero stays single-column (no md:grid-cols-[1.1fr_1fr] signature)
+      expect(response.body).not_to include("md:grid-cols-[1.1fr_1fr]")
+      # The note IS in the page (community section), just not the hero
+      expect(response.body).to include("hinge of the gospel")
     end
   end
 
@@ -91,9 +93,16 @@ RSpec.describe "Homepage hero verse card", type: :request do
       create(:highlight_note, highlight: newer_hl, note: newer_note)
 
       get "/"
+      # Newer featured note wins the hero spot. Older one drops down
+      # to the community section (still visible, not gone).
       expect(response.body).to include("Priscilla")
       expect(response.body).to include("Newer thought")
-      expect(response.body).not_to include("Apollos")
+      expect(response.body).to include("Apollos")
+      expect(response.body).to include("hinge of the gospel")
+      # Hero card is the newer note's. Sanity-check that Priscilla's
+      # ref appears before Apollos's in the document order (hero is
+      # rendered before the community section).
+      expect(response.body.index("Priscilla")).to be < response.body.index("Apollos")
     end
   end
 end

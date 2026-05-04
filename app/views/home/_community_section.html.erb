@@ -1,0 +1,25 @@
+<%# Sprint 22.3 — community section. Renders only when at least one
+    public note exists with a resolvable verse (the controller filters
+    out orphans). Up to COMMUNITY_NOTE_LIMIT cards (3) in a 1-col grid
+    on mobile, 3-col grid at md+ — mirrors the Echo prototype's
+    .notes-grid. Section heading uses hero-emphasis so the i18n <em>
+    carries the same Instrument Serif mint italic as the hero h1 +
+    other section headings (Sprint 18.6 pattern). %>
+<section id="community" class="space-y-6 sm:space-y-8">
+  <div class="space-y-3">
+    <h2 class="<%= section_h2 %>">
+      <%= t("home.community.heading_html") %>
+    </h2>
+    <p class="max-w-2xl font-reading text-base leading-[1.6] text-pretty text-surface-600 dark:text-surface-400">
+      <%= t("home.community.intro") %>
+    </p>
+  </div>
+
+  <ul class="grid grid-cols-1 gap-4 md:grid-cols-3">
+    <% @community_entries.each do |note, verse| %>
+      <li>
+        <%= render "community_note_card", note: note, verse: verse %>
+      </li>
+    <% end %>
+  </ul>
+</section>

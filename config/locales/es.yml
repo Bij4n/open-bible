@@ -62,6 +62,9 @@ es:
     cta_public_bible: Leer la Biblia
     cta_how_it_works: Ver cómo funciona
     tertiary: Sin rastreo. Sostenido por donaciones.
+    community:
+      heading_html: Lee lo que tocó a <em>otro.</em>
+      intro: Un pequeño vistazo de lo que los lectores comparten públicamente. Las notas públicas son visibles para todos. Las notas privadas nunca salen de tu cuenta.
     features:
       heading_html: Hecho para la forma en que <em>realmente</em> lees.
       for_yourself: Para ti

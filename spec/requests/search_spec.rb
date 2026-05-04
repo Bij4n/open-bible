@@ -65,7 +65,9 @@ RSpec.describe "Search", type: :request do
 
     it "shows an empty-query hint when q is blank" do
       get "/search"
-      expect(response.body).to include(I18n.t("search.empty_hint"))
+      # Compare against the HTML-escaped form since ERB <%= escapes
+      # apostrophes/quotes in the i18n string by default.
+      expect(response.body).to include(ERB::Util.html_escape(I18n.t("search.empty_hint")))
     end
 
     describe "mode=semantic" do

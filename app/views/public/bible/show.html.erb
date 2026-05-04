@@ -19,6 +19,9 @@
     <h1 class="font-ui text-4xl font-semibold leading-[1.05] tracking-[-0.025em] text-surface-900 dark:text-surface-50 sm:text-5xl md:text-6xl">
       <span class="book-title-text"><%= book_name %> <%= @chapter.number %></span>
     </h1>
+    <p class="max-w-2xl pt-1 font-reading text-sm leading-[1.6] text-pretty text-surface-600 dark:text-surface-400">
+      <%= t("public_bible.intro") %>
+    </p>
     <% if user_signed_in? %>
       <p class="font-ui text-sm italic text-surface-600 dark:text-surface-400">
         <%= link_to t("public_bible.switch_to_my_bible"),

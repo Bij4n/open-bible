@@ -161,6 +161,7 @@ en:
         other: "This highlight has %{count} notes. Removing it will delete the notes. Continue?"
   settings:
     title: Settings
+    description: Customize your reading experience. Most changes save automatically — no save button needed.
     updated: Preferences saved.
     save: Save
     sections:
@@ -214,7 +215,9 @@ en:
     privacy:
       private_group: Private
       invite_only: Invite-only
-    empty: You aren't in any groups yet.
+    description: Read scripture together with people you trust. Groups are small spaces — a study, a family thread, a friend group — where you can share notes, comments, and highlights in real-time. Notes stay private by default and only surface to the group when you choose to share them.
+    new_description: Start a small reading group. Add a name and an optional description. Once you've created the group, you can invite friends by email or share an invitation code from the group page.
+    empty: You aren't in any groups yet. Create one to start a study with friends, or paste an invitation code below to join one someone has shared with you.
   memberships:
     added: "Added %{email} to the group."
     removed: Member removed.
@@ -279,6 +282,7 @@ en:
     timestamp: "%{ago} ago"
   public_bible:
     community_view: Community view
+    intro: Anyone can read this view. Highlights and notes shown here come from people who chose to share them publicly. Sign in to add your own — or to keep your reading private to your account.
     community_notes: Community notes
     switch_to_my_bible: Switch to my bible
     no_notes_yet: No community notes on this chapter yet.
@@ -292,7 +296,7 @@ en:
     flag_failed: Couldn't submit the flag. Try again later.
   search:
     title: Search the Bible
-    subtitle: Find verses and community insights
+    subtitle: Search across every verse and every public note. Type a phrase you remember, or switch to semantic mode (English KJV) and search by what you mean — find verses you'd never have looked up.
     input_placeholder: Search for verses, topics, or keywords…
     submit: Search
     filters:
@@ -302,7 +306,7 @@ en:
     translations:
       current: This translation
       all: All translations
-    empty_hint: Enter a search term above to explore verses and community notes.
+    empty_hint: Type something you remember from scripture, or a feeling you can't name. Try one of the suggestions below if you don't know where to start.
     no_results_html: "No results for <strong>%{query}</strong>. Try different keywords or check your spelling."
     results_for_html: "Results for <strong>%{query}</strong>"
     verses_heading: Verses
@@ -399,5 +403,5 @@ en:
       body: "Between wallets at the moment. Check back soon, or get in touch if you would like to help in another way."
     thank_you:
       heading: Thank you
-      body: "Your support keeps Open Bible alive. If you left an email, expect a short reply soon."
+      body: "Your support keeps Open Bible online for everyone reading it — no ads, no tracking, no subscription. If you left an email, expect a short reply soon."
       back_to_reading: Back to reading

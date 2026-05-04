@@ -17,6 +17,10 @@
     <%= link_to t("groups.new"), new_group_path, class: primary_btn %>
   </header>
 
+  <p class="max-w-2xl font-reading text-base leading-[1.6] text-pretty text-surface-600 dark:text-surface-400">
+    <%= t("groups.description") %>
+  </p>
+
   <% if @groups.any? %>
     <ul class="space-y-3">
       <% @groups.each do |group| %>

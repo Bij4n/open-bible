@@ -154,6 +154,7 @@ es:
         other: "Este resaltado tiene %{count} notas. Quitarlo eliminará las notas. ¿Continuar?"
   settings:
     title: Ajustes
+    description: Personaliza tu experiencia de lectura. La mayoría de los cambios se guardan automáticamente — no hace falta un botón de guardar.
     updated: Preferencias guardadas.
     save: Guardar
     sections:
@@ -207,7 +208,9 @@ es:
     privacy:
       private_group: Privado
       invite_only: Solo por invitación
-    empty: Aún no estás en ningún grupo.
+    description: Lee la Escritura con personas en quienes confías. Los grupos son espacios pequeños — un estudio, un hilo familiar, un grupo de amigos — donde puedes compartir notas, comentarios y resaltados en tiempo real. Las notas son privadas por defecto y sólo se muestran al grupo cuando tú eliges compartirlas.
+    new_description: Crea un grupo de lectura pequeño. Agrega un nombre y una descripción opcional. Una vez creado, podrás invitar a amigos por correo o compartir el código de invitación desde la página del grupo.
+    empty: Aún no estás en ningún grupo. Crea uno para empezar un estudio con amigos, o pega un código de invitación abajo para unirte a uno que alguien te haya compartido.
   memberships:
     added: "Se añadió %{email} al grupo."
     removed: Miembro eliminado.
@@ -272,6 +275,7 @@ es:
     timestamp: "hace %{ago}"
   public_bible:
     community_view: Vista de la comunidad
+    intro: Cualquiera puede leer esta vista. Los resaltados y notas que aparecen aquí son de personas que decidieron compartirlos públicamente. Inicia sesión para añadir los tuyos — o para mantener tu lectura privada en tu cuenta.
     community_notes: Notas de la comunidad
     switch_to_my_bible: Cambiar a mi biblia
     no_notes_yet: Aún no hay notas de la comunidad en este capítulo.
@@ -285,7 +289,7 @@ es:
     flag_failed: No se pudo enviar el reporte. Inténtalo más tarde.
   search:
     title: Busca en la Biblia
-    subtitle: Encuentra versículos y comentarios de la comunidad
+    subtitle: Busca en cada versículo y en cada nota pública. Escribe una frase que recuerdes, o cambia al modo semántico (KJV inglés) y busca por significado — encuentra versículos que nunca habrías buscado.
     input_placeholder: Busca versículos, temas o palabras clave…
     submit: Buscar
     filters:
@@ -295,7 +299,7 @@ es:
     translations:
       current: Esta traducción
       all: Todas las traducciones
-    empty_hint: Escribe un término de búsqueda para explorar versículos y notas.
+    empty_hint: Escribe algo que recuerdes de la Escritura, o un sentimiento que no puedas nombrar. Si no sabes por dónde empezar, prueba una de las sugerencias abajo.
     no_results_html: "Sin resultados para <strong>%{query}</strong>. Prueba otras palabras o revisa la ortografía."
     results_for_html: "Resultados para <strong>%{query}</strong>"
     verses_heading: Versículos
@@ -392,5 +396,5 @@ es:
       body: "Estamos entre carteras en este momento. Vuelve pronto, o ponte en contacto si quieres ayudar de otra forma."
     thank_you:
       heading: Gracias
-      body: "Tu apoyo mantiene vivo a Open Bible. Si dejaste un correo, espera una respuesta breve pronto."
+      body: "Tu apoyo mantiene Open Bible en línea para todos los que lo leen — sin anuncios, sin rastreo, sin suscripción. Si dejaste un correo, espera una respuesta breve pronto."
       back_to_reading: Volver a leer

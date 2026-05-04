@@ -120,7 +120,7 @@ RSpec.describe "GroupInvitations", type: :request do
       it "stashes the show URL via Devise's stored_location and redirects to sign-in" do
         get accept_group_invitation_path(invitation.token)
         expect(response).to redirect_to(new_user_session_path)
-        expect(session["user_return_to"]).to eq(accept_group_invitation_path(invitation.token))
+        expect(session["pending_group_invitation_token"]).to eq(invitation.token)
       end
     end
 

@@ -91,20 +91,19 @@ RSpec.describe "Footer", type: :system do
       end
     end
 
-    it "links About to the homepage About anchor" do
+    it "links About to the canonical /about page" do
       visit "/"
       within("footer") do
         link = find_link(I18n.t("layout.about_link"))
-        expect(link[:href]).to end_with("#about")
+        expect(link[:href]).to end_with("/about")
       end
     end
 
     # Active-state is the "you are here" cue: links pointing at the
     # current route render in mint accent instead of the idle surface
-    # tone. About is excluded by design — its href is the in-page
-    # anchor /#about, which would erroneously match `/` and mark About
-    # active on the homepage. Real route changes (Donate, Settings)
-    # opt in via the nav_active? helper.
+    # tone. About now points at /about (canonical page) so the
+    # nav_active? helper can mark it active when on /about, just like
+    # Donate + Settings.
     describe "active-state styling" do
       before { BitcoinAddress.rotate_to!(address: "bc1qfzfen6peqgqmc03gj2jsu0zc96s49dwgahvu2l") }
 
@@ -129,6 +128,14 @@ RSpec.describe "Footer", type: :system do
         within("footer") do
           link = find_link(I18n.t("layout.about_link"))
           expect(link[:class]).not_to include("decoration-accent-700/40")
+        end
+      end
+
+      it "marks the About link active when on /about" do
+        visit "/about"
+        within("footer") do
+          link = find_link(I18n.t("layout.about_link"))
+          expect(link[:class]).to include("decoration-accent-700/40")
         end
       end
     end

@@ -196,7 +196,7 @@
             <% if donate_link_visible? %>
               <%= link_to t("layout.donate_link"), donate_path, class: "#{footer_link_base} #{footer_link_active if nav_active?(donate_path)}" %>
             <% end %>
-            <%= link_to t("layout.about_link"), "#{root_path}#about", class: footer_link_base %>
+            <%= link_to t("layout.about_link"), about_path, class: "#{footer_link_base} #{footer_link_active if nav_active?(about_path)}" %>
             <% if user_signed_in? %>
               <%= link_to t("auth.settings"), settings_path, class: "#{footer_link_base} #{footer_link_active if nav_active?(settings_path)}" %>
             <% end %>

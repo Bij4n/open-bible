@@ -237,6 +237,21 @@ en:
       shared_users: Share with people
       shared_groups: Share with groups
       public_note: Public
+  group_invitations:
+    create:
+      sent: "Invitation sent to %{email}."
+      already_member: "%{email} is already a member of this group."
+    destroy:
+      cancelled: "Cancelled invitation to %{email}."
+    show:
+      sign_in_to_accept: "Sign in to accept the invitation. New here? Use the sign-up link — your invitation is saved."
+      joined: "Welcome to %{group_name}."
+      already_accepted: You've already joined this group.
+    expired:
+      eyebrow: INVITATION EXPIRED
+      title: Invitation expired
+      heading_html: This invitation <em>has expired.</em>
+      body: Invitations are valid for 14 days. Ask the group owner to send a new one.
   group_invitation_mailer:
     invite:
       subject: "%{inviter} invited you to %{group_name} on Open Bible"

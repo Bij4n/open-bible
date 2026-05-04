@@ -7,7 +7,7 @@ class GroupInvitationMailer < ApplicationMailer
     @invitation = invitation
     @group      = invitation.group
     @inviter    = invitation.invited_by
-    @accept_url = group_invitation_url(invitation.token)
+    @accept_url = accept_group_invitation_url(invitation.token)
     @expires_in_days = ((invitation.expires_at - Time.current) / 1.day).round
 
     I18n.with_locale(@inviter.ui_locale.presence || I18n.default_locale) do

@@ -7,11 +7,14 @@ Rails.application.routes.draw do
   resources :highlights, only: [ :create, :update, :destroy ]
   resources :notes,      only: [ :new, :create, :update, :destroy, :show, :edit ]
 
-  # Sprint 23.2 — accept-via-token route for email group invitations.
-  # 23.3 fleshes out create/destroy + flesh out the show accept logic;
-  # for now show is a stub so the GroupInvitationMailer's
-  # group_invitation_url helper resolves.
-  resources :group_invitations, only: [ :show ], param: :token
+  # Sprint 23.2/23.3 — accept-via-token route for email group
+  # invitations. The named helper is `accept_group_invitation_path`
+  # so it doesn't collide with the nested `group_invitation_path`
+  # (DELETE /groups/:group_id/invitations/:id) generated under the
+  # groups resource above.
+  get "/group_invitations/:token",
+      to: "group_invitations#show",
+      as: :accept_group_invitation
 
   resources :note_shares, only: [ :create, :destroy ]
   resources :comments,    only: [ :create, :update, :destroy ]
@@ -28,6 +31,10 @@ Rails.application.routes.draw do
       delete :leave
     end
     resources :memberships, only: [ :create, :destroy ]
+    # Sprint 23.3 — owner sends/cancels email invitations from the
+    # group's show page. show (accept-via-token) lives at the
+    # top-level path keyed by token; see below.
+    resources :invitations, only: [ :create, :destroy ], controller: "group_invitations"
     get "bible/:translation/:book/:chapter",
         to: "groups/bible#show",
         as: :bible_chapter,

@@ -1,10 +1,102 @@
 class GroupInvitationsController < ApplicationController
-  # Sprint 23.2 stub — wired so the route helper `group_invitation_url`
-  # resolves for the GroupInvitationMailer. Sprint 23.3 fleshes out the
-  # accept-via-token flow (sign-in-and-join, or sign-up-then-auto-join
-  # via session-stashed token) plus #create / #destroy for the owner's
-  # send-and-cancel actions.
+  # Sprint 23.3 — full controller for email-based group invitations.
+  #
+  # - #create: owner sends an invitation. Authenticated + owner-gated.
+  # - #destroy: owner cancels a pending invitation. Same gates.
+  # - #show: recipient clicks the email link.
+  #     - If signed in → accept!, redirect to the group's bible reader.
+  #     - If signed out → stash the show URL via store_location_for and
+  #       redirect to /users/sign_in. Devise sends them back here after
+  #       auth (sign in OR sign up via "Create an account" link); on
+  #       return, current_user is set and we accept.
+  before_action :authenticate_user!, only: %i[create destroy]
+
+  def create
+    @group = current_user.owned_groups.find_by(id: params[:group_id])
+    return head :not_found unless @group
+
+    invitation = @group.group_invitations.build(
+      email: invitation_params[:email],
+      invited_by: current_user
+    )
+
+    if already_member?(@group, invitation.email)
+      redirect_to(group_path(@group),
+                  alert: t("group_invitations.create.already_member", email: invitation.email))
+      return
+    end
+
+    if invitation.save
+      GroupInvitationMailer.invite(invitation).deliver_later
+      redirect_to(group_path(@group),
+                  notice: t("group_invitations.create.sent", email: invitation.email))
+    else
+      redirect_to(group_path(@group),
+                  alert: invitation.errors.full_messages.to_sentence)
+    end
+  end
+
+  def destroy
+    invitation = GroupInvitation.find_by(id: params[:id], group_id: params[:group_id])
+    return head :not_found unless invitation
+    return head :not_found unless invitation.group.owner_id == current_user.id
+
+    invitation.destroy!
+    redirect_to(group_path(invitation.group),
+                notice: t("group_invitations.destroy.cancelled", email: invitation.email))
+  end
+
   def show
-    head :not_implemented
+    invitation = GroupInvitation.find_by(token: params[:token])
+
+    if invitation.nil? || invitation.expired?
+      render :expired, status: :gone
+      return
+    end
+
+    if invitation.accepted?
+      redirect_to_group_or_sign_in(invitation)
+      return
+    end
+
+    unless user_signed_in?
+      store_location_for(:user, request.fullpath)
+      flash[:notice] = t("group_invitations.show.sign_in_to_accept")
+      redirect_to new_user_session_path
+      return
+    end
+
+    invitation.accept!(current_user)
+    redirect_to(
+      group_bible_chapter_path(invitation.group, translation: "kjv", book: "gen", chapter: 1),
+      notice: t("group_invitations.show.joined", group_name: invitation.group.name)
+    )
+  end
+
+  private
+
+  def invitation_params
+    params.require(:group_invitation).permit(:email)
+  end
+
+  def already_member?(group, email)
+    return false if email.blank?
+
+    User.where("LOWER(email) = ?", email.to_s.downcase).any? do |u|
+      group.member?(u)
+    end
+  end
+
+  def redirect_to_group_or_sign_in(invitation)
+    if user_signed_in?
+      redirect_to(
+        group_bible_chapter_path(invitation.group, translation: "kjv", book: "gen", chapter: 1),
+        notice: t("group_invitations.show.already_accepted")
+      )
+    else
+      store_location_for(:user, request.fullpath)
+      redirect_to new_user_session_path,
+                  notice: t("group_invitations.show.sign_in_to_accept")
+    end
   end
 end

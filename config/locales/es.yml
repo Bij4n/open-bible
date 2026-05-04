@@ -230,6 +230,21 @@ es:
       shared_users: Compartir con personas
       shared_groups: Compartir con grupos
       public_note: Pública
+  group_invitations:
+    create:
+      sent: "Invitación enviada a %{email}."
+      already_member: "%{email} ya es miembro de este grupo."
+    destroy:
+      cancelled: "Invitación a %{email} cancelada."
+    show:
+      sign_in_to_accept: "Inicia sesión para aceptar la invitación. ¿Eres nuevo? Usa el enlace de registro — tu invitación queda guardada."
+      joined: "Bienvenido a %{group_name}."
+      already_accepted: Ya te uniste a este grupo.
+    expired:
+      eyebrow: INVITACIÓN CADUCADA
+      title: Invitación caducada
+      heading_html: Esta invitación <em>ha caducado.</em>
+      body: Las invitaciones son válidas por 14 días. Pide al dueño del grupo que envíe una nueva.
   group_invitation_mailer:
     invite:
       subject: "%{inviter} te invitó a %{group_name} en Open Bible"

@@ -13,6 +13,10 @@ class Group < ApplicationRecord
 
   has_many :note_shares, as: :shareable, dependent: :destroy
 
+  # Email-based invitations — Sprint 23.1. Augments the
+  # invitation_code flow with sent + tokenized join links.
+  has_many :group_invitations, dependent: :destroy
+
   validates :name, presence: true, length: { maximum: 100 }
   validates :description, length: { maximum: 500 }, allow_blank: true
   validates :invitation_code,

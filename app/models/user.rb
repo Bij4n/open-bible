@@ -20,6 +20,13 @@ class User < ApplicationRecord
   # Polymorphic note shares keyed on this user (shareable).
   has_many :note_shares, as: :shareable, dependent: :destroy
 
+  # Outbound email invites this user has sent — Sprint 23.1.
+  has_many :sent_group_invitations,
+           class_name: "GroupInvitation",
+           foreign_key: :invited_by_id,
+           dependent: :destroy,
+           inverse_of: :invited_by
+
   validates :ui_locale, inclusion: { in: UI_LOCALES }
   validates :theme,     inclusion: { in: THEMES }
   validates :display_name,

@@ -1,0 +1,20 @@
+<%= t("app.name") %>
+
+<%= t("group_invitation_mailer.invite.eyebrow") %>
+
+<%= t("group_invitation_mailer.invite.heading_text",
+      inviter: @inviter.author_name, group_name: @group.name) %>
+
+<%= t("group_invitation_mailer.invite.body_1", inviter: @inviter.author_name) %>
+<% if @group.description.present? %>
+
+<%= @group.description %>
+<% end %>
+
+<%= t("group_invitation_mailer.invite.cta") %>:
+<%= @accept_url %>
+
+<%= t("group_invitation_mailer.invite.expires_in", days: @expires_in_days) %>
+
+---
+<%= t("group_invitation_mailer.invite.footer_text") %>

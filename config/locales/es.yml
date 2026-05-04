@@ -230,6 +230,17 @@ es:
       shared_users: Compartir con personas
       shared_groups: Compartir con grupos
       public_note: Pública
+  group_invitation_mailer:
+    invite:
+      subject: "%{inviter} te invitó a %{group_name} en Open Bible"
+      eyebrow: INVITACIÓN AL GRUPO
+      heading_html: "%{inviter} quiere leer las Escrituras <em>contigo.</em>"
+      heading_text: "%{inviter} quiere leer las Escrituras contigo en %{group_name}."
+      body_1: "%{inviter} te invitó a su grupo en Open Bible — un lector bíblico compartido donde los resaltados, las notas y las conversaciones se quedan entre los miembros."
+      cta: Aceptar la invitación
+      expires_in: "Esta invitación caduca en %{days} días."
+      footer_html: Recibes este correo porque alguien te invitó por email. Si no lo esperabas, puedes ignorarlo con tranquilidad — no se crea ninguna cuenta hasta que aceptes.
+      footer_text: Recibes este correo porque alguien te invitó por email. Si no lo esperabas, ignóralo — no se crea ninguna cuenta hasta que aceptes.
   comments:
     title: Discusión
     post: Comentar

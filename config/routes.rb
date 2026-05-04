@@ -7,6 +7,12 @@ Rails.application.routes.draw do
   resources :highlights, only: [ :create, :update, :destroy ]
   resources :notes,      only: [ :new, :create, :update, :destroy, :show, :edit ]
 
+  # Sprint 23.2 — accept-via-token route for email group invitations.
+  # 23.3 fleshes out create/destroy + flesh out the show accept logic;
+  # for now show is a stub so the GroupInvitationMailer's
+  # group_invitation_url helper resolves.
+  resources :group_invitations, only: [ :show ], param: :token
+
   resources :note_shares, only: [ :create, :destroy ]
   resources :comments,    only: [ :create, :update, :destroy ]
   resources :upvotes,     only: [ :create, :destroy ]

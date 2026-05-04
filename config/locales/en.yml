@@ -237,6 +237,17 @@ en:
       shared_users: Share with people
       shared_groups: Share with groups
       public_note: Public
+  group_invitation_mailer:
+    invite:
+      subject: "%{inviter} invited you to %{group_name} on Open Bible"
+      eyebrow: GROUP INVITATION
+      heading_html: "%{inviter} wants to read scripture <em>with you.</em>"
+      heading_text: "%{inviter} wants to read scripture with you in %{group_name}."
+      body_1: "%{inviter} invited you to join their group on Open Bible — a small, shared Bible reader where highlights, notes, and conversations stay between members."
+      cta: Accept the invitation
+      expires_in: "This invitation expires in %{days} days."
+      footer_html: You're receiving this because someone invited you by email. If you weren't expecting this, you can safely ignore the message — no account is created until you accept.
+      footer_text: You're receiving this because someone invited you by email. If you weren't expecting this, ignore this message — no account is created until you accept.
   comments:
     title: Discussion
     post: Comment

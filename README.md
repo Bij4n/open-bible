@@ -14,7 +14,9 @@ discussion, keyword and semantic search, and a manuscript-inspired design.
 - Red-letter Jesus words, rendered from character-offset ranges captured at
   import time. RV1909 inherits KJV's red coverage at verse granularity (its
   source doesn't tag `<q who="Jesus">`).
-- Drop caps, fleuron ornaments, and a warm candlelit dark mode.
+- Modern reading chrome — Inter UI, Instrument Serif for verse + italic
+  accents, JetBrains Mono for refs and labels, mint accent (`#0F5C3F`)
+  on a cool near-white paper. Cool near-black dark mode.
 - Bilingual interface (English + Spanish), independent of the translation
   being read.
 
@@ -28,16 +30,24 @@ discussion, keyword and semantic search, and a manuscript-inspired design.
 - Threaded comments on any visible note.
 
 **Collaboration**
-- Group Bibles with real-time broadcast via Action Cable — a highlight or
-  note created by one member appears immediately for others reading the
-  same chapter.
-- Invite-by-code group membership with owner/member roles.
+- Group Bibles with real-time broadcast via Action Cable — a note shared
+  with a group appears immediately for others reading the same chapter,
+  with edits + new comments broadcast through the same channel.
+- Two ways to grow a group: copy-paste a 6-8-char invitation code, or
+  send an email invitation that delivers a tokenized "Accept" link
+  (signed cookie carries the token across sign-up so brand-new users
+  can join in one flow). Owner cancels any pending invite from the
+  group page.
 
 **Community**
-- Public Bible view surfaces featured and top-voted community notes beside
-  the text.
+- Public Bible view surfaces featured + recent community notes beside
+  the text. Homepage spotlights one admin-featured public note in the
+  hero verse card; a 3-card community section below shows the next
+  most-recent public notes.
 - Upvoting, flagging, and admin moderation (feature/hide notes, resolve
   flags, soft-delete abusive content).
+- Custom branded 404 / 422 / 500 pages (static fallbacks + dynamic
+  views inside the application layout).
 
 **Search**
 - Keyword search over verse text and public note bodies via `pg_search`

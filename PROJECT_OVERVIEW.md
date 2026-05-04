@@ -102,7 +102,7 @@ Total ~$39/mo. `RAILS_MASTER_KEY` is set in Render env (sync: false in blueprint
 - `system/` — 20 system specs incl. `home_mobile_audit_spec.rb` (375px viewport, asserts no horizontal overflow, tagged `js: true`), `accessibility_spec.rb` (axe baseline across 5+ surfaces), `footer_spec.rb` (renders on /, public reader, /donate, /search; Donate gating; About anchor; Settings auth-only), `donations_public_spec.rb`, `admin_bitcoin_address_rotation_spec.rb`, `theme_toggle_spec.rb`, `bilingual_bible_spec.rb`.
 - `requests/` — 25+ request specs incl. `home_i18n_spec.rb`, `donations_spec.rb`, `devise_password_reset_spec.rb` (full SMTP smoke), `locale_resolution_spec.rb`.
 - `models/`, `services/`, `factories/`, `support/`.
-- **657 examples, 0 failures** as of Sprint 15 close.
+- **500+ non-JS examples + ~100 JS-tagged system specs, 0 failures** as of Sprint 23 close (PR #79). The full non-JS suite (`bundle exec rspec --tag ~js`) runs in under 10 seconds locally; CI runs JS-tagged specs against headless Firefox + axe.
 
 ### Other
 
@@ -177,33 +177,56 @@ This `PROJECT_OVERVIEW.md` is a snapshot meant to onboard a new conversation; it
 - **Donation rotation should be a deliberate admin choice, not a forced side-effect of adding an address.** The current behavior (every "Add address" forces a rotation) is fine for the seed case but has known sharp edges in steady state — listed in Sprint 16+ backlog.
 - **Footer chrome justifies itself with content.** Sprint 15.5's per-page-hidden footer (single Donate link, hidden on `/`) was a workaround for an empty-slot footer. Once there's actual content (wordmark, nav, attribution), the chrome stands site-wide. The `donate_footer_link_visible?` helper got deleted as dead weight.
 
+**Sprints 16–23 — Echo design system, app-wide polish, public notes, group invitations.** ~50 PRs across roughly two long autonomous sessions. PLAN.md decisions log has the full per-sprint detail; summary by cluster:
+
+- **Sprint 16 — Echo design tokens (mint accent + Instrument Serif + JetBrains Mono).** Bronze → mint accent, Source Serif 4 → Instrument Serif, green-zinc surface, cool near-white paper. CLAUDE.md aesthetic line + Rule 8 font list updated.
+- **Sprints 16.5 / 16.6 — Reader interaction grain.** Toolbar persistence (active-state ring, dismiss-only ×, color-toggle removal, click-outside dismiss, surgical Turbo streams), mobile bottom-sheet for the toolbar at < 640px, range-intersection active-state contract (replaced PR A's anchor-based detection after production friction surfaced overshoot-by-one-character drag-selects).
+- **Sprint 17 — High-traffic body-chrome reskin.** Six routes brought to Echo card vocabulary (`rounded-2xl` + paper-card chrome). Pattern locked: primary CTAs → `rounded-full` pills, cards → `rounded-2xl`, text inputs / banners / alerts → keep `rounded-md`, danger buttons keep `rounded-md` for visual differentiation.
+- **Sprint 17.6 — Lower-traffic sweep.** Settings, groups, admin, reader headers aligned to the same locked pattern.
+- **Sprint 18 — Echo Category B content additions.** Hero secondary CTA ("See how it works"), hero meta chips below CTA row, About 2-col pull-quote layout, features-card embedded demos (4 of 7 cards), how-it-works step-screens (all 3 steps), section heading italic-em treatment matching the hero voice. Translated faithfully from the Echo prototype JSX.
+- **Sprint 19 — App-wide polish pass.** /settings, /donate, /search, /groups, /admin, bible-reader headers all walked through with the same card-wrap + heading-cascade vocabulary.
+- **Sprint 20 — Missing-pages audit.** Branded 404 / 422 / 500 / 400 / 406 error pages (static fallbacks + dynamic `ErrorsController#show` via `config.exceptions_app`), `/about` standalone canonical route, `/sitemap.xml` listing all bible chapters across translations.
+- **Sprint 21 — SEO + social baseline.** `<meta name="description">`, Open Graph + Twitter card meta, canonical link, `og:locale` switching, `robots.txt` with sitemap directive, branded mint-disc favicon replacing the Rails red-circle placeholder.
+- **Sprint 22 — Public notes enabled + Echo Category A.** Flipped the long-stale `notes_controller.rb` `ACTIVE_VISIBILITIES` gate (had been labelled "Coming in Sprint 7"); added `confirmPublic` Stimulus dialog so public is a deliberate choice. Hero verse card spotlights one admin-featured public note when one exists; community section below shows the next 3 most-recent public notes. Echo prototype is now fully translated into the codebase. Curation policy locked: post-then-moderate via existing `/admin/notes` actions.
+- **Sprint 23 — Email-based group invitations.** New `GroupInvitation` model + `GroupInvitationMailer` (HTML + plaintext, bilingual) + `GroupInvitationsController` (create + destroy + accept-via-token). Owner enters friend's email on `/groups/:id`, friend gets a branded mint-accent email, click "Accept the invitation" → if signed in, joins immediately; if not, signed cookie carries the token across sign-up flow (cookies, not session, because warden rotates the session during sign-in). End-to-end signed-out → email link → sign-up → auto-join system spec. Closes the user-emphasized "bible studies" use case; original invitation-code flow stays available alongside.
+
+**Items still deferred (need owner content or design decisions, autonomous-shippable ones complete):** legal pages (terms / privacy / acceptable-use — needs jurisdiction + content), contact form (delivery channel TBD), Devise mailer HTML polish, public author profiles (`/authors/:slug`), FAQ, onboarding flow, pencil-bridge polish (Sprint 16.5 PR E — needs UX gesture spec).
+
 ---
 
-## 8. Sprint 16+ backlog
+## 8. Backlog
 
 Items currently parked in PLAN.md, ready to pick up:
 
 - **Bitcoin admin UX redesign.** Add row creates **inactive**; separate `Activate` action promotes (and archives the prior active) as a deliberate second step. Add `Edit notes` action that works on any row. Optional rotation reminder (target date + email N days before). Principle: rotation is deliberate, not forced.
 - **Multilingual semantic search (4-step sequenced).** (1) Make `embeddings.rake` translation-agnostic. (2) Swap to `paraphrase-multilingual-MiniLM-L12-v2` (same 384 dim, schema doesn't move). (3) Regenerate embeddings for both KJV and RV1909. (4) Drop the "(English)" parenthetical and flip the homepage label back to plain `Semantic search`.
 - **Devise paranoid-mode stance.** Currently `paranoid = false` — reset-password leaks account existence on unknown emails. Decide before any donation launch attracts adversarial traffic.
-- **Voices section** — pull 3 featured public notes from DB once volume + curation policy exist. Implement only when real notes exist; never seed with synthetic testimony.
 - **Admin controller inheritance consistency.** `bitcoin_addresses_controller.rb` inherits `Admin::BaseController`; legacy admin controllers (`notes`, `flags`) don't. Standardize.
 - **Hide Concept search mode on RV1909 reader** until multilingual embeddings ship — currently the toggle exists but returns nothing useful for Spanish queries.
+- **Sprint 16.5 PR E — pencil-bridge polish.** The mechanical pencil → note bridge already works; "polish" without a clear UX spec is open-ended. Deferred until a specific gesture / animation is locked.
+- **Old `MembershipsController#create`** is now orphaned (Sprint 23.4 swapped the UI to the invitation flow). Future cleanup PR can drop it.
 - **Various copy-audit nits** scattered in PLAN.md.
 
 ---
 
 ## 9. What's coming next
 
-> **🚨 Heads up — major incoming work.** The user is preparing **a redesign and updated branding guidelines** to share separately. The next conversation will likely begin with the user pasting those guidelines, after which the work is to plan how to integrate the redesign with the current state of the app. Don't pre-empt that — wait for the guidelines, then propose an integration approach (probably a new sprint or sprint cluster) before touching code.
+The Echo redesign (Sprint 16) and the long autonomous-feature run (Sprints 17–23) closed out the design + community + collaboration tracks. The remaining roadmap clusters are:
 
-Other items flagged for upcoming work, in rough priority order:
+**Owner-blocked (need content / decisions):**
+- **Legal pages** — `/terms`, `/privacy`, `/acceptable-use`. Flagged as a Sprint 15 blocker; still open. Needs jurisdiction + drafted copy.
+- **Contact form** — delivery channel TBD (Resend mailer pipe? Slack hook? Ticket queue?).
 
-- **About page (`/about`).** Footer "About" currently anchors to `/#about`. Needs a real page with deeper content than the homepage section.
-- **Testimony submission + featured testimony page.** This is the bridge from "Bible reader with notes" toward the social-network vision. **Never seed with synthetic testimony.** Ship only when real notes exist and a curation policy is decided.
-- **Social network features.** Long-term vision: usernames (currently `display_name` is optional and falls back to email local-part), profile pages, public feeds of what's striking other readers, follow relationships, per-item privacy controls richer than the current four-branch enum. This is scripture-as-fellowship made into a real social product.
-- **`/how-it-works` page** with more depth than the homepage's 3-step section.
-- **Donate section iteration.** Bitcoin admin UX redesign feeds into this; copy and disclaimer language will continue to evolve.
+**Autonomous-doable, queued:**
+- **Devise mailer HTML polish** — bare `<p>` tags currently. Email-styling vocabulary now exists from the static error pages + group invitation mailer (#75). Mechanical port.
+- **Public author profiles** — `/authors/:slug` showing public notes by an author. Now that public notes exist and accumulate organically, this becomes useful.
+- **FAQ / Help (`/help`)** — usage guide. No clear demand yet but easy to add when needed.
+- **Onboarding flow** — first-time user post-signup screen. Open question: what does it teach?
+- **`/how-it-works` standalone page** — extending the homepage section into a deeper tutorial.
+- **Donate section iteration.** Bitcoin admin UX redesign feeds into this; copy + disclaimer language will continue to evolve.
+
+**Long-term vision:**
+- **Social network features.** Usernames (currently `display_name` is optional and falls back to email local-part), profile pages, public feeds of what's striking other readers, follow relationships, per-item privacy controls richer than the current four-branch enum. This is scripture-as-fellowship made into a real social product. Public notes (Sprint 22) + hero verse card (Sprint 22) + community section (Sprint 22) + email-based group invitations (Sprint 23) are the foundation pieces.
 
 ---
 

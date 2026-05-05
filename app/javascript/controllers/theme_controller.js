@@ -44,8 +44,14 @@ export default class extends Controller {
   }
 
   toggle() {
-    const idx = MODES.indexOf(this.mode)
-    const next = MODES[(idx === -1 ? 0 : idx + 1) % MODES.length]
+    // Read localStorage at click time rather than trusting the cached
+    // this.mode — external code (e.g. system specs setting up a known
+    // starting state) can mutate localStorage after connect, and the
+    // toggle should respect what the user actually has saved.
+    const stored = localStorage.getItem(this.storageKeyValue)
+    const current = MODES.includes(stored) ? stored : (this.mode || "system")
+    const idx = MODES.indexOf(current)
+    const next = MODES[(idx + 1) % MODES.length]
     this.applyMode(next, { persistLocal: true, persistServer: true })
   }
 

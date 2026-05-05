@@ -73,12 +73,14 @@
   --color-surface-100: #ecefe7;
   --color-surface-200: #dde2d8;
   --color-surface-300: #d1d7ce;
+  --color-surface-400: #a3aaa4;
   /* surface-500 splits per mode: green-grey #8a9590 fails 4.5:1 on
      light paper but reads as intended on dark. Light gets #677470
      (4.57:1 AA); dark keeps the design's --ink-faint via the
      [data-theme="dark"] override below. Both ≥AA against their
      respective page bg. */
   --color-surface-500: #677470;
+  --color-surface-600: #586663;
   --color-surface-700: #4a5450;
   --color-surface-800: #243029;
   --color-surface-900: #161e1a;

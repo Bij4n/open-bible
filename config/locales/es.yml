@@ -35,6 +35,7 @@ es:
     theme_switch: Cambiar tema
     theme_light: Claro
     theme_dark: Oscuro
+    theme_system: Predeterminado del sistema
     language_switcher: Idioma
     language_en: English
     language_es: Español

@@ -1,15 +1,22 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Three-way theme resolution on connect:
-//   1. If the server already set data-theme (signed-in user with a saved
-//      preference), respect it.
-//   2. Else if localStorage has a value, use it.
-//   3. Else follow prefers-color-scheme.
+// Tri-state theme cycle: light → dark → system → light. The "system"
+// mode follows prefers-color-scheme and reacts to OS-level changes
+// while it's selected. Storage holds the *mode* (which can be
+// "system"), while the rendered data-theme attribute holds the
+// *resolved* palette ("light" or "dark") so CSS doesn't have to know
+// about a third option.
 //
-// On toggle: flip the theme, persist to localStorage, and if the user is
-// signed in, POST the new value to /settings so it survives across
-// devices. The server-side update is best-effort — UI responds to the
-// local change immediately.
+// On connect:
+//   1. If the server already set data-theme (signed-in user with a
+//      saved preference of light/dark), use that as the mode.
+//   2. Else if localStorage has a value, use it.
+//   3. Else fall back to "system".
+//
+// On toggle: advance to the next mode, persist locally, and POST to
+// /settings if signed in. Server-side update is best-effort.
+const MODES = ["light", "dark", "system"]
+
 export default class extends Controller {
   static targets = ["label"]
   static values = {
@@ -17,40 +24,62 @@ export default class extends Controller {
   }
 
   connect() {
+    this.media = window.matchMedia("(prefers-color-scheme: dark)")
+    this.systemListener = this._onSystemChange.bind(this)
+    this.media.addEventListener("change", this.systemListener)
+
     const existing = document.documentElement.dataset.theme
+    let mode
     if (existing === "light" || existing === "dark") {
-      this.apply(existing, { persistLocal: false, persistServer: false })
-      return
+      mode = existing
+    } else {
+      const stored = localStorage.getItem(this.storageKeyValue)
+      mode = MODES.includes(stored) ? stored : "system"
     }
-    const stored = localStorage.getItem(this.storageKeyValue)
-    const initial = stored || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
-    this.apply(initial, { persistLocal: false, persistServer: false })
+    this.applyMode(mode, { persistLocal: false, persistServer: false })
+  }
+
+  disconnect() {
+    if (this.media) this.media.removeEventListener("change", this.systemListener)
   }
 
   toggle() {
-    const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark"
-    this.apply(next, { persistLocal: true, persistServer: true })
+    // Read localStorage at click time rather than trusting the cached
+    // this.mode — external code (e.g. system specs setting up a known
+    // starting state) can mutate localStorage after connect, and the
+    // toggle should respect what the user actually has saved.
+    const stored = localStorage.getItem(this.storageKeyValue)
+    const current = MODES.includes(stored) ? stored : (this.mode || "system")
+    const idx = MODES.indexOf(current)
+    const next = MODES[(idx + 1) % MODES.length]
+    this.applyMode(next, { persistLocal: true, persistServer: true })
   }
 
-  apply(theme, { persistLocal, persistServer }) {
-    document.documentElement.dataset.theme = theme
+  applyMode(mode, { persistLocal, persistServer }) {
+    this.mode = mode
+    const resolved = mode === "system" ? (this.media.matches ? "dark" : "light") : mode
+    document.documentElement.dataset.theme = resolved
+
     if (this.hasLabelTarget) {
-      // Label shows the current theme ("Light" / "Dark"), not the
-      // action — so pick the matching dataset key on this theme.
-      const key = theme === "dark" ? "labelDark" : "labelLight"
-      const text = this.labelTarget.dataset[key]
+      const dataKey = mode === "dark" ? "labelDark" : mode === "light" ? "labelLight" : "labelSystem"
+      const text = this.labelTarget.dataset[dataKey]
       if (text) this.labelTarget.textContent = text
     }
-    if (persistLocal) localStorage.setItem(this.storageKeyValue, theme)
-    if (persistServer) this.persistRemote(theme)
+
+    if (persistLocal) localStorage.setItem(this.storageKeyValue, mode)
+    if (persistServer) this.persistRemote(mode)
+  }
+
+  _onSystemChange() {
+    if (this.mode === "system") {
+      this.applyMode("system", { persistLocal: false, persistServer: false })
+    }
   }
 
   persistRemote(theme) {
     const csrf = document.querySelector('meta[name="csrf-token"]')
     if (!csrf) return // not signed in / no layout csrf meta
 
-    // Only fires when the user is signed in; settings_path requires auth
-    // and 302s to sign-in otherwise, which we silently ignore here.
     fetch("/settings", {
       method: "PATCH",
       credentials: "same-origin",
@@ -60,9 +89,6 @@ export default class extends Controller {
         "X-CSRF-Token": csrf.content
       },
       body: JSON.stringify({ user: { theme } })
-    }).catch(() => {
-      // Network errors here aren't user-actionable; local state already
-      // reflects the preference.
-    })
+    }).catch(() => {})
   }
 }

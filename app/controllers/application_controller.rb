@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
 
   before_action :set_locale
 
-  helper_method :resolved_theme, :donate_link_visible?
+  helper_method :resolved_theme, :initial_theme_label, :donate_link_visible?
 
   # Admin gate for /admin/* controllers. Non-admins get 404 rather than
   # 403 so the existence of admin routes isn't advertised.
@@ -51,6 +51,18 @@ class ApplicationController < ActionController::Base
 
     theme = current_user.theme
     %w[light dark].include?(theme) ? theme : nil
+  end
+
+  # Initial label for the header theme button before the Stimulus
+  # controller hydrates. Mirrors the user's saved mode — light, dark,
+  # or system — rather than the resolved palette, so a "system" user
+  # sees "System default" rather than "Light"/"Dark" until JS loads.
+  def initial_theme_label
+    case current_user&.theme
+    when "dark" then I18n.t("layout.theme_dark")
+    when "light" then I18n.t("layout.theme_light")
+    else I18n.t("layout.theme_system")
+    end
   end
 
   private

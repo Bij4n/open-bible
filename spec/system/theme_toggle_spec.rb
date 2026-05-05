@@ -24,4 +24,25 @@ RSpec.describe "Theme toggle", type: :system, js: true do
     visit "/"
     expect(page).to have_css(%(html[data-theme="dark"]))
   end
+
+  it "cycles light → dark → system → light on successive clicks" do
+    visit "/"
+    page.execute_script(
+      "localStorage.setItem('open-bible:theme', 'light');" \
+      "document.documentElement.dataset.theme = 'light';"
+    )
+
+    open_account_menu
+    button = find("button[data-action='theme#toggle']")
+
+    button.click
+    expect(page.evaluate_script("localStorage.getItem('open-bible:theme')")).to eq("dark")
+
+    button.click
+    expect(page.evaluate_script("localStorage.getItem('open-bible:theme')")).to eq("system")
+
+    button.click
+    expect(page.evaluate_script("localStorage.getItem('open-bible:theme')")).to eq("light")
+    expect(page).to have_css(%(html[data-theme="light"]))
+  end
 end

@@ -128,8 +128,9 @@
                 </svg>
                 <span data-theme-target="label"
                       data-label-light="<%= t("layout.theme_light") %>"
-                      data-label-dark="<%= t("layout.theme_dark") %>">
-                  <%= resolved_theme == "dark" ? t("layout.theme_dark") : t("layout.theme_light") %>
+                      data-label-dark="<%= t("layout.theme_dark") %>"
+                      data-label-system="<%= t("layout.theme_system") %>">
+                  <%= initial_theme_label %>
                 </span>
               </button>
 

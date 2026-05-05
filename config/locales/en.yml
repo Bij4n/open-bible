@@ -35,6 +35,7 @@ en:
     theme_switch: Switch theme
     theme_light: Light
     theme_dark: Dark
+    theme_system: System default
     language_switcher: Language
     language_en: English
     language_es: Español

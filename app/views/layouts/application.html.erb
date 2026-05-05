@@ -226,7 +226,11 @@
             scale-up so the line doesn't outsize the translations
             line above it. %>
         <div class="space-y-1 border-t border-surface-200 pt-4 dark:border-surface-800">
-          <p class="font-ui text-xs text-surface-500 dark:text-surface-400">
+          <%# text-balance asks the browser to balance line widths so
+              the parentheticals ("(English)", "(Spanish)") don't drop
+              to an orphan third line at narrow viewports. Falls back
+              to default wrapping in browsers that don't support it. %>
+          <p class="font-ui text-xs text-balance text-surface-500 dark:text-surface-400">
             <%= t("layout.footer_attribution_translations") %>
           </p>
           <p class="font-mono text-[10px] uppercase tracking-widest text-surface-500 dark:text-surface-400">

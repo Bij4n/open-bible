@@ -3,7 +3,9 @@
 A Ruby on Rails web app for reading, highlighting, annotating, and sharing the
 Bible — collaboratively or publicly. Bilingual (English KJV + Spanish RV1909),
 with character-level highlights, rich-text notes, threaded community
-discussion, keyword and semantic search, and a manuscript-inspired design.
+discussion, keyword and semantic search, and a modern reading-focused design
+(Inter UI sans, Instrument Serif body + verse, JetBrains Mono refs, mint
+accent on cool near-white paper / cool near-black dark).
 
 ## Features
 
@@ -62,8 +64,12 @@ discussion, keyword and semantic search, and a manuscript-inspired design.
 **Accessibility**
 - WCAG 2.1 AA compliant (automated check via `axe-core-rspec` on every
   major surface).
-- Warm gilt focus indicators on `:focus-visible`.
-- Honors `prefers-reduced-motion` globally.
+- Mint-accent focus indicators on `:focus-visible` (mint-700 light,
+  mint-400 dark).
+- Honors `prefers-reduced-motion` globally — covers the 150ms theme-flip
+  crossfade and any future Tailwind transition.
+- Tri-state theme toggle (Light / Dark / System); System mode tracks OS
+  `prefers-color-scheme` live.
 - Print stylesheet for typeset chapter output.
 
 ## Stack

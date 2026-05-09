@@ -2,7 +2,7 @@
 
 ## Current sprint
 
-**Sprint 16 — Echo design-tokens reskin (mint + Instrument Serif).** Sprint 15 closed end-to-end in production (14 PRs, all green behind branch protection). Sprint 16 ships the visual reskin in a small cluster: PR 1 design tokens (shipped as #26), PR 2 landing-page restyle (this branch), PR 3 reader restyle, PR 4 Source Serif 4 cleanup. Rules 7/8/9 and branch protection on main unchanged. See latest decisions log entry for the open brief and Sprint 16+ backlog items.
+**Between sprints — Sprint 24 closed (dark/light + mobile-navbar audit cluster, PRs #83–#89), plus copy-pass cluster (#80–82) and the /about eyebrow nit (#90).** No active sprint in flight. Production at bible-together.org is up-to-date with `main`. The approved audit plan saved at `~/.claude/plans/what-do-you-need-enumerated-ember.md` shipped its items 1–4 (tokens, tri-state, active-route, tap targets) plus 6 + 8 (footer balance, theme transition); items 5 / 7 / 9 / 10 remain deferred — see the Sprint 24 decisions-log entry for the why. Next pickup is owner-directed: choose between the deferred audit items, the Sprint 23+ owner-blocked queue (legal pages, contact form), or the autonomous-doable queue (devise mailer polish, public author profiles, FAQ). See `HANDOFF.md` for the current-state primer.
 
 ---
 

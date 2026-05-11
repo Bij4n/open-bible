@@ -6,6 +6,8 @@
 
 Full roadmap lives in `PLAN.md`. Read it before starting any sprint. Update it when decisions change.
 
+The repo is open-source (public on GitHub, MIT). `CONTRIBUTING.md` is the public-facing parallel of the rules below — the same requirements, written for external contributors. Keep the two in sync if the rules ever change.
+
 ---
 
 ## Rules

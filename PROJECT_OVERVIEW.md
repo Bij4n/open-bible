@@ -10,7 +10,7 @@
 
 That's the affordance. The **product** is something else: it's scripture-as-conversation. The animating belief is that scripture is meant to be read with someone — that the comma where a verse turned for you matters more when somebody else can hear it. Testimony culture meets digital reading. Fellowship is the product; highlighting and notes are the surface. Long-term, this is shaped to become a real social network around scripture: usernames, profiles, follow relationships, a feed of what's striking other readers. We're not there yet, and the homepage copy now reflects that — *Where verses meet voices.* / *Donde los versículos encuentran voz.*
 
-- **Repository:** `Bij4n/open-bible` — private GitHub repo
+- **Repository:** `Bij4n/open-bible` — open-source on GitHub (MIT). `CONTRIBUTING.md` documents the contributor rules; `CODE_OF_CONDUCT.md` sets community expectations.
 - **Production:** https://bible-together.org (live since 2026-04-21)
 - **Hosting:** Render (blueprint at repo root in `render.yaml`)
 - **Audience:** anyone reading scripture and wanting to mark it up, talk about it, and eventually find others reading the same thing — bilingual EN/ES from day one, no SMS, no phone fields, ever

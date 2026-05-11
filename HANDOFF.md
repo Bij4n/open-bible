@@ -8,6 +8,7 @@
 ## Where things are right now
 
 - **Production:** [bible-together.org](https://bible-together.org), live since 2026-04-21, on Render. `main` auto-deploys.
+- **Repo:** Public on GitHub as of 2026-05-11 (MIT). `CONTRIBUTING.md` + `CODE_OF_CONDUCT.md` + PR template are in place for external contributors.
 - **Branch:** `main` is clean and matches origin. No active sprint in flight.
 - **Last cluster shipped (Sprint 24, PRs #80–90):** copy-pass + page descriptions + dark/light-and-mobile audit. Headline fix was the surface-400/600 token definitions in `@theme` — ~100 muted-text callsites had been tree-shaking, making dark-mode "muted" labels render at full near-white. Theme toggle is now tri-state (Light / Dark / System) and System mode tracks OS-level `prefers-color-scheme` live.
 

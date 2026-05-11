@@ -98,7 +98,7 @@ jobs:
       # commit SHAs cannot. Update the pin when bumping versions.
       # browser-actions/setup-firefox v1.7.1 — see decisions log 2026-04-24.
       - name: Install Firefox for system specs
-        uses: browser-actions/setup-firefox@fcf821c621167805dd63a29662bd7cb5676c81a8
+        uses: browser-actions/setup-firefox@0bc507ddf224827e3b1af68e014d5e42ab93e795
 
       # browser-actions/setup-geckodriver v0.0.0 — the only tagged ref on
       # the repo. master HEAD has newer changes (aarch64 support) but

@@ -8,9 +8,11 @@
 ## Where things are right now
 
 - **Production:** [bible-together.org](https://bible-together.org), live since 2026-04-21, on Render. `main` auto-deploys.
-- **Repo:** Public on GitHub as of 2026-05-11 (MIT). `CONTRIBUTING.md` + `CODE_OF_CONDUCT.md` + PR template are in place for external contributors.
-- **Branch:** `main` is clean and matches origin. No active sprint in flight.
+- **Repo:** Public on GitHub as of 2026-05-11 (MIT). `CONTRIBUTING.md` + `CODE_OF_CONDUCT.md` + `.github/pull_request_template.md` are in place for external contributors.
+- **GitHub Discussions:** Live as of 2026-05-11. Categories: Announcements (admin-only), Q&A, Ideas, General. Welcome post pinned as discussion #92 in Announcements. Questions now point to Discussions; issues reserved for confirmed bugs.
+- **Branch:** `main` is clean and pushed to origin. No active sprint in flight.
 - **Last cluster shipped (Sprint 24, PRs #80–90):** copy-pass + page descriptions + dark/light-and-mobile audit. Headline fix was the surface-400/600 token definitions in `@theme` — ~100 muted-text callsites had been tree-shaking, making dark-mode "muted" labels render at full near-white. Theme toggle is now tri-state (Light / Dark / System) and System mode tracks OS-level `prefers-color-scheme` live.
+- **Last session (2026-05-11):** Open-source transition only — no product code changed. See the 2026-05-11 entry in `PLAN.md` decisions log for the full record.
 
 ---
 
@@ -27,11 +29,12 @@
 
 These are the things sitting on the user's desk, not Claude's. Don't pick them blind.
 
-- **Sprint 24 audit item 5** — language-switcher placement vs. theme-toggle pinning. The audit (saved at `~/.claude/plans/what-do-you-need-enumerated-ember.md`) flagged the account-sheet as overloaded; two options, owner needs to pick.
-- **Legal pages** — `/terms`, `/privacy`, `/acceptable-use`. Sprint 15 blocker, still open. Needs jurisdiction + drafted copy.
-- **Contact form** — delivery channel undecided (Resend mailer pipe? Slack hook? Ticket queue?).
-- **Donation rotation UX redesign** — current behavior forces a rotation on every "Add address." Backlogged design call: `Add` creates inactive, separate `Activate` action promotes.
-- **Devise paranoid-mode stance** — currently `paranoid = false`; reset-password leaks account existence. Decide before the donation page attracts adversarial traffic.
+- **Legal pages** — `/terms`, `/privacy`, `/acceptable-use`. Sprint 15 blocker, still open. More pressing now that the repo is public and the app is accepting donations. Needs jurisdiction decision + drafted copy from the owner before any code can be written.
+- **Devise paranoid-mode stance** — currently `paranoid = false`; reset-password leaks account existence. More relevant now that the repo is public and visible. Flip to `paranoid = true` is a one-liner; owner decides whether the UX trade-off (typo'd email silently "succeeds") is acceptable.
+- **Sprint 24 audit item 5** — language-switcher placement vs. theme-toggle pinning. The audit (saved at `~/.claude/plans/what-do-you-need-enumerated-ember.md`) flagged the account-sheet as overloaded; two options, owner needs to pick. Ask to see both options if unclear.
+- **Contact form** — delivery channel undecided (Resend mailer pipe? Slack hook? Ticket queue?). Ready to build the moment the channel is decided.
+- **Donation rotation UX redesign** — current behavior forces a rotation on every "Add address." Backlogged design call: `Add` creates inactive, separate `Activate` action promotes. Low urgency; current behaviour works.
+- **Issue triage process** — now that the repo is public, how fast and by what criteria does the owner respond to incoming GitHub issues? No tooling needed; just a mental model to have.
 
 ---
 

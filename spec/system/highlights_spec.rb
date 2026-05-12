@@ -400,8 +400,8 @@ RSpec.describe "Highlights", type: :system, js: true do
       expect(page).to have_css("[data-highlight-target='toolbar']:not([hidden])", visible: :all)
 
       # Click on the footer — definitively outside the toolbar AND
-      # outside the chapter container. Document mousedown listener
-      # fires hideToolbar.
+      # outside the chapter container. pointerdown listener fires
+      # hideToolbar (covers both mouse and touch).
       find("footer").click
 
       expect(page).to have_css("[data-highlight-target='toolbar']", visible: :hidden)

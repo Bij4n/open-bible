@@ -9,10 +9,15 @@
 
 - **Production:** [bible-together.org](https://bible-together.org), live since 2026-04-21, on Render. `main` auto-deploys.
 - **Repo:** Public on GitHub as of 2026-05-11 (MIT). `CONTRIBUTING.md` + `CODE_OF_CONDUCT.md` + `.github/pull_request_template.md` are in place for external contributors.
-- **GitHub Discussions:** Live as of 2026-05-11. Categories: Announcements (admin-only), Q&A, Ideas, General. Welcome post pinned as discussion #92 in Announcements. Questions now point to Discussions; issues reserved for confirmed bugs.
-- **Branch:** `main` is clean and pushed to origin. No active sprint in flight.
-- **Last cluster shipped (Sprint 24, PRs #80–90):** copy-pass + page descriptions + dark/light-and-mobile audit. Headline fix was the surface-400/600 token definitions in `@theme` — ~100 muted-text callsites had been tree-shaking, making dark-mode "muted" labels render at full near-white. Theme toggle is now tri-state (Light / Dark / System) and System mode tracks OS-level `prefers-color-scheme` live.
-- **Last session (2026-05-11):** Open-source transition only — no product code changed. See the 2026-05-11 entry in `PLAN.md` decisions log for the full record.
+- **GitHub Discussions:** Live as of 2026-05-11. Categories: Announcements (admin-only), Q&A, Ideas, General. Welcome post pinned as discussion #92 in Announcements.
+- **Branch:** `main` is clean. Two open PRs (#100, #101) are waiting on CI — see below.
+- **Last cluster shipped (Sprint 25, 2026-05-12):** mobile highlighting / note-leaving / note-sharing flow.
+  - **PR #97 (merged)** — Firefox/Xvfb workaround for local Nvidia SWGL deadlock; mobile CSS: comment-indent cap, Trix min-height.
+  - **PR #98 (merged)** — Citation header in note panel ("John 3:16"); `touch-target-row` 44px labels on visibility radios + group checkboxes; `inputmode="email"` on share field; `osis_citation` helper.
+  - **PR #99 (merged)** — Tap highlight to open toolbar without drag selection (`tapSpan` state, `onDocumentPointerup` handler, `showToolbarAtSpan`).
+  - **PR #100 (OPEN — CI pending)** — Inline amber warning panel replaces `window.confirm()` for public note visibility. Branch: `inline-public-warning`. Watch CI and merge when green.
+  - **PR #101 (OPEN — CI pending)** — Post-save Turbo Stream flash: `flash_container` div in layout, `respond_to_change` sends contextual notice + closes note panel. Branch: `post-save-flash`. Watch CI and merge when green.
+- **Next session goal (owner-directed):** UI polish and design cleanup. See the queue below.
 
 ---
 
@@ -38,14 +43,29 @@ These are the things sitting on the user's desk, not Claude's. Don't pick them b
 
 ---
 
+## UI polish queue (owner-directed next session)
+
+The owner wants to focus on polishing the UI and cleaning up the design. Below are the strongest candidates. Owner picks the direction; Claude executes.
+
+**Highest-impact, clear scope:**
+- **Fix the 5 pre-existing axe contrast failures** — `spec/system/accessibility_spec.rb` has been failing since before Sprint 25. The culprit is `#bcc3bb` foreground on `#7b7e7b` background (2.28:1 vs 4.5:1 AA requirement). Trace the exact callsites, darken the foreground or lighten the background to clear AA, re-run axe. Single-commit fix.
+- **Sprint 24 audit item 9 — hero empty-state placeholder** — when no admin-featured public note exists, the homepage hero is single-column and reads as empty. Ship a fallback: famous public-domain verse card + "Be the first to share a note" CTA, or a static illustration treatment. Owner decides the approach.
+- **Devise mailer HTML polish** — current invite / reset-password / confirmation mailers use bare `<p>` tags. The `GroupInvitationMailer` (PR #75) set the visual vocabulary (mint accent, Instrument Serif italic em); mechanical port of that pattern to the 4 Devise action mailers. Low risk, meaningful polish for email-driven acquisition.
+- **Sprint 24 audit item 5 — language-switcher placement** — the account-sheet is overloaded (theme + locale + auth all in one dropdown). Two options exist; owner needs to pick. Audit detail at `~/.claude/plans/what-do-you-need-enumerated-ember.md`.
+
+**Interaction polish:**
+- **Sprint 24 audit item 10 — swipe-to-dismiss bottom sheet** — the mobile highlight toolbar (PR #50 bottom-sheet) and account menu have no swipe gesture. Substantive Stimulus + gesture work.
+- **Sprint 16.5 PR E — pencil-bridge polish** — the transition between toolbar dismiss and note-panel reveal. No clear UX spec locked yet; owner needs to decide: slide animation? auto-focus scroll? back-arrow to reopen toolbar?
+- **Note panel slide-in uses `transform` in CSS override but Tailwind v4 uses `translate` property** — current `body[data-note-panel-open="true"] #note-panel-container { transform: translateX(0) }` in `application.css` may not override `translate-x-full` correctly in all browsers. Verify production behavior, fix if there's a gap. (The test workaround uses `style.translate` directly; the production CSS rule should too.)
+
 ## Autonomous-doable queue (no owner input needed)
 
 Pick from this list when the user says "what's next" without specifics. Listed roughly by impact / readiness, not by priority.
 
-- **Sprint 24 audit item 7** — notes-panel anchor header. Format the highlight's OSIS ref to a human "John 3:16" via a new helper (parse with `OsisRef`, look up book by `osis_code` for `name_en` / `name_es`); render a small "anchored to <ref>" line at the top of the slide-in panel. Bigger lift if you also wire a tap-target that closes the panel + scrolls to the verse — that's a Stimulus action on `note_panel_controller`.
-- **Sprint 24 audit item 9** — hero empty-state placeholder. Right now when no admin-featured public note exists, the homepage hero stays single-column and reads as empty. Either ship a placeholder (famous public-domain verse + "Be the first to share a note" CTA) or treat the empty state as a finished design — owner's call.
-- **Sprint 24 audit item 10** — swipe-to-dismiss on the mobile bottom-sheet (account menu + highlight toolbar). Substantive Stimulus + gesture work.
-- **Devise mailer HTML polish** — bare `<p>` tags currently. Email-styling vocabulary now exists from the static error pages + group invitation mailer (PR #75). Mechanical port.
+- **Sprint 24 audit item 9** — hero empty-state placeholder (see UI polish queue above).
+- **Fix axe contrast failures** — 5 pre-existing failures in `spec/system/accessibility_spec.rb` (see UI polish queue above).
+- **Sprint 24 audit item 10** — swipe-to-dismiss on the mobile bottom-sheet. Substantive Stimulus + gesture work.
+- **Devise mailer HTML polish** — bare `<p>` tags. Mechanical port of the GroupInvitationMailer pattern.
 - **Public author profiles** — `/authors/:slug` showing public notes by an author. Useful now that public notes exist and accumulate.
 - **`/help` or FAQ** — usage guide. No clear demand yet but easy to add when needed.
 - **Multilingual semantic search (4-step sequenced)** — see `PROJECT_OVERVIEW.md` §8 for the full plan. Currently Concept search is English-only and the homepage labels it as such; multilingual would let it cover RV1909 too.
@@ -79,11 +99,14 @@ When the user provides explicit direction (e.g. "fix the about page eyebrow"), d
 - **CI required checks:** `test`, `lint`, `scan_ruby`, `scan_js`, GitGuardian. Branch protection enforces.
 - **Theme system:** `data-theme="dark"` attribute on `<html>` set by `theme_controller.js` from server pin / localStorage / system; CSS uses `@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *))`.
 - **OSIS refs** are canonical: `Bible.<TRANSLATION>.<Book>.<Chapter>.<Verse>[!offset]`. Don't reinvent — use `app/services/osis_ref.rb`.
-- **Test count:** ~711 non-JS examples + ~60 JS-tagged. Full non-JS suite runs in ~10s locally.
+- **Test count:** ~786 total (full suite as of 2026-05-12). Full non-JS suite runs in ~10s locally. 5 pre-existing axe contrast failures in `spec/system/accessibility_spec.rb` — present before Sprint 25, not introduced by this work.
 
 ---
 
 ## Local environment quirks (matters when running specs)
 
-- **Stale Firefox / geckodriver sessions on the dev box** can cause JS-tagged system specs to time out with `Net::ReadTimeout` on `Selenium::WebDriver::Remote::Bridge#create_session` — the spec itself is fine; the local browser is wedged. CI is the authoritative validator for JS-tagged specs. If `theme_toggle_spec` or any other JS spec hangs locally, push and let CI confirm rather than chasing the local flake.
+- **Xvfb workaround for Nvidia SWGL deadlock** — the dev box has an Nvidia GPU that makes headless Firefox crash via the SWGL software renderer. `spec/rails_helper.rb` starts a dedicated Xvfb server on `:99` and sets `DISPLAY=:99`; the geckodriver runs Firefox with a real framebuffer instead of headless. If JS specs start hanging (after a reboot or if Xvfb dies), the fix is to reboot or manually run `Xvfb :99 -screen 0 1280x1024x24 &`. CI uses browser-actions/setup-firefox + setup-geckodriver which don't have the GPU issue; headless works fine there.
+- **Stale Firefox / geckodriver sessions** can still cause `Net::ReadTimeout` on `Selenium::WebDriver::Remote::Bridge#create_session` even with Xvfb. If a JS spec hangs, kill any orphaned geckodriver/firefox processes (`pkill -f geckodriver && pkill -f firefox`) and re-run. CI is the authoritative validator; don't chase local flakes.
+- **Note panel + Turbo Frame testing pattern** — visiting `/notes/:id/edit` directly renders only the partial (no layout, no Stimulus). System specs that need JS features in the panel should visit a reader page and set the turbo-frame `src` via `execute_script`. Example in `spec/system/notes_spec.rb` "post-save flash" spec.
+- **Tailwind v4 translate vs transform** — Tailwind v4 uses the CSS `translate` property (not `transform`) for `translate-x-*` utilities. When forcing elements on-screen in specs, you must set both `element.classList.remove('translate-x-full')` and `element.style.translate = '0 0'`; setting `element.style.transform` alone has no effect on the Tailwind-controlled position.
 - **`bin/embedding`** boots a Python venv + uvicorn for semantic search; skip with `EMBEDDING_SERVICE_SKIP=1 bin/dev` if you don't need it.

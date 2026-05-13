@@ -236,6 +236,14 @@ en:
     emails_placeholder: friend@example.com, another@example.com
     visibility_legend: Visibility
     confirm_make_public: Make this note public? Anyone reading this verse will see it, attributed to your display name. You can edit or delete it anytime.
+    saved: Note saved.
+    saved_public: Note is now public.
+    saved_shared_users:
+      one: Shared with 1 person.
+      other: "Shared with %{count} people."
+    saved_shared_groups:
+      one: Shared with 1 group.
+      other: "Shared with %{count} groups."
     visibility:
       private_note: Private
       shared_users: Share with people

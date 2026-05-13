@@ -115,6 +115,67 @@ RSpec.describe "Notes", type: :request do
       patch "/notes/#{note.id}", params: { note: { body: "hijack" } }
       expect(response).to have_http_status(:not_found)
     end
+
+    describe "Turbo Stream response" do
+      let(:turbo_headers) { { "Accept" => "text/vnd.turbo-stream.html" } }
+
+      before { sign_in user }
+
+      it "returns a turbo-stream that replaces flash_container on success" do
+        patch "/notes/#{note.id}",
+              params: { note: { body: "Updated", visibility: "private_note" } },
+              headers: turbo_headers
+
+        expect(response.content_type).to include("turbo-stream")
+        expect(response.body).to include('target="flash_container"')
+        expect(response.body).to match(/Note saved/i)
+      end
+
+      it "includes a sharing count when sharing with users" do
+        friend = create(:user)
+        patch "/notes/#{note.id}",
+              params: { note: { body: "Updated", visibility: "shared_users",
+                                user_ids: [ friend.id ] } },
+              headers: turbo_headers
+
+        expect(response.body).to match(/Shared with 1 person/i)
+      end
+
+      it "includes a group count when sharing with groups" do
+        group = create(:group, owner: user)
+        patch "/notes/#{note.id}",
+              params: { note: { body: "Updated", visibility: "shared_groups",
+                                group_ids: [ group.id ] } },
+              headers: turbo_headers
+
+        expect(response.body).to match(/Shared with 1 group/i)
+      end
+
+      it "clears the note_panel frame" do
+        patch "/notes/#{note.id}",
+              params: { note: { body: "Updated", visibility: "private_note" } },
+              headers: turbo_headers
+
+        expect(response.body).to include('target="note_panel"')
+      end
+    end
+  end
+
+  describe "POST /notes — Turbo Stream response" do
+    let(:turbo_headers) { { "Accept" => "text/vnd.turbo-stream.html" } }
+
+    before { sign_in user }
+
+    it "returns a turbo-stream flash on successful create" do
+      post "/notes",
+           params: { note: { body: "<p>A thought</p>", highlight_ids: [ highlight.id ],
+                             visibility: "private_note" } },
+           headers: turbo_headers
+
+      expect(response.content_type).to include("turbo-stream")
+      expect(response.body).to include('target="flash_container"')
+      expect(response.body).to match(/Note saved/i)
+    end
   end
 
   describe "DELETE /notes/:id" do

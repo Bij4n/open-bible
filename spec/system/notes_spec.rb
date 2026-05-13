@@ -55,4 +55,28 @@ RSpec.describe "Notes", type: :system, js: true do
     # on the row hits the radio — not just the 16px input itself.
     expect(page).to have_css("label.touch-target-row", minimum: 4)
   end
+
+  describe "post-save flash", js: true do
+    it "shows a status flash after saving from the reader page" do
+      sign_in user
+      visit "/bible/kjv/john/3"
+
+      # Load the note form into the turbo frame and force the panel visible
+      # so Capybara can interact with it (the aside starts off-screen via
+      # translate-x-full, which in Tailwind v4 uses the CSS translate
+      # property — a separate axis from transform).
+      execute_script(<<~JS)
+        document.getElementById('note_panel').setAttribute('src', '/notes/#{note.id}/edit');
+        const c = document.getElementById('note-panel-container');
+        c.classList.remove('translate-x-full');
+        c.style.translate = '0 0';
+        c.style.transition = 'none';
+      JS
+
+      expect(page).to have_css("trix-editor", visible: :all, wait: 5)
+      click_button "Save note"
+
+      expect(page).to have_css("#flash_container [role='status']", wait: 5)
+    end
+  end
 end

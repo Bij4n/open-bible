@@ -229,6 +229,14 @@ es:
     emails_placeholder: amigo@ejemplo.com, otro@ejemplo.com
     visibility_legend: Visibilidad
     confirm_make_public: "¿Hacer esta nota pública? Cualquiera que lea este versículo la verá, atribuida a tu nombre público. Puedes editarla o eliminarla en cualquier momento."
+    saved: Nota guardada.
+    saved_public: La nota ahora es pública.
+    saved_shared_users:
+      one: Compartida con 1 persona.
+      other: "Compartida con %{count} personas."
+    saved_shared_groups:
+      one: Compartida con 1 grupo.
+      other: "Compartida con %{count} grupos."
     visibility:
       private_note: Privada
       shared_users: Compartir con personas

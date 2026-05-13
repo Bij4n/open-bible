@@ -136,9 +136,28 @@ class NotesController < ApplicationController
 
   def respond_to_change(note, status)
     respond_to do |format|
-      format.turbo_stream { render turbo_stream: "", status: status }
-      format.html         { head status }
-      format.json         { render json: note_payload(note), status: status }
+      format.turbo_stream do
+        flash.now[:notice] = flash_notice(note)
+        render turbo_stream: [
+          turbo_stream.update("flash_container", partial: "shared/flashes"),
+          turbo_stream.update("note_panel", html: "")
+        ], status: status
+      end
+      format.html { head status }
+      format.json { render json: note_payload(note), status: status }
+    end
+  end
+
+  def flash_notice(note)
+    case note.visibility
+    when "shared_users"
+      t("notes.saved_shared_users", count: note.shared_users.count)
+    when "shared_groups"
+      t("notes.saved_shared_groups", count: note.shared_groups.count)
+    when "public_note"
+      t("notes.saved_public")
+    else
+      t("notes.saved")
     end
   end
 

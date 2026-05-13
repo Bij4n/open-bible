@@ -179,7 +179,9 @@
     </header>
 
     <main id="main" class="mx-auto max-w-5xl px-6 py-12">
-      <%= render "shared/flashes" %>
+      <div id="flash_container">
+        <%= render "shared/flashes" %>
+      </div>
       <%= render "shared/locale_banner" %>
       <%= yield %>
     </main>

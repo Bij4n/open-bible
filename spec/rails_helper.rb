@@ -125,9 +125,45 @@ Capybara.register_driver(:headless_firefox_ci) do |app|
 
   options = Selenium::WebDriver::Firefox::Options.new
   options.binary = firefox_binary
-  options.add_argument("-headless")
-  options.add_argument("--width=1400")
-  options.add_argument("--height=1400")
+
+  # Firefox 140 headless on Intel+Nvidia Optimus machines hits a SWGL
+  # compositor deadlock: Firefox's internal headless renderer (SWGL) can't
+  # map a framebuffer against the Nvidia EGL stack, so the browser window
+  # never opens and geckodriver times out. The fix is to route Firefox
+  # through an Xvfb virtual display instead of using --headless at all;
+  # Xvfb provides a pure-software framebuffer that has no GPU dependency.
+  #
+  # Branch logic:
+  #   DISPLAY set + Xvfb available → start Xvfb on :99, run Firefox
+  #     without --headless so it uses X11 rendering through Xvfb.
+  #   No DISPLAY (CI VMs) → fall through to --headless; those machines
+  #     don't have Nvidia and SWGL works fine on plain KVM framebuffers.
+  using_xvfb = !ENV["DISPLAY"].to_s.empty? && system("which Xvfb > /dev/null 2>&1")
+  if using_xvfb
+    unless system("DISPLAY=:99 xdpyinfo > /dev/null 2>&1")
+      system("Xvfb :99 -screen 0 1400x1024x24 -ac +extension GLX +render &")
+      sleep 1
+    end
+    ENV["DISPLAY"] = ":99"
+  else
+    options.add_argument("-headless")
+  end
+
+  # Firefox 138+ tries to create Linux user namespaces for its sandbox.
+  # On hosts where the kernel restricts unprivileged namespaces
+  # (kernel.apparmor_restrict_unprivileged_userns=1, common on Ubuntu
+  # 23.10+), the clone(CLONE_NEWPID) call fails with EPERM, which
+  # stalls Firefox startup long enough for geckodriver's Marionette
+  # connection to time out. Setting content.level=0 opts the test
+  # runner out of the subprocess sandbox — acceptable for local/CI
+  # test runners that don't browse untrusted content.
+  options.add_preference("security.sandbox.content.level", 0)
+  # Disable WebRender (Firefox's GPU compositor). Under virtual displays and
+  # on Nvidia Optimus machines, WebRender's SWGL backend can't map an EGL
+  # framebuffer, producing "RenderCompositorSWGL failed mapping default
+  # framebuffer, no dt" and hanging browser startup. The basic compositor
+  # works on any X11 display, including Xvfb.
+  options.add_preference("gfx.webrender.force-disabled", true)
 
   service = Selenium::WebDriver::Firefox::Service.new(path: geckodriver_path)
 

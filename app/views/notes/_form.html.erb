@@ -19,11 +19,18 @@
   <section class="note-panel"
            data-controller="note-panel"
            data-note-panel-open-value="true">
-    <header class="flex items-center justify-between border-b border-surface-200 pb-3 dark:border-surface-800">
-      <h2 class="font-ui text-lg font-semibold tracking-tight text-surface-900 dark:text-surface-50">
-        <% citation = note.highlights.map(&:osis_ref).first || "New note" %>
-        <%= existing ? citation : (highlight_ids.any? ? "Note" : "New note") %>
-      </h2>
+    <% citation_osis = local_assigns[:citation_osis] %>
+    <header class="flex items-start justify-between border-b border-surface-200 pb-3 dark:border-surface-800">
+      <div>
+        <h2 class="font-ui text-lg font-semibold tracking-tight text-surface-900 dark:text-surface-50">
+          <%= highlight_ids.any? || existing ? "Note" : "New note" %>
+        </h2>
+        <% if citation_osis.present? %>
+          <p class="mt-0.5 font-mono text-xs text-surface-500 dark:text-surface-400">
+            <%= osis_citation(citation_osis) %>
+          </p>
+        <% end %>
+      </div>
       <button type="button"
               data-action="note-panel#close"
               aria-label="Close"

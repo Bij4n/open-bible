@@ -34,4 +34,11 @@ RSpec.describe "Notes", type: :system, js: true do
     expect(page).to have_content("The hinge of the gospel")
     expect(page).to have_content(/Bible\.KJV\.John\.3\.16!4-Bible\.KJV\.John\.3\.16!7/i)
   end
+
+  it "shows a human citation in the note edit panel header" do
+    sign_in user
+    visit "/notes/#{note.id}/edit"
+    expect(page).to have_content("John 3:16")
+    expect(page).not_to have_content("Bible.KJV.John.3.16!")
+  end
 end

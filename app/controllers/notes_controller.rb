@@ -17,9 +17,10 @@ class NotesController < ApplicationController
 
   def edit
     @highlight_ids = @note.highlights.ids
+    citation_osis = @note.highlights.first&.osis_ref
     respond_to do |format|
-      format.html         { render partial: "form", locals: { note: @note, highlight_ids: @highlight_ids } }
-      format.turbo_stream { render partial: "form", locals: { note: @note, highlight_ids: @highlight_ids } }
+      format.html         { render partial: "form", locals: { note: @note, highlight_ids: @highlight_ids, citation_osis: citation_osis } }
+      format.turbo_stream { render partial: "form", locals: { note: @note, highlight_ids: @highlight_ids, citation_osis: citation_osis } }
     end
   end
 
@@ -32,7 +33,8 @@ class NotesController < ApplicationController
 
     note = existing || current_user.notes.build(visibility: "private_note")
     ids  = existing ? existing.highlights.ids : current_user.highlights.where(id: highlight_ids).ids
-    render partial: "form", locals: { note: note, highlight_ids: ids }
+    first_hl = existing ? existing.highlights.first : current_user.highlights.where(id: highlight_ids).first
+    render partial: "form", locals: { note: note, highlight_ids: ids, citation_osis: first_hl&.osis_ref }
   end
 
   def create

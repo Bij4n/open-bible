@@ -2,18 +2,13 @@
 
 ## Current sprint
 
-**Sprint 25 partially shipped — mobile highlighting / note-leaving / note-sharing flow (PRs #97–#101).** Three PRs merged to `main`; two open with CI pending. Owner stepping away and returning to focus on UI polish and design cleanup.
+**Sprint 25 closed — mobile highlighting / note-leaving / note-sharing flow (PRs #97–#101), all merged and live.** Next session is owner-directed UI polish and design cleanup. See `HANDOFF.md` for the queue.
 
-**Merged to main (PRs #97–#99):**
-- PR #97 — Firefox/Xvfb workaround for local Nvidia SWGL deadlock; mobile CSS fixes (comment-indent cap, Trix min-height on small screens)
-- PR #98 — Citation header in the note-edit panel ("John 3:16" instead of raw OSIS); form touch targets (`touch-target-row` 44px labels on visibility radios + group checkboxes); `inputmode="email"` on the share field; new `osis_citation` helper in `ApplicationHelper`
-- PR #99 — Tap-highlight-to-open-toolbar: `onDocumentPointerup` on the highlight controller opens the toolbar at the tapped span's position without requiring a drag selection; `tapSpan` state guards `syncSelection()` so tap-then-dismiss works cleanly
-
-**Open, CI pending:**
-- PR #100 — Inline public-note warning panel replaces `window.confirm()`: amber card with "Make it public" / "Go back" buttons wired to new `confirmPublic` / `cancelPublic` / `acceptPublic` methods in `note_panel_controller.js`
-- PR #101 — Post-save Turbo Stream flash: `respond_to_change` now renders `turbo_stream.update("flash_container", …)` + `turbo_stream.update("note_panel", "")` after create/update; message is visibility-aware ("Note saved." / "Shared with N people." / etc.); layout wrapped `render "shared/flashes"` in `<div id="flash_container">`
-
-**Next session: UI polish and design cleanup (owner-directed).** See `HANDOFF.md` for the queue.
+- PR #97 — Firefox/Xvfb workaround; mobile CSS (comment-indent cap, Trix min-height)
+- PR #98 — Citation header in note panel; touch-target-row labels; `inputmode="email"`; `osis_citation` helper
+- PR #99 — Tap highlight to open toolbar without drag selection
+- PR #100 — Inline amber warning panel replaces `window.confirm()` for public note visibility
+- PR #101 — Post-save Turbo Stream flash with contextual visibility-aware message
 
 ---
 

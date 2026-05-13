@@ -10,13 +10,13 @@
 - **Production:** [bible-together.org](https://bible-together.org), live since 2026-04-21, on Render. `main` auto-deploys.
 - **Repo:** Public on GitHub as of 2026-05-11 (MIT). `CONTRIBUTING.md` + `CODE_OF_CONDUCT.md` + `.github/pull_request_template.md` are in place for external contributors.
 - **GitHub Discussions:** Live as of 2026-05-11. Categories: Announcements (admin-only), Q&A, Ideas, General. Welcome post pinned as discussion #92 in Announcements.
-- **Branch:** `main` is clean. Two open PRs (#100, #101) are waiting on CI — see below.
-- **Last cluster shipped (Sprint 25, 2026-05-12):** mobile highlighting / note-leaving / note-sharing flow.
-  - **PR #97 (merged)** — Firefox/Xvfb workaround for local Nvidia SWGL deadlock; mobile CSS: comment-indent cap, Trix min-height.
-  - **PR #98 (merged)** — Citation header in note panel ("John 3:16"); `touch-target-row` 44px labels on visibility radios + group checkboxes; `inputmode="email"` on share field; `osis_citation` helper.
-  - **PR #99 (merged)** — Tap highlight to open toolbar without drag selection (`tapSpan` state, `onDocumentPointerup` handler, `showToolbarAtSpan`).
-  - **PR #100 (OPEN — CI pending)** — Inline amber warning panel replaces `window.confirm()` for public note visibility. Branch: `inline-public-warning`. Watch CI and merge when green.
-  - **PR #101 (OPEN — CI pending)** — Post-save Turbo Stream flash: `flash_container` div in layout, `respond_to_change` sends contextual notice + closes note panel. Branch: `post-save-flash`. Watch CI and merge when green.
+- **Branch:** `main` is clean. No open PRs.
+- **Last cluster shipped (Sprint 25, 2026-05-12–13):** mobile highlighting / note-leaving / note-sharing flow. All 5 PRs merged and live on bible-together.org.
+  - **PR #97** — Firefox/Xvfb workaround for local Nvidia SWGL deadlock; mobile CSS: comment-indent cap, Trix min-height.
+  - **PR #98** — Citation header in note panel ("John 3:16"); `touch-target-row` 44px labels on visibility radios + group checkboxes; `inputmode="email"` on share field; `osis_citation` helper.
+  - **PR #99** — Tap highlight to open toolbar without drag selection (`tapSpan` state, `onDocumentPointerup` handler, `showToolbarAtSpan`).
+  - **PR #100** — Inline amber warning panel replaces `window.confirm()` for public note visibility; `confirmPublic` / `cancelPublic` / `acceptPublic` in `note_panel_controller.js`.
+  - **PR #101** — Post-save Turbo Stream flash: `flash_container` div in layout, `respond_to_change` sends contextual notice + clears note panel frame.
 - **Next session goal (owner-directed):** UI polish and design cleanup. See the queue below.
 
 ---

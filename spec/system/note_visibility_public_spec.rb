@@ -2,9 +2,9 @@ require "rails_helper"
 
 # Sprint 22.1 — public_note enabled. The form's 4 visibilities all
 # render now (the "Coming in Sprint 7" disabled stub is gone). The
-# Public radio carries a confirm-on-change handler in the
-# note_panel_controller so users can't accidentally publish to the
-# public bible reader.
+# Public radio shows an inline amber warning panel (Sprint 25 PR #100,
+# replaced the earlier window.confirm() approach) so users can't
+# accidentally publish to the public bible reader.
 #
 # End-to-end "anonymous visitor sees the new public note" is already
 # covered by spec/requests/public/bible_spec.rb (the existing
@@ -70,16 +70,13 @@ RSpec.describe "Note visibility — public", type: :system, js: true do
     expect(page).to have_no_content("Coming in Sprint 7")
   end
 
-  # The radios live inside the slide-in note panel
-  # (#note-panel-container) which has overflow-y-auto. Direct
-  # `find(input).click` fails under headless Firefox because
-  # Selenium's pre-click "scroll into view" step doesn't reliably
-  # reach into a fixed-position panel's inner scroll container.
-  # Synthesise the change directly via JS instead — sets the
-  # checked attribute on the public radio and dispatches a real
-  # `change` Event so the Stimulus confirmPublic action fires
-  # exactly as if a user clicked. window.confirm still fires
-  # because confirmPublic is invoked synchronously from change.
+  # The radios and warning-panel buttons live inside the slide-in note
+  # panel (#note-panel-container) which has overflow-y-auto. Direct
+  # `find(el).click` fails under headless Firefox because Selenium's
+  # pre-click "scroll into view" step doesn't reliably reach into a
+  # fixed-position panel's inner scroll container. Use JS dispatch
+  # instead — triggers Stimulus actions exactly as a real user click
+  # would, without relying on Selenium's positioning logic.
   def trigger_public_radio_change
     page.execute_script(<<~JS)
       const radio = document.querySelector('input[name="note[visibility]"][value="public_note"]');
@@ -88,9 +85,23 @@ RSpec.describe "Note visibility — public", type: :system, js: true do
     JS
   end
 
+  def click_accept_public
+    page.execute_script(<<~JS)
+      document.querySelector('[data-action="note-panel#acceptPublic"]').click();
+    JS
+  end
+
+  def click_cancel_public
+    page.execute_script(<<~JS)
+      document.querySelector('[data-action="note-panel#cancelPublic"]').click();
+    JS
+  end
+
   it "persists a public note when the user confirms the public-publish dialog" do
     open_note_panel
-    page.accept_confirm { trigger_public_radio_change }
+    trigger_public_radio_change
+    expect(page).to have_css("[data-note-panel-target='publicWarning']:not([hidden])", visible: :all)
+    click_accept_public
     page.execute_script("document.querySelector('trix-editor').editor.insertString('A community thought.')")
 
     expect {
@@ -108,7 +119,9 @@ RSpec.describe "Note visibility — public", type: :system, js: true do
 
   it "reverts to private_note when the user declines the public-publish dialog" do
     open_note_panel
-    page.dismiss_confirm { trigger_public_radio_change }
+    trigger_public_radio_change
+    expect(page).to have_css("[data-note-panel-target='publicWarning']:not([hidden])", visible: :all)
+    click_cancel_public
     expect(page).to have_selector('input[name="note[visibility]"][value="private_note"]:checked', visible: :all)
     expect(page).to have_no_selector('input[name="note[visibility]"][value="public_note"]:checked', visible: :all)
   end

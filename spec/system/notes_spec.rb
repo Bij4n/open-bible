@@ -79,4 +79,52 @@ RSpec.describe "Notes", type: :system, js: true do
       expect(page).to have_css("#flash_container [role='status']", wait: 5)
     end
   end
+
+  describe "public visibility confirmation", js: true do
+    # The note panel runs inside a turbo-frame that lives in the main
+    # layout. Visiting /notes/:id/edit directly returns just the partial
+    # (no layout, no Stimulus). Instead we load the form into the frame
+    # from the reader page, which carries the full layout + Stimulus JS.
+    before do
+      sign_in user
+      visit "/bible/kjv/john/3"
+      page.execute_script(<<~JS)
+        // Tailwind v4 uses the modern CSS `translate` property (not
+        // `transform`), so overriding `transform` inline doesn't move
+        // the panel. Removing translate-x-full and disabling the
+        // transition brings it on-screen instantly for Selenium.
+        const c = document.getElementById('note-panel-container');
+        c.classList.remove('translate-x-full');
+        c.style.translate   = '0 0';
+        c.style.transition  = 'none';
+        document.body.dataset.notePanelOpen = 'true';
+        document.getElementById('note_panel').src = '/notes/#{note.id}/edit';
+      JS
+      expect(page).to have_css("input[name='note[visibility]'][value='public_note']")
+    end
+
+    it "shows an inline warning when Public is selected instead of a browser confirm dialog" do
+      expect(page).to have_css("[data-note-panel-target='publicWarning']", visible: false)
+      choose "Public"
+      expect(page).to have_css("[data-note-panel-target='publicWarning']", visible: true)
+    end
+
+    it "reverts to Private when the user cancels the public warning" do
+      choose "Public"
+      expect(page).to have_css("[data-note-panel-target='publicWarning']", visible: true)
+
+      click_button "Go back"
+
+      expect(page).to have_css("[data-note-panel-target='publicWarning']", visible: false)
+      expect(page).to have_field("note[visibility]", with: "private_note")
+    end
+
+    it "keeps Public selected when the user confirms" do
+      choose "Public"
+      click_button "Make it public"
+
+      expect(page).to have_css("[data-note-panel-target='publicWarning']", visible: false)
+      expect(page).to have_field("note[visibility]", with: "public_note")
+    end
+  end
 end

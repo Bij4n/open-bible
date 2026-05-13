@@ -70,11 +70,33 @@
           <label class="touch-target-row flex cursor-pointer items-center gap-2 rounded-md px-1 py-2 -mx-1 hover:bg-surface-100 dark:hover:bg-surface-800">
             <%= f.radio_button :visibility, v,
                                checked: (note.visibility || "private_note") == v,
-                               data: (v == "public_note" ? { action: "change->note-panel#confirmPublic", confirm_message: t("notes.confirm_make_public") } : {}),
+                               data: (v == "public_note" ? { action: "change->note-panel#confirmPublic" } : {}),
                                class: "h-4 w-4 accent-accent-700 dark:accent-accent-400" %>
             <%= t("notes.visibility.#{v}", default: v.humanize) %>
           </label>
         <% end %>
+
+        <%# Inline warning replaces window.confirm() for the public option.
+            Shown by confirmPublic(), hidden by cancelPublic/acceptPublic. %>
+        <div data-note-panel-target="publicWarning"
+             hidden
+             class="mt-2 rounded-md border border-amber-200 bg-amber-50 p-3 dark:border-amber-800 dark:bg-amber-950/30">
+          <p class="font-ui text-sm text-amber-800 dark:text-amber-200">
+            <%= t("notes.public_warning") %>
+          </p>
+          <div class="mt-2 flex gap-2">
+            <button type="button"
+                    data-action="note-panel#cancelPublic"
+                    class="rounded-md border border-surface-300 bg-surface-50 px-3 py-1.5 font-ui text-xs font-medium text-surface-700 transition-colors hover:bg-surface-100 dark:border-surface-700 dark:bg-surface-900 dark:text-surface-300 dark:hover:bg-surface-800">
+              <%= t("notes.cancel_public") %>
+            </button>
+            <button type="button"
+                    data-action="note-panel#acceptPublic"
+                    class="rounded-md bg-amber-700 px-3 py-1.5 font-ui text-xs font-medium text-white transition-colors hover:bg-amber-800 dark:bg-amber-600 dark:hover:bg-amber-500">
+              <%= t("notes.confirm_public") %>
+            </button>
+          </div>
+        </div>
       </fieldset>
 
       <div data-note-panel-target="shareSection" data-visibility-dependent="shared_users">

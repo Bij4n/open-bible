@@ -244,6 +244,9 @@ en:
     saved_shared_groups:
       one: Shared with 1 group.
       other: "Shared with %{count} groups."
+    public_warning: Anyone reading this passage will see this note, attributed to your display name. This is permanent until you change it.
+    confirm_public: Make it public
+    cancel_public: Go back
     visibility:
       private_note: Private
       shared_users: Share with people

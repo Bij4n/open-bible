@@ -9,7 +9,7 @@ import { Controller } from "@hotwired/stimulus"
 // naming the radio they belong to; we hide the non-matching sections
 // so only the currently chosen visibility's fields are visible.
 export default class extends Controller {
-  static targets = ["shareSection"]
+  static targets = ["shareSection", "publicWarning"]
   static values = { open: Boolean }
 
   connect() {
@@ -53,20 +53,30 @@ export default class extends Controller {
     if (event.target.name === "note[visibility]") this.syncVisibility()
   }
 
-  // Sprint 22.1 — public_note radio carries a data-action change
-  // handler so we can prompt before the visibility flips to Public.
-  // Making a note public broadcasts it to anyone reading the public
-  // bible reader; friction at choice-time prevents accidental
-  // publication. If the user declines, we revert to private_note (the
-  // safest default) and re-sync the share-section visibility.
+  // Replaces window.confirm() with an inline warning panel. Showing
+  // friction at the moment of choosing Public prevents accidental
+  // publication; the inline design is less jarring on mobile than a
+  // browser confirm dialog and keeps focus inside the panel.
   confirmPublic(event) {
-    const message = event.target.dataset.confirmMessage || "Make this note public?"
-    if (window.confirm(message)) return
+    this.pendingPublicRadio = event.target
+    if (this.hasPublicWarningTarget) {
+      this.publicWarningTarget.hidden = false
+    }
+  }
 
-    event.target.checked = false
+  cancelPublic() {
+    if (this.hasPublicWarningTarget) this.publicWarningTarget.hidden = true
+    if (this.pendingPublicRadio) this.pendingPublicRadio.checked = false
     const privateRadio = this.element.querySelector('input[name="note[visibility]"][value="private_note"]')
     if (privateRadio) privateRadio.checked = true
+    this.pendingPublicRadio = null
     this.syncVisibility()
+  }
+
+  acceptPublic() {
+    if (this.hasPublicWarningTarget) this.publicWarningTarget.hidden = true
+    this.pendingPublicRadio = null
+    // Radio stays checked; syncVisibility was already called on change.
   }
 
   syncVisibility() {
@@ -75,5 +85,9 @@ export default class extends Controller {
       const match = section.dataset.visibilityDependent
       section.hidden = !(selected === match)
     })
+    // Dismiss the inline warning whenever the user switches away from public.
+    if (selected !== "public_note" && this.hasPublicWarningTarget) {
+      this.publicWarningTarget.hidden = true
+    }
   }
 }

@@ -237,6 +237,9 @@ es:
     saved_shared_groups:
       one: Compartida con 1 grupo.
       other: "Compartida con %{count} grupos."
+    public_warning: Cualquiera que lea este pasaje verá esta nota, atribuida a tu nombre público. Esto es permanente hasta que lo cambies.
+    confirm_public: Hacerla pública
+    cancel_public: Volver
     visibility:
       private_note: Privada
       shared_users: Compartir con personas

@@ -54,6 +54,25 @@ RSpec.describe "Comments", type: :system, js: true do
     expect(style).to include("margin-left: 20px")
   end
 
+  it "shows the reply form when Reply is clicked", js: true do
+    sign_in owner
+    create(:comment, note: note, user: owner, body: "Seed comment")
+
+    # Visit the note page directly — much lighter than the full group
+    # Bible chapter (no verse rendering or highlight computation).
+    visit note_path(note)
+    expect(page).to have_content("Seed comment")
+
+    # Reply form starts hidden.
+    expect(page).to have_css("[data-comment-target='replyForm']", visible: false)
+
+    find("[data-action='comment#toggleReply']").click
+
+    # After toggle the form is visible and the textarea is focused.
+    expect(page).to have_css("[data-comment-target='replyForm']", visible: true)
+    expect(page.evaluate_script("document.activeElement.tagName")).to eq("TEXTAREA")
+  end
+
   it "hides edit/delete for other users' comments" do
     create(:comment, note: note, user: owner, body: "Owner says so")
     sign_in member

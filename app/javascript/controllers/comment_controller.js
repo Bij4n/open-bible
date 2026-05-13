@@ -11,7 +11,9 @@ export default class extends Controller {
     if (!this.hasReplyFormTarget) return
     this.replyFormTarget.classList.toggle("hidden")
     if (!this.replyFormTarget.classList.contains("hidden")) {
-      this.replyFormTarget.querySelector("textarea")?.focus()
+      const textarea = this.replyFormTarget.querySelector("textarea")
+      textarea?.scrollIntoView({ behavior: "smooth", block: "nearest" })
+      textarea?.focus()
     }
   }
 }

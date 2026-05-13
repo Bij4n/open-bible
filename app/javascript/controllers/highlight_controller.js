@@ -23,24 +23,21 @@ export default class extends Controller {
 
   connect() {
     this.onSelectionChange = this.onSelectionChange.bind(this)
-    this.onDocumentMousedown = this.onDocumentMousedown.bind(this)
+    this.onDocumentPointerdown = this.onDocumentPointerdown.bind(this)
     document.addEventListener("selectionchange", this.onSelectionChange)
-    // Sprint 16.5 PR D — click-outside dismiss. Inside-toolbar and
-    // inside-chapter clicks early-return; everything else
-    // (header/footer/sidebar/body padding) closes the toolbar. New
-    // selections inside the chapter are managed by selectionchange,
-    // not by this listener.
-    document.addEventListener("mousedown", this.onDocumentMousedown)
+    // pointerdown fires for both mouse and touch, so toolbar dismiss
+    // works on mobile without separate touchstart handling.
+    document.addEventListener("pointerdown", this.onDocumentPointerdown)
     if (this.debugValue) this.mountInspector()
   }
 
   disconnect() {
     document.removeEventListener("selectionchange", this.onSelectionChange)
-    document.removeEventListener("mousedown", this.onDocumentMousedown)
+    document.removeEventListener("pointerdown", this.onDocumentPointerdown)
     if (this.inspector) this.inspector.remove()
   }
 
-  onDocumentMousedown(event) {
+  onDocumentPointerdown(event) {
     if (!this.hasToolbarTarget || this.toolbarTarget.hidden) return
     if (this.toolbarTarget.contains(event.target)) return
     if (this.hasChapterTarget && this.chapterTarget.contains(event.target)) return

@@ -729,3 +729,11 @@
     font-style: italic;
   }
 }
+
+/* On narrow viewports the 20px-per-depth inline indent eats too much
+   horizontal space. CSS !important overrides the inline style. */
+@media (max-width: 639px) {
+  .comment[data-depth="1"] { margin-left: 12px !important; }
+  .comment[data-depth="2"] { margin-left: 24px !important; }
+  .comment[data-depth="3"] { margin-left: 36px !important; }
+}

@@ -24,7 +24,7 @@ RSpec.describe "Homepage hero verse card", type: :request do
       expect(response.body).not_to include("Apollos")
     end
 
-    it "leaves the hero text-only when a non-featured public note exists (note still surfaces in community section, just not the hero)" do
+    it "shows the empty-state verse card (not a featured note) when a non-featured public note exists" do
       note = create(:note, user: author, body: "<p>The hinge of the gospel.</p>", visibility: :public_note)
       highlight = create(:highlight, user: author, translation: translation,
                                      osis_ref: "Bible.KJV.John.3.16!4-Bible.KJV.John.3.16!7",
@@ -33,8 +33,9 @@ RSpec.describe "Homepage hero verse card", type: :request do
 
       get "/"
       expect(response).to have_http_status(:ok)
-      # Hero stays single-column (no md:grid-cols-[1.1fr_1fr] signature)
-      expect(response.body).not_to include("md:grid-cols-[1.1fr_1fr]")
+      # Hero always shows two-column grid; unfeatured notes get the static empty-state card
+      expect(response.body).to include("md:grid-cols-[1.1fr_1fr]")
+      expect(response.body).to include(I18n.t("home.hero_empty_state.cta"))
       # The note IS in the page (community section), just not the hero
       expect(response.body).to include("hinge of the gospel")
     end

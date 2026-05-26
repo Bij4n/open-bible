@@ -11,13 +11,20 @@
 - **Repo:** Public on GitHub as of 2026-05-11 (MIT). `CONTRIBUTING.md` + `CODE_OF_CONDUCT.md` + `.github/pull_request_template.md` are in place for external contributors.
 - **GitHub Discussions:** Live as of 2026-05-11. Categories: Announcements (admin-only), Q&A, Ideas, General. Welcome post pinned as discussion #92 in Announcements.
 - **Branch:** `main` is clean. No open PRs.
-- **Last cluster shipped (Sprint 25, 2026-05-12–13):** mobile highlighting / note-leaving / note-sharing flow. All 5 PRs merged and live on bible-together.org.
-  - **PR #97** — Firefox/Xvfb workaround for local Nvidia SWGL deadlock; mobile CSS: comment-indent cap, Trix min-height.
-  - **PR #98** — Citation header in note panel ("John 3:16"); `touch-target-row` 44px labels on visibility radios + group checkboxes; `inputmode="email"` on share field; `osis_citation` helper.
-  - **PR #99** — Tap highlight to open toolbar without drag selection (`tapSpan` state, `onDocumentPointerup` handler, `showToolbarAtSpan`).
-  - **PR #100** — Inline amber warning panel replaces `window.confirm()` for public note visibility; `confirmPublic` / `cancelPublic` / `acceptPublic` in `note_panel_controller.js`.
-  - **PR #101** — Post-save Turbo Stream flash: `flash_container` div in layout, `respond_to_change` sends contextual notice + clears note panel frame.
-- **Next session goal (owner-directed):** UI polish and design cleanup. See the queue below.
+- **Last cluster shipped (2026-05-26, PR #111):** post-Sprint-25 UI polish + homepage redesign. All items merged and live.
+  - **WCAG contrast** — `color-scheme: light/dark` declared; inline no-flash theme script added to `<head>`; all 6 axe specs now pass consistently.
+  - **Surface palette shift** — warm cream (Substack-style) replacing the cooler near-white. Token changes in `application.css`.
+  - **Homepage restructured** — now shows only hero + community section. Features grid, How-it-works steps, and About section moved to a new `/how-it-works` route (`app/views/home/how_it_works.html.erb`). Footer "How it works" link updated.
+  - **Dropped cursive headline treatment** — plain font-weight headings site-wide. Donate panel got a plain border treatment.
+  - **Hero empty-state** — static John 3:16 card renders when no featured public note exists; hero grid always applies so layout is symmetric from day one.
+  - **Note panel slide-in fixed** — Tailwind v4 emits `translate: 100%` (the CSS `translate` property), not `transform: translateX`. Rule moved outside `@layer` so it wins on specificity; switched to `translate: 0`. System spec workarounds simplified to match.
+  - **Devise mailers redesigned** — mint glyph wordmark, mono eyebrow, Instrument Serif body, pill CTA. All 5 Devise action mailers updated (reset password, confirmation, email changed, password change, unlock). Matches `GroupInvitationMailer` vocabulary.
+  - **Hide Concept search toggle for RV1909** — toggle hidden when translation=RV1909 and scope=current; `mode=semantic` param falls back to keyword silently.
+  - **Cleanup** — orphaned `MembershipsController#create` removed (route deleted; `destroy` stays). Admin controllers standardized: `BitcoinAddressesController` now inherits `Admin::BaseController`.
+
+- **Previous cluster (Sprint 25, 2026-05-12–13):** mobile highlighting / note-leaving / note-sharing flow. PRs #97–#101. See prior HANDOFF for detail.
+
+- **Session note (2026-05-26):** recovery session after GPU crash mid-redesign. No code written this session — this was orientation only. All redesign work from PR #111 was already committed before the crash; nothing was lost.
 
 ---
 
@@ -35,43 +42,26 @@
 These are the things sitting on the user's desk, not Claude's. Don't pick them blind.
 
 - **Legal pages** — `/terms`, `/privacy`, `/acceptable-use`. Sprint 15 blocker, still open. More pressing now that the repo is public and the app is accepting donations. Needs jurisdiction decision + drafted copy from the owner before any code can be written.
-- **Devise paranoid-mode stance** — currently `paranoid = false`; reset-password leaks account existence. More relevant now that the repo is public and visible. Flip to `paranoid = true` is a one-liner; owner decides whether the UX trade-off (typo'd email silently "succeeds") is acceptable.
-- **Sprint 24 audit item 5** — language-switcher placement vs. theme-toggle pinning. The audit (saved at `~/.claude/plans/what-do-you-need-enumerated-ember.md`) flagged the account-sheet as overloaded; two options, owner needs to pick. Ask to see both options if unclear.
+- **Devise paranoid-mode stance** — currently `paranoid = false`; reset-password leaks account existence. Flip to `paranoid = true` is a one-liner; owner decides whether the UX trade-off (typo'd email silently "succeeds") is acceptable.
+- **Language-switcher placement** — the account-sheet is overloaded (theme + locale + auth all in one dropdown). Two options exist; owner picks. Audit detail saved at `~/.claude/plans/what-do-you-need-enumerated-ember.md`.
+- **Pencil-bridge polish** (Sprint 16.5 PR E) — transition between toolbar dismiss and note-panel reveal. No UX spec locked: slide animation? auto-focus scroll? back-arrow to reopen toolbar? Owner decides the gesture before building.
 - **Contact form** — delivery channel undecided (Resend mailer pipe? Slack hook? Ticket queue?). Ready to build the moment the channel is decided.
 - **Donation rotation UX redesign** — current behavior forces a rotation on every "Add address." Backlogged design call: `Add` creates inactive, separate `Activate` action promotes. Low urgency; current behaviour works.
 - **Issue triage process** — now that the repo is public, how fast and by what criteria does the owner respond to incoming GitHub issues? No tooling needed; just a mental model to have.
 
 ---
 
-## UI polish queue (owner-directed next session)
+## Next session queue
 
-The owner wants to focus on polishing the UI and cleaning up the design. Below are the strongest candidates. Owner picks the direction; Claude executes.
+**Owner input needed first:**
+- **Language-switcher placement** — once decided, this is a focused Stimulus + CSS change. No code until the owner picks an option.
+- **Pencil-bridge polish** — same; the build is straightforward once the UX is specified.
 
-**Highest-impact, clear scope:**
-- **Fix the 5 pre-existing axe contrast failures** — `spec/system/accessibility_spec.rb` has been failing since before Sprint 25. The culprit is `#bcc3bb` foreground on `#7b7e7b` background (2.28:1 vs 4.5:1 AA requirement). Trace the exact callsites, darken the foreground or lighten the background to clear AA, re-run axe. Single-commit fix.
-- **Sprint 24 audit item 9 — hero empty-state placeholder** — when no admin-featured public note exists, the homepage hero is single-column and reads as empty. Ship a fallback: famous public-domain verse card + "Be the first to share a note" CTA, or a static illustration treatment. Owner decides the approach.
-- **Devise mailer HTML polish** — current invite / reset-password / confirmation mailers use bare `<p>` tags. The `GroupInvitationMailer` (PR #75) set the visual vocabulary (mint accent, Instrument Serif italic em); mechanical port of that pattern to the 4 Devise action mailers. Low risk, meaningful polish for email-driven acquisition.
-- **Sprint 24 audit item 5 — language-switcher placement** — the account-sheet is overloaded (theme + locale + auth all in one dropdown). Two options exist; owner needs to pick. Audit detail at `~/.claude/plans/what-do-you-need-enumerated-ember.md`.
-
-**Interaction polish:**
-- **Sprint 24 audit item 10 — swipe-to-dismiss bottom sheet** — the mobile highlight toolbar (PR #50 bottom-sheet) and account menu have no swipe gesture. Substantive Stimulus + gesture work.
-- **Sprint 16.5 PR E — pencil-bridge polish** — the transition between toolbar dismiss and note-panel reveal. No clear UX spec locked yet; owner needs to decide: slide animation? auto-focus scroll? back-arrow to reopen toolbar?
-- **Note panel slide-in uses `transform` in CSS override but Tailwind v4 uses `translate` property** — current `body[data-note-panel-open="true"] #note-panel-container { transform: translateX(0) }` in `application.css` may not override `translate-x-full` correctly in all browsers. Verify production behavior, fix if there's a gap. (The test workaround uses `style.translate` directly; the production CSS rule should too.)
-
-## Autonomous-doable queue (no owner input needed)
-
-Pick from this list when the user says "what's next" without specifics. Listed roughly by impact / readiness, not by priority.
-
-- **Sprint 24 audit item 9** — hero empty-state placeholder (see UI polish queue above).
-- **Fix axe contrast failures** — 5 pre-existing failures in `spec/system/accessibility_spec.rb` (see UI polish queue above).
-- **Sprint 24 audit item 10** — swipe-to-dismiss on the mobile bottom-sheet. Substantive Stimulus + gesture work.
-- **Devise mailer HTML polish** — bare `<p>` tags. Mechanical port of the GroupInvitationMailer pattern.
+**Autonomous-doable (no owner input needed):**
+- **Swipe-to-dismiss bottom sheet** — the mobile highlight toolbar (PR #50) and account menu have no swipe gesture. Substantive Stimulus + gesture work; roughly a full sprint segment.
 - **Public author profiles** — `/authors/:slug` showing public notes by an author. Useful now that public notes exist and accumulate.
-- **`/help` or FAQ** — usage guide. No clear demand yet but easy to add when needed.
-- **Multilingual semantic search (4-step sequenced)** — see `PROJECT_OVERVIEW.md` §8 for the full plan. Currently Concept search is English-only and the homepage labels it as such; multilingual would let it cover RV1909 too.
-- **Hide Concept search mode on RV1909 reader** until multilingual ships — currently the toggle exists but returns nothing useful for Spanish queries.
-- **Old `MembershipsController#create`** is now orphaned (Sprint 23.4 swapped the UI to invitations). Delete in a small cleanup PR.
-- **Admin controller inheritance consistency** — `bitcoin_addresses_controller` inherits `Admin::BaseController`; `notes` and `flags` don't. Standardize.
+- **Multilingual semantic search (4-step sequenced)** — see `PROJECT_OVERVIEW.md` §8 for the full plan. Currently Concept search is English-only and labeled as such; multilingual covers RV1909. Steps: (1) make `embeddings.rake` translation-agnostic, (2) swap to multilingual model, (3) regenerate embeddings, (4) drop the "(English)" parenthetical from homepage.
+- **`/help` or FAQ** — usage guide. No clear demand yet; easy to add.
 
 ---
 
@@ -97,9 +87,10 @@ When the user provides explicit direction (e.g. "fix the about page eyebrow"), d
 - **Email-only auth.** No SMS. No phone fields. Ever.
 - **Bilingual (en + es) is a merge gate.** Both locales updated in the same PR.
 - **CI required checks:** `test`, `lint`, `scan_ruby`, `scan_js`, GitGuardian. Branch protection enforces.
-- **Theme system:** `data-theme="dark"` attribute on `<html>` set by `theme_controller.js` from server pin / localStorage / system; CSS uses `@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *))`.
+- **Theme system:** `data-theme="dark"` attribute on `<html>` set by `theme_controller.js` from server pin / localStorage / system; CSS uses `@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *))`. No-flash theme script is in `<head>` as an inline `<script>` — sets `data-theme` before any stylesheet evaluates.
+- **Homepage layout (as of PR #111):** `/` shows only hero + community. Features grid, How it works, and About live at `/how-it-works`. Don't add content sections back to `/` without owner direction.
 - **OSIS refs** are canonical: `Bible.<TRANSLATION>.<Book>.<Chapter>.<Verse>[!offset]`. Don't reinvent — use `app/services/osis_ref.rb`.
-- **Test count:** ~786 total (full suite as of 2026-05-12). Full non-JS suite runs in ~10s locally. 5 pre-existing axe contrast failures in `spec/system/accessibility_spec.rb` — present before Sprint 25, not introduced by this work.
+- **Test count:** ~800+ (estimate post PR #111 additions; last confirmed count was ~786 as of 2026-05-12). Full non-JS suite runs in ~10s locally.
 
 ---
 
@@ -108,5 +99,5 @@ When the user provides explicit direction (e.g. "fix the about page eyebrow"), d
 - **Xvfb workaround for Nvidia SWGL deadlock** — the dev box has an Nvidia GPU that makes headless Firefox crash via the SWGL software renderer. `spec/rails_helper.rb` starts a dedicated Xvfb server on `:99` and sets `DISPLAY=:99`; the geckodriver runs Firefox with a real framebuffer instead of headless. If JS specs start hanging (after a reboot or if Xvfb dies), the fix is to reboot or manually run `Xvfb :99 -screen 0 1280x1024x24 &`. CI uses browser-actions/setup-firefox + setup-geckodriver which don't have the GPU issue; headless works fine there.
 - **Stale Firefox / geckodriver sessions** can still cause `Net::ReadTimeout` on `Selenium::WebDriver::Remote::Bridge#create_session` even with Xvfb. If a JS spec hangs, kill any orphaned geckodriver/firefox processes (`pkill -f geckodriver && pkill -f firefox`) and re-run. CI is the authoritative validator; don't chase local flakes.
 - **Note panel + Turbo Frame testing pattern** — visiting `/notes/:id/edit` directly renders only the partial (no layout, no Stimulus). System specs that need JS features in the panel should visit a reader page and set the turbo-frame `src` via `execute_script`. Example in `spec/system/notes_spec.rb` "post-save flash" spec.
-- **Tailwind v4 translate vs transform** — Tailwind v4 uses the CSS `translate` property (not `transform`) for `translate-x-*` utilities. When forcing elements on-screen in specs, you must set both `element.classList.remove('translate-x-full')` and `element.style.translate = '0 0'`; setting `element.style.transform` alone has no effect on the Tailwind-controlled position.
+- **Tailwind v4 translate vs transform** — Tailwind v4 uses the CSS `translate` property (not `transform`) for `translate-x-*` utilities. When forcing elements on-screen in specs, set both `element.classList.remove('translate-x-full')` and `element.style.translate = '0 0'`; `element.style.transform` alone has no effect. Production CSS override also uses `translate: 0` (not `transform`), outside all `@layer` blocks so it wins on specificity.
 - **`bin/embedding`** boots a Python venv + uvicorn for semantic search; skip with `EMBEDDING_SERVICE_SKIP=1 bin/dev` if you don't need it.

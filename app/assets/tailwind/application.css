@@ -64,27 +64,23 @@
      not body. */
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
-  /* Neutral surface palette — green-tinted zinc. Light mode grounds
-     everything on cool near-white; dark mode inverts to a green-cast
-     near-black. The faint green tint binds the surface to the mint
-     accent so the page reads as one palette, not background +
-     unrelated brand color. */
-  --color-surface-50:  #f7f8f5;
-  --color-surface-100: #ecefe7;
-  --color-surface-200: #dde2d8;
-  --color-surface-300: #d1d7ce;
-  --color-surface-400: #a3aaa4;
-  /* surface-500 splits per mode: green-grey #8a9590 fails 4.5:1 on
-     light paper but reads as intended on dark. Light gets #677470
-     (4.57:1 AA); dark keeps the design's --ink-faint via the
-     [data-theme="dark"] override below. Both ≥AA against their
-     respective page bg. */
-  --color-surface-500: #677470;
-  --color-surface-600: #586663;
-  --color-surface-700: #4a5450;
-  --color-surface-800: #243029;
-  --color-surface-900: #161e1a;
-  --color-surface-950: #0e1411;
+  /* Neutral surface palette — warm parchment. Light mode grounds
+     everything on warm near-white (Substack-style cream); dark mode
+     inverts to warm near-black. The faint warm tint reads editorial
+     rather than SaaS-techy without competing with the mint accent. */
+  --color-surface-50:  #f2f2ee;
+  --color-surface-100: #e8e7e2;
+  --color-surface-200: #d4d3ce;
+  --color-surface-300: #bebcb7;
+  --color-surface-400: #969490;
+  /* surface-500 splits per mode: light gets #696765 (~4.8:1 AA on
+     surface-50); dark gets a lighter warm neutral via override below. */
+  --color-surface-500: #696765;
+  --color-surface-600: #535150;
+  --color-surface-700: #3c3b38;
+  --color-surface-800: #252421;
+  --color-surface-900: #181714;
+  --color-surface-950: #0f0e0c;
 
   /* Mint accent — quieter and more devotional than the prior bronze,
      still distinctive against the SaaS-default blue/teal field.
@@ -115,7 +111,7 @@
    values for light vs. dark — the @theme block stays the source of
    truth otherwise. */
 [data-theme="dark"] {
-  --color-surface-500: #8a9590;
+  --color-surface-500: #8c8a86;
 }
 
 @layer base {

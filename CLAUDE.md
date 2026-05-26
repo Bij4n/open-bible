@@ -199,6 +199,15 @@ bin/rails bible:import[kjv]  # seed KJV (Sprint 1+)
 
 ---
 
+## Design System
+
+Always read `DESIGN.md` before making any visual or UI decisions.
+All font choices, colors, spacing, border-radius, and aesthetic direction are defined there.
+Do not deviate without explicit user approval.
+In QA mode, flag any code that doesn't match DESIGN.md.
+
+---
+
 ## Workflow notes
 
 - **Commit before destructive generators.** Rails generators like `rails g devise:install`, `rails g devise <Model>`, or `rails g scaffold` will happily overwrite uncommitted files (factories, specs, views). If you've started writing tests or fixtures before running a generator that touches those files, commit them first — `git checkout HEAD -- file` can always restore a committed version; it can't restore an unstaged one. Bit us in Sprint 2 when `rails g devise User` clobbered an unstaged factory + spec.

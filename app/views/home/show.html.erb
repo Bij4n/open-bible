@@ -1,7 +1,6 @@
 <%
-  hero_btn     = "inline-flex items-center gap-2 rounded-full bg-surface-950 px-7 py-3.5 font-ui text-base font-medium text-surface-50 transition-colors hover:bg-accent-700 hover:-translate-y-px dark:bg-surface-50 dark:text-surface-950 dark:hover:bg-accent-400"
-  donate_btn   = "inline-flex items-center gap-2 rounded-full bg-surface-50 px-7 py-3.5 font-ui text-base font-medium text-surface-950 transition-colors hover:bg-accent-300 hover:-translate-y-px"
-  section_h2   = "hero-emphasis font-ui text-2xl font-semibold tracking-tight text-surface-900 dark:text-surface-50 sm:text-3xl"
+  hero_btn   = "inline-flex items-center gap-2 rounded-full bg-surface-950 px-7 py-3.5 font-ui text-base font-medium text-surface-50 transition-colors hover:bg-accent-700 hover:-translate-y-px dark:bg-surface-50 dark:text-surface-950 dark:hover:bg-accent-400"
+  section_h2 = "font-ui text-2xl font-semibold tracking-tight text-surface-900 dark:text-surface-50 sm:text-3xl"
 %>
 
 <div class="space-y-24 sm:space-y-28">
@@ -9,7 +8,7 @@
       Single column on mobile; verse card stacks below the text. %>
   <section class="pt-2 sm:pt-4 md:grid md:grid-cols-[1.1fr_1fr] md:items-center md:gap-x-12 md:gap-y-0">
     <div class="space-y-5 sm:space-y-6">
-      <h1 class="hero-emphasis font-ui text-[clamp(48px,9vw,96px)] font-semibold leading-[1.05] tracking-[-0.035em] text-surface-900 dark:text-surface-50">
+      <h1 class="font-ui text-[clamp(48px,9vw,96px)] font-semibold leading-[1.05] tracking-[-0.035em] text-surface-900 dark:text-surface-50">
         <%= t("home.welcome_html") %>
       </h1>
       <p class="max-w-2xl font-reading text-lg leading-[1.6] text-pretty text-surface-700 dark:text-surface-300 sm:text-xl">
@@ -56,17 +55,16 @@
   <%# Donate CTA — gated on active-address check. %>
   <% if donate_link_visible? %>
     <section data-section="donate-cta"
-             class="donate-callout rounded-3xl p-8 text-center sm:p-12">
-      <div class="relative">
-        <h2 class="font-ui text-2xl font-semibold tracking-tight text-surface-50 sm:text-3xl">
-          <%= t("home.donate_cta.heading") %>
-        </h2>
-        <p class="mx-auto mt-3 max-w-md font-reading text-base leading-[1.7] text-pretty text-surface-50/72">
-          <%= t("home.donate_cta.body") %>
-        </p>
-        <div class="mt-7">
-          <%= link_to t("home.donate_cta.button"), donate_path, class: donate_btn %>
-        </div>
+             class="rounded-2xl border border-surface-200 bg-surface-50 p-8 text-center dark:border-surface-800 dark:bg-surface-900 sm:p-10">
+      <h2 class="font-ui text-xl font-semibold tracking-tight text-surface-900 dark:text-surface-50 sm:text-2xl">
+        <%= t("home.donate_cta.heading") %>
+      </h2>
+      <p class="mx-auto mt-3 max-w-md font-reading text-base leading-[1.7] text-pretty text-surface-600 dark:text-surface-400">
+        <%= t("home.donate_cta.body") %>
+      </p>
+      <div class="mt-6">
+        <%= link_to t("home.donate_cta.button"), donate_path,
+                    class: "inline-flex items-center gap-2 rounded-full bg-accent-700 px-7 py-3 font-ui text-base font-medium text-surface-50 transition-colors hover:bg-accent-800 dark:bg-accent-400 dark:text-surface-950 dark:hover:bg-accent-300" %>
       </div>
     </section>
   <% end %>

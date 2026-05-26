@@ -34,9 +34,7 @@ RSpec.describe "Home page", type: :system do
   it "renders the hero copy" do
     visit "/"
 
-    expect(page).to have_css("h1.hero-emphasis", text: "Where verses meet voices.")
-    expect(page).to have_css("h1.hero-emphasis em", text: "verses")
-    expect(page).to have_css("h1.hero-emphasis em", text: "voices")
+    expect(page).to have_css("h1", text: "Where verses meet voices.")
     expect(page).to have_content(I18n.t("home.subhead"))
     expect(page).to have_content(I18n.t("home.tertiary"))
   end

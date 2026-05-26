@@ -8,6 +8,9 @@ class SearchController < ApplicationController
     @translations = SearchService::VALID_TRANSLATIONS.include?(params[:translations]) ? params[:translations] : "current"
     @translation_code = params[:translation_code].to_s.presence || default_translation_code
 
+    @semantic_available = !rv1909_only?
+    @mode = "keyword" if @mode == "semantic" && !@semantic_available
+
     @results = @mode == "semantic" ? semantic_results : keyword_results
   end
 
@@ -42,5 +45,9 @@ class SearchController < ApplicationController
 
   def default_translation_code
     user_signed_in? && current_user.default_translation&.code || "KJV"
+  end
+
+  def rv1909_only?
+    @translations == "current" && @translation_code.upcase == "RV1909"
   end
 end

@@ -27,15 +27,18 @@
       <%= f.submit t("search.submit"), class: submit_classes %>
     </div>
 
-    <fieldset class="flex items-center gap-4 font-ui text-sm text-surface-700 dark:text-surface-300">
-      <legend class="sr-only"><%= t("search.modes.keyword") %></legend>
-      <% SearchController::MODES.each do |mode| %>
-        <label class="flex items-center gap-1.5">
-          <%= f.radio_button :mode, mode, checked: @mode == mode, class: "h-4 w-4 accent-accent-700 dark:accent-accent-400" %>
-          <%= t("search.modes.#{mode}") %>
-        </label>
-      <% end %>
-    </fieldset>
+    <% available_modes = @semantic_available ? SearchController::MODES : %w[keyword] %>
+    <% if available_modes.size > 1 %>
+      <fieldset class="flex items-center gap-4 font-ui text-sm text-surface-700 dark:text-surface-300">
+        <legend class="sr-only"><%= t("search.modes.keyword") %></legend>
+        <% available_modes.each do |mode| %>
+          <label class="flex items-center gap-1.5">
+            <%= f.radio_button :mode, mode, checked: @mode == mode, class: "h-4 w-4 accent-accent-700 dark:accent-accent-400" %>
+            <%= t("search.modes.#{mode}") %>
+          </label>
+        <% end %>
+      </fieldset>
+    <% end %>
 
     <fieldset class="flex items-center gap-4 font-ui text-sm text-surface-700 dark:text-surface-300">
       <legend class="sr-only"><%= t("search.filters.all") %></legend>

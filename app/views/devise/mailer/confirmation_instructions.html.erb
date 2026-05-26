@@ -1,5 +1,36 @@
-<p><%= t('.greeting', recipient: @email) %></p>
+<%# Inline-styled HTML email. %>
+<div style="background:#f7f8f5; padding:32px 16px; font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Arial,sans-serif; color:#161e1a; line-height:1.5;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px; margin:0 auto;">
+    <tr>
+      <td>
+        <p style="margin:0 0 32px 0; font-weight:600; font-size:17px; letter-spacing:-0.01em; color:#161e1a;">
+          <span style="display:inline-block; width:14px; height:14px; border-radius:50%; background:#0F5C3F; margin-right:10px; vertical-align:-2px;"></span>
+          <%= t("app.name") %>
+        </p>
 
-<p><%= t('.instruction') %></p>
+        <p style="margin:0 0 8px 0; font-family:ui-monospace,'JetBrains Mono',SFMono-Regular,Menlo,Consolas,monospace; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:#677470;">
+          <%= t(".eyebrow") %>
+        </p>
+        <h1 style="margin:0 0 24px 0; font-size:28px; font-weight:600; line-height:1.2; letter-spacing:-0.02em; color:#161e1a;">
+          <%= t(".heading") %>
+        </h1>
 
-<p><%= link_to t('.action'), confirmation_url(@resource, confirmation_token: @token) %></p>
+        <p style="margin:0 0 8px 0; font-family:'Instrument Serif',ui-serif,Georgia,serif; font-size:17px; line-height:1.6; color:#4a5450;">
+          <%= t(".greeting", recipient: @email) %>
+        </p>
+        <p style="margin:0 0 24px 0; font-family:'Instrument Serif',ui-serif,Georgia,serif; font-size:17px; line-height:1.6; color:#4a5450;">
+          <%= t(".instruction") %>
+        </p>
+
+        <p style="margin:0 0 24px 0;">
+          <%= link_to t(".action"), confirmation_url(@resource, confirmation_token: @token),
+                style: "display:inline-block; background:#161e1a; color:#f7f8f5; padding:14px 28px; border-radius:9999px; font-weight:500; font-size:15px; text-decoration:none;" %>
+        </p>
+
+        <p style="margin:32px 0 0 0; padding-top:20px; border-top:1px solid #dde2d8; font-size:12px; color:#677470; line-height:1.5;">
+          <%= t("app.name") %> &middot; <a href="https://bible-together.org" style="color:#677470;">bible-together.org</a>
+        </p>
+      </td>
+    </tr>
+  </table>
+</div>

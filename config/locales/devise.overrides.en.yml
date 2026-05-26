@@ -10,3 +10,19 @@ en:
     shared:
       links:
         sign_in: Sign in
+    mailer:
+      reset_password_instructions:
+        eyebrow: "Password reset"
+        heading: "Change your password"
+      confirmation_instructions:
+        eyebrow: "Email verification"
+        heading: "Confirm your account"
+      email_changed:
+        eyebrow: "Account update"
+        heading: "Email address changed"
+      password_change:
+        eyebrow: "Account security"
+        heading: "Password updated"
+      unlock_instructions:
+        eyebrow: "Account access"
+        heading: "Unlock your account"

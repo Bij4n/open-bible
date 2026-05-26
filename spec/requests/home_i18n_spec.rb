@@ -31,11 +31,13 @@ RSpec.describe "Home i18n coverage", type: :request do
 
   it "renders the localized H1 in English" do
     get "/", params: { locale: :en }
-    expect(response.body).to include("Where verses meet voices.")
+    expect(response.body).to include("Where verses")
+    expect(response.body).to include("meet voices.")
   end
 
   it "renders the localized H1 in Spanish" do
     get "/", params: { locale: :es }
-    expect(response.body).to include("Donde los versículos encuentran voz.")
+    expect(response.body).to include("Donde los versículos")
+    expect(response.body).to include("encuentran voz.")
   end
 end

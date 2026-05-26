@@ -62,7 +62,7 @@ en:
       ref: John 3 · 16
       verse: "For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life."
       cta: "Be the first to share a note on this verse →"
-    welcome_html: Where verses meet voices.
+    welcome_html: '<span class="block">Where verses</span> <span class="block">meet voices.</span>'
     subhead: Highlight the words that pierced through. Share what they meant to you. Read what the same verse meant to someone else.
     cta_public_bible: Read the Bible
     cta_how_it_works: See how it works

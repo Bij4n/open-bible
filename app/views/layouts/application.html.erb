@@ -206,7 +206,7 @@
             </p>
           </div>
 
-          <nav class="flex flex-wrap items-center gap-4 font-ui text-sm text-surface-600 dark:text-surface-400">
+          <nav class="flex flex-col gap-2 font-ui text-sm text-surface-600 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4 dark:text-surface-400">
             <% if donate_link_visible? %>
               <%= link_to t("layout.donate_link"), donate_path, class: "#{footer_link_base} #{footer_link_active if nav_active?(donate_path)}" %>
             <% end %>

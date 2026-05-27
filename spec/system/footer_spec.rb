@@ -188,4 +188,23 @@ RSpec.describe "Footer", type: :system do
       end
     end
   end
+
+  describe "language toggle" do
+    it "renders EN and ES buttons in the footer" do
+      visit "/"
+      within("footer") do
+        expect(page).to have_content("EN")
+        expect(page).to have_content("ES")
+      end
+    end
+
+    it "marks the active locale" do
+      visit "/"
+      within("footer") do
+        # EN is active by default — it carries aria-current="true"
+        expect(page).to have_css("[aria-current='true']", text: "EN")
+        expect(page).not_to have_css("[aria-current='true']", text: "ES")
+      end
+    end
+  end
 end

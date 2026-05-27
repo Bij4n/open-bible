@@ -37,11 +37,8 @@ RSpec.describe "Settings preferences", type: :system, js: true do
     visit "/"
     expect(page).to have_content(/where verses\s+meet voices/i)
 
-    # Language pills moved into the Account-menu dropdown in the
-    # Sprint 12 navbar rewrite; they still render as <a> for signed-out
-    # users so click_on still works, but the menu has to be open first.
-    open_account_menu
-    click_on "Español"
+    # Language toggle is in the footer — no menu to open.
+    within("footer") { click_on "ES" }
     expect(page).to have_content(/donde los versículos\s+encuentran voz/i)
 
     # Navigate elsewhere without carrying a locale param — session should

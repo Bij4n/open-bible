@@ -170,28 +170,6 @@
                 </span>
               </button>
 
-              <div class="px-4 py-2">
-                <div class="mb-1.5 text-xs uppercase tracking-wide text-surface-500 dark:text-surface-400">
-                  <%= t("layout.language_switcher") %>
-                </div>
-                <div class="flex gap-1.5">
-                  <% User::UI_LOCALES.each do |code| %>
-                    <% label = t("layout.language_#{code}") %>
-                    <% active = I18n.locale.to_s == code %>
-                    <% locale_classes = "rounded-md px-2.5 py-1 text-xs font-medium transition-colors #{ active ? "bg-accent-700 text-surface-50 dark:bg-accent-400 dark:text-surface-950" : "text-surface-700 hover:bg-surface-100 dark:text-surface-300 dark:hover:bg-surface-800" }" %>
-                    <% if user_signed_in? %>
-                      <%= button_to label, settings_path, method: :patch, params: { user: { ui_locale: code } }, form_class: "inline", class: locale_classes %>
-                    <% else %>
-                      <%# data-turbo-prefetch="false": locale change writes
-                          through to session via params, so hover-prefetch
-                          would silently flip the user's UI language. Click
-                          still navigates via Turbo as normal. %>
-                      <%= link_to label, url_for(locale: code), role: "menuitem", class: locale_classes, data: { turbo_prefetch: "false" } %>
-                    <% end %>
-                  <% end %>
-                </div>
-              </div>
-
               <% if user_signed_in? %>
                 <div class="my-1 border-t border-surface-200 dark:border-surface-800" role="separator"></div>
                 <%= button_to t("auth.sign_out"), destroy_user_session_path, method: :delete, form_class: "block", class: "block w-full px-4 py-2 text-left text-surface-700 transition-colors hover:bg-surface-100 hover:text-surface-900 dark:text-surface-300 dark:hover:bg-surface-800 dark:hover:text-surface-50" %>
@@ -248,17 +226,33 @@
             text-[10px] compensates for the tracking-widest visual
             scale-up so the line doesn't outsize the translations
             line above it. %>
-        <div class="space-y-1 border-t border-surface-200 pt-4 dark:border-surface-800">
-          <%# text-balance asks the browser to balance line widths so
-              the parentheticals ("(English)", "(Spanish)") don't drop
-              to an orphan third line at narrow viewports. Falls back
-              to default wrapping in browsers that don't support it. %>
-          <p class="font-ui text-xs text-balance text-surface-500 dark:text-surface-400">
-            <%= t("layout.footer_attribution_translations") %>
-          </p>
-          <p class="font-mono text-[10px] uppercase tracking-widest text-surface-500 dark:text-surface-400">
-            <%= t("layout.footer_attribution_meta", year: Date.current.year) %>
-          </p>
+        <div class="flex items-end justify-between gap-4 border-t border-surface-200 pt-4 dark:border-surface-800">
+          <div class="space-y-1">
+            <%# text-balance asks the browser to balance line widths so
+                the parentheticals ("(English)", "(Spanish)") don't drop
+                to an orphan third line at narrow viewports. Falls back
+                to default wrapping in browsers that don't support it. %>
+            <p class="font-ui text-xs text-balance text-surface-500 dark:text-surface-400">
+              <%= t("layout.footer_attribution_translations") %>
+            </p>
+            <p class="font-mono text-[10px] uppercase tracking-widest text-surface-500 dark:text-surface-400">
+              <%= t("layout.footer_attribution_meta", year: Date.current.year) %>
+            </p>
+          </div>
+
+          <%# Language toggle lives here so it's always reachable without
+              opening the account menu — one tap regardless of auth state. %>
+          <div class="flex gap-1" aria-label="<%= t("layout.language_switcher") %>">
+            <% User::UI_LOCALES.each do |code| %>
+              <% active = I18n.locale.to_s == code %>
+              <% locale_classes = "rounded px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest transition-colors #{active ? "bg-surface-200 text-surface-900 dark:bg-surface-700 dark:text-surface-50" : "text-surface-400 hover:text-surface-600 dark:text-surface-500 dark:hover:text-surface-300"}" %>
+              <% if user_signed_in? %>
+                <%= button_to code.upcase, settings_path, method: :patch, params: { user: { ui_locale: code } }, form_class: "inline", class: locale_classes, aria: { label: t("layout.language_#{code}"), current: active ? "true" : nil } %>
+              <% else %>
+                <%= link_to code.upcase, url_for(locale: code), class: locale_classes, data: { turbo_prefetch: "false" }, aria: { label: t("layout.language_#{code}"), current: active ? "true" : nil } %>
+              <% end %>
+            <% end %>
+          </div>
         </div>
       </div>
     </footer>

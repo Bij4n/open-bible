@@ -43,7 +43,10 @@ en:
     open_menu: Open menu
     close_menu: Close menu
     account: Account
+    my_notes_link: Notes
+    my_groups_link: Groups
     donate_link: Donate
+    how_it_works_link: How it works
     about_link: About
     footer_tagline: Read scripture with someone.
     footer_attribution_translations: "Public domain texts: KJV (English) · Reina-Valera 1909 (Spanish)."
@@ -221,6 +224,15 @@ en:
     privacy:
       private_group: Private
       invite_only: Invite-only
+      open_group: Open
+    discover_title: Discover Groups
+    discover_subtitle: Open groups anyone can join — no invitation needed.
+    discover_empty: No open groups yet. Create one and set it to "Open" so others can find it.
+    join_open: Join group
+    member_count:
+      one: 1 member
+      other: "%{count} members"
+    not_found: That group wasn't found.
     description: Read scripture together with people you trust. Groups are small spaces — a study, a family thread, a friend group — where you can share notes, comments, and highlights in real-time. Notes stay private by default and only surface to the group when you choose to share them.
     new_description: Start a small reading group. Add a name and an optional description. Once you've created the group, you can invite friends by email or share an invitation code from the group page.
     empty: You aren't in any groups yet. Create one to start a study with friends, or paste an invitation code below to join one someone has shared with you.
@@ -233,6 +245,13 @@ en:
     remove: Remove
     email_placeholder: member@example.com
   notes:
+    my_notes: My Notes
+    empty: No notes yet. Open the Bible, highlight a verse, and write what it means to you.
+    badge:
+      private_note: Private
+      shared_users: Shared
+      shared_groups: With groups
+      public_note: Public
     save: Save note
     delete: Delete note
     confirm_delete: Delete this note?
@@ -257,6 +276,10 @@ en:
       shared_users: Share with people
       shared_groups: Share with groups
       public_note: Public
+  authors:
+    public_notes_heading: Public Notes
+    member_since: "Member since %{year}"
+    no_public_notes: This author hasn't published any public notes yet.
   group_invitations:
     invite_button: Send invitation
     pending_heading: Pending invitations
@@ -305,6 +328,7 @@ en:
     no_notes_yet: No community notes on this chapter yet.
     sign_in_to_add: Sign in to add one.
     by_author: "by %{name}"
+    by_author_html: "by %{name}"
     featured: Featured
     hidden: Hidden
     flag: Flag
@@ -422,3 +446,57 @@ en:
       heading: Thank you
       body: "Your support keeps Open Bible online for everyone reading it — no ads, no tracking, no subscription. If you left an email, expect a short reply soon."
       back_to_reading: Back to reading
+  legal:
+    eyebrow: Open Bible
+    last_updated: "Last updated: %{date}"
+    terms:
+      title: Terms of Use
+      acceptance_heading: Acceptance
+      acceptance_body: By using Open Bible you agree to these terms. If you do not agree, please do not use the service.
+      service_heading: The service
+      service_body: Open Bible is a free Bible reader that lets you make highlights and notes on public-domain scripture. It is provided by Demarco Ventures LLC, a single-person company. The service is donation-supported and carries no subscription fee.
+      your_content_heading: Your content
+      your_content_body: Your notes and highlights belong to you. You grant us a limited license to store them and, where you choose to make them public, to display them to other readers. You can edit or delete your content at any time from your account. Deleting your account removes all of your private content permanently.
+      conduct_heading: Conduct
+      conduct_body: "Public notes are read by other people. Please keep them constructive and on-topic. You may not post content that is:"
+      conduct_items:
+        - Harassing, threatening, or abusive toward any person
+        - Spam or unsolicited commercial content
+        - Designed to impersonate another person
+        - In violation of any applicable law
+      termination_heading: Account suspension
+      termination_body: We may suspend or delete accounts that repeatedly violate these terms. We will try to reach you first if the situation allows it.
+      donations_heading: Donations
+      donations_body: Bitcoin donations are voluntary and non-refundable. They support the ongoing cost of running the service. Donating does not grant any additional features or rights.
+      warranty_heading: Warranty disclaimer
+      warranty_body: Open Bible is provided "as is" without warranty of any kind. We do our best to keep it running and your data safe, but we make no guarantees of uptime, data preservation, or fitness for any particular purpose.
+      contact_heading: Contact
+      contact_body_html: 'Questions about these terms? Email us at <a href="mailto:hello@bible-together.org" class="text-accent-700 underline underline-offset-2 hover:text-accent-800 dark:text-accent-400 dark:hover:text-accent-300">hello@bible-together.org</a>.'
+    privacy:
+      title: Privacy Policy
+      summary_heading: The short version
+      summary_body: "We collect only what we need to run the service: your email address and the content you create. We do not track you, sell your data, or run ads."
+      collect_heading: What we collect
+      collect_intro: "When you create an account and use Open Bible, we store:"
+      collect_items:
+        - Your email address (used only for authentication and password resets)
+        - A hashed copy of your password (we never store the plaintext)
+        - Your highlights, notes, and group memberships
+        - An optional display name if you choose to set one
+        - Your UI language and theme preference
+      not_collect_heading: What we do not collect
+      not_collect_body: We do not use analytics services, advertising trackers, cookies beyond what is necessary for login, or any third-party tracking. We do not collect your name, phone number, or payment information (Bitcoin donations go directly to a wallet address and are pseudonymous by nature).
+      use_heading: How we use your information
+      use_intro: "Your information is used only to:"
+      use_items:
+        - Authenticate you when you sign in
+        - Display your content back to you and, where you choose, to other readers
+        - Send transactional emails (password resets, group invitations) that you initiate
+      sharing_heading: Third-party sharing
+      sharing_body: We do not sell, rent, or share your personal information with third parties. Your data is stored on servers operated by Render (our hosting provider) in the United States. Render's privacy policy governs their handling of infrastructure-level data.
+      public_content_heading: Public content
+      public_content_body: Notes you mark as public are visible to anyone who reads the same passage — signed in or not — and may be indexed by search engines. Your display name (or if not set, your email's local-part) is shown alongside public notes. You can change a note's visibility back to private at any time, which removes it from the public view.
+      deletion_heading: Deleting your account
+      deletion_body_html: 'You can delete your account at any time from <a href="/settings" class="text-accent-700 underline underline-offset-2 hover:text-accent-800 dark:text-accent-400 dark:hover:text-accent-300">Settings</a>. Deletion removes your email address, password, and all private content permanently and is irreversible. Public notes you authored may remain visible briefly until caches clear.'
+      contact_heading: Questions
+      contact_body_html: 'For privacy questions or data requests, email <a href="mailto:hello@bible-together.org" class="text-accent-700 underline underline-offset-2 hover:text-accent-800 dark:text-accent-400 dark:hover:text-accent-300">hello@bible-together.org</a>.'

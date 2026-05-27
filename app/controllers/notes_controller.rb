@@ -2,6 +2,10 @@ class NotesController < ApplicationController
   before_action :authenticate_user!
   before_action :load_note, only: %i[show edit update destroy]
 
+  def index
+    @notes = current_user.notes.includes(:highlights).order(updated_at: :desc)
+  end
+
   # All four Note::VISIBILITIES are now active (Sprint 22.1, 2026-05-02
   # — public_note enabled). The constant remains as the form's
   # canonical list + a bidirectional gate so a future deprecation

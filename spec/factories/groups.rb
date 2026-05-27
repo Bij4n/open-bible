@@ -9,6 +9,10 @@ FactoryBot.define do
       privacy { "private_group" }
     end
 
+    trait :open_group do
+      privacy { "open_group" }
+    end
+
     trait :with_invitation_code do
       sequence(:invitation_code) { |n| "CODE#{n.to_s.rjust(4, '0')}" }
     end

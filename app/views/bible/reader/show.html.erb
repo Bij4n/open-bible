@@ -11,11 +11,13 @@
          data-highlight-debug-value="<%= debug_selection %>">
   <nav aria-label="<%= t("bible.reader.chapter_label") %>" class="flex items-center justify-between gap-4 font-ui text-sm">
     <% if prev_chapter %>
-      <%= link_to t("bible.reader.prev_chapter"),
-                  bible_chapter_path(translation: @translation.code.downcase,
+      <%= link_to bible_chapter_path(translation: @translation.code.downcase,
                                      book: prev_chapter.book.osis_code.downcase,
                                      chapter: prev_chapter.number),
-                  class: "text-surface-600 transition-colors hover:text-accent-700 dark:text-surface-400 dark:hover:text-accent-400" %>
+                  class: "inline-flex items-center gap-1 text-surface-600 transition-colors hover:text-accent-700 dark:text-surface-400 dark:hover:text-accent-400" do %>
+        <span aria-hidden="true">&larr;</span>
+        <%= t("bible.reader.prev_chapter") %>
+      <% end %>
     <% else %>
       <span aria-hidden="true"></span>
     <% end %>
@@ -29,11 +31,13 @@
                aria_label: t("bible.reader.chapter_label") %>
 
     <% if next_chapter %>
-      <%= link_to t("bible.reader.next_chapter"),
-                  bible_chapter_path(translation: @translation.code.downcase,
+      <%= link_to bible_chapter_path(translation: @translation.code.downcase,
                                      book: next_chapter.book.osis_code.downcase,
                                      chapter: next_chapter.number),
-                  class: "text-surface-600 transition-colors hover:text-accent-700 dark:text-surface-400 dark:hover:text-accent-400" %>
+                  class: "inline-flex items-center gap-1 text-surface-600 transition-colors hover:text-accent-700 dark:text-surface-400 dark:hover:text-accent-400" do %>
+        <%= t("bible.reader.next_chapter") %>
+        <span aria-hidden="true">&rarr;</span>
+      <% end %>
     <% else %>
       <span aria-hidden="true"></span>
     <% end %>
@@ -69,7 +73,6 @@
   </div>
 
   <% if user_signed_in? %>
-    <!-- toolbar interaction polish (pencil → note bridge) tracked for Sprint 16.5 -->
     <%# Sprint 16.5 PR C: confirm-remove templates carry the
         pluralized I18n forms as data attributes. JS picks `singular`
         when noteCount == 1, `plural` otherwise, then string-replaces
@@ -121,21 +124,25 @@
 
   <nav aria-label="<%= t("bible.reader.chapter_label") %>" class="flex items-center justify-between border-t border-surface-200 pt-6 font-ui text-sm dark:border-surface-800">
     <% if prev_chapter %>
-      <%= link_to t("bible.reader.prev_chapter"),
-                  bible_chapter_path(translation: @translation.code.downcase,
+      <%= link_to bible_chapter_path(translation: @translation.code.downcase,
                                      book: prev_chapter.book.osis_code.downcase,
                                      chapter: prev_chapter.number),
-                  class: "text-surface-600 transition-colors hover:text-accent-700 dark:text-surface-400 dark:hover:text-accent-400" %>
+                  class: "inline-flex items-center gap-1 text-surface-600 transition-colors hover:text-accent-700 dark:text-surface-400 dark:hover:text-accent-400" do %>
+        <span aria-hidden="true">&larr;</span>
+        <%= t("bible.reader.prev_chapter") %>
+      <% end %>
     <% else %>
       <span aria-hidden="true"></span>
     <% end %>
 
     <% if next_chapter %>
-      <%= link_to t("bible.reader.next_chapter"),
-                  bible_chapter_path(translation: @translation.code.downcase,
+      <%= link_to bible_chapter_path(translation: @translation.code.downcase,
                                      book: next_chapter.book.osis_code.downcase,
                                      chapter: next_chapter.number),
-                  class: "text-surface-600 transition-colors hover:text-accent-700 dark:text-surface-400 dark:hover:text-accent-400" %>
+                  class: "inline-flex items-center gap-1 text-surface-600 transition-colors hover:text-accent-700 dark:text-surface-400 dark:hover:text-accent-400" do %>
+        <%= t("bible.reader.next_chapter") %>
+        <span aria-hidden="true">&rarr;</span>
+      <% end %>
     <% end %>
   </nav>
 </article>

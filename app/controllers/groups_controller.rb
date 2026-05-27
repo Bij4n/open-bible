@@ -4,8 +4,16 @@ class GroupsController < ApplicationController
   before_action :ensure_group_member, only: %i[show]
   before_action :ensure_group_owner,  only: %i[edit update destroy]
 
+  skip_before_action :authenticate_user!, only: [ :discover ]
+
   def index
     @groups = current_user.groups.distinct.order(:name)
+  end
+
+  def discover
+    @groups = Group.where(privacy: :open_group)
+                   .includes(:memberships)
+                   .order(:name)
   end
 
   def new
@@ -44,15 +52,11 @@ class GroupsController < ApplicationController
   end
 
   def join
-    code = params[:invitation_code].to_s.strip.upcase
-    group = Group.find_by(invitation_code: code)
-
-    if group.nil?
-      redirect_to groups_path, alert: t("groups.invalid_code") and return
+    if params[:group_id].present?
+      join_open_group
+    else
+      join_by_code
     end
-
-    group.memberships.find_or_create_by!(user: current_user) { |m| m.role = :member }
-    redirect_to group_path(group), notice: t("groups.joined")
   end
 
   def leave
@@ -70,6 +74,25 @@ class GroupsController < ApplicationController
   end
 
   private
+
+  def join_open_group
+    group = Group.find_by(id: params[:group_id], privacy: :open_group)
+    if group.nil?
+      redirect_to discover_groups_path, alert: t("groups.not_found") and return
+    end
+    group.memberships.find_or_create_by!(user: current_user) { |m| m.role = :member }
+    redirect_to group_path(group), notice: t("groups.joined")
+  end
+
+  def join_by_code
+    code = params[:invitation_code].to_s.strip.upcase
+    group = Group.find_by(invitation_code: code)
+    if group.nil?
+      redirect_to groups_path, alert: t("groups.invalid_code") and return
+    end
+    group.memberships.find_or_create_by!(user: current_user) { |m| m.role = :member }
+    redirect_to group_path(group), notice: t("groups.joined")
+  end
 
   def load_group
     @group = Group.find(params[:id])

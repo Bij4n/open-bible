@@ -27,7 +27,7 @@ That's the affordance. The **product** is something else: it's scripture-as-conv
 | Database | PostgreSQL — single DB shared by primary + Solid Cache/Queue/Cable (multi-DB collapsed at deploy) |
 | Frontend | Hotwire (Turbo + Stimulus), import maps, **Tailwind CSS v4** via `tailwindcss-rails` |
 | Asset pipeline | Propshaft |
-| Fonts | **Inter** (UI/body sans) + **Instrument Serif** (verse + italic accents) + **JetBrains Mono** (refs/labels) — self-hosted `.woff2` in `public/fonts/` (Rule 8). Source Serif 4 retained one transitional sprint while call sites migrate. |
+| Fonts | **Inter** (UI/body sans) + **Instrument Serif** (verse + italic accents) + **JetBrains Mono** (refs/labels) — self-hosted `.woff2` in `public/fonts/` (Rule 8). Full design system in `DESIGN.md`. |
 | Rich text | Action Text (Trix), used for note bodies and comments |
 | Real-time | Action Cable + Turbo Streams (group Bibles only) |
 | Background jobs | Solid Queue (DB-backed) |

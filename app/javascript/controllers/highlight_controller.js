@@ -563,7 +563,11 @@ export default class extends Controller {
     // the note panel for that highlight directly (no selection needed).
     if (this.tapSpan) {
       const ids = (this.tapSpan.dataset.highlightIds || "").split(",").filter(Boolean).map(Number)
-      if (ids.length > 0) { this.loadNotePanelFor(ids); return }
+      if (ids.length > 0) {
+        this.hideToolbar()
+        this.loadNotePanelFor(ids)
+        return
+      }
     }
 
     // If the user has a selection, first create a gold highlight
@@ -573,12 +577,14 @@ export default class extends Controller {
     const existingIds = this.highlightIdsUnderCursor()
 
     if (existingIds.length > 0) {
+      this.hideToolbar()
       this.loadNotePanelFor(existingIds)
       return
     }
 
     if (!this.currentRef) return
 
+    this.hideToolbar()
     const csrfMeta = document.querySelector('meta[name="csrf-token"]')
     const csrf = csrfMeta ? csrfMeta.content : ""
     const response = await fetch("/highlights", {

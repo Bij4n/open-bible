@@ -43,7 +43,10 @@ es:
     open_menu: Abrir menú
     close_menu: Cerrar menú
     account: Cuenta
+    my_notes_link: Notas
+    my_groups_link: Grupos
     donate_link: Donar
+    how_it_works_link: Cómo funciona
     about_link: Acerca de
     footer_tagline: Lee la Escritura en compañía.
     footer_attribution_translations: "Textos de dominio público: KJV (inglés) · Reina-Valera 1909 (español)."
@@ -214,6 +217,15 @@ es:
     privacy:
       private_group: Privado
       invite_only: Solo por invitación
+      open_group: Abierto
+    discover_title: Descubrir grupos
+    discover_subtitle: Grupos abiertos a los que cualquiera puede unirse, sin invitación.
+    discover_empty: Todavía no hay grupos abiertos. Crea uno y configúralo como "Abierto" para que otros puedan encontrarlo.
+    join_open: Unirse al grupo
+    member_count:
+      one: 1 miembro
+      other: "%{count} miembros"
+    not_found: No se encontró ese grupo.
     description: Lee la Escritura con personas en quienes confías. Los grupos son espacios pequeños — un estudio, un hilo familiar, un grupo de amigos — donde puedes compartir notas, comentarios y resaltados en tiempo real. Las notas son privadas por defecto y sólo se muestran al grupo cuando tú eliges compartirlas.
     new_description: Crea un grupo de lectura pequeño. Agrega un nombre y una descripción opcional. Una vez creado, podrás invitar a amigos por correo o compartir el código de invitación desde la página del grupo.
     empty: Aún no estás en ningún grupo. Crea uno para empezar un estudio con amigos, o pega un código de invitación abajo para unirte a uno que alguien te haya compartido.
@@ -226,6 +238,13 @@ es:
     remove: Eliminar
     email_placeholder: miembro@ejemplo.com
   notes:
+    my_notes: Mis notas
+    empty: Aún no hay notas. Abre la Biblia, resalta un versículo y escribe lo que significa para ti.
+    badge:
+      private_note: Privada
+      shared_users: Compartida
+      shared_groups: Con grupos
+      public_note: Pública
     save: Guardar nota
     delete: Eliminar nota
     confirm_delete: ¿Eliminar esta nota?
@@ -250,6 +269,10 @@ es:
       shared_users: Compartir con personas
       shared_groups: Compartir con grupos
       public_note: Pública
+  authors:
+    public_notes_heading: Notas públicas
+    member_since: "Miembro desde %{year}"
+    no_public_notes: Este autor aún no ha publicado notas públicas.
   group_invitations:
     invite_button: Enviar invitación
     pending_heading: Invitaciones pendientes
@@ -298,6 +321,7 @@ es:
     no_notes_yet: Aún no hay notas de la comunidad en este capítulo.
     sign_in_to_add: Inicia sesión para añadir una.
     by_author: "por %{name}"
+    by_author_html: "por %{name}"
     featured: Destacada
     hidden: Oculta
     flag: Reportar
@@ -415,3 +439,57 @@ es:
       heading: Gracias
       body: "Tu apoyo mantiene Open Bible en línea para todos los que lo leen — sin anuncios, sin rastreo, sin suscripción. Si dejaste un correo, espera una respuesta breve pronto."
       back_to_reading: Volver a leer
+  legal:
+    eyebrow: Open Bible
+    last_updated: "Última actualización: %{date}"
+    terms:
+      title: Términos de uso
+      acceptance_heading: Aceptación
+      acceptance_body: Al usar Open Bible aceptas estos términos. Si no estás de acuerdo, por favor no uses el servicio.
+      service_heading: El servicio
+      service_body: Open Bible es un lector de Biblia gratuito que te permite hacer resaltados y notas en textos de dominio público. Es proporcionado por Demarco Ventures LLC, una empresa unipersonal. El servicio se financia con donaciones y no tiene ningún costo de suscripción.
+      your_content_heading: Tu contenido
+      your_content_body: Tus notas y resaltados te pertenecen. Nos otorgas una licencia limitada para almacenarlos y, cuando eliges hacerlos públicos, mostrarlos a otros lectores. Puedes editar o eliminar tu contenido en cualquier momento desde tu cuenta. Eliminar tu cuenta borra todo tu contenido privado de forma permanente.
+      conduct_heading: Conducta
+      conduct_body: "Las notas públicas son leídas por otras personas. Por favor mantenlas constructivas y relacionadas con el tema. No puedes publicar contenido que sea:"
+      conduct_items:
+        - Acoso, amenazas o abuso hacia cualquier persona
+        - Spam o contenido comercial no solicitado
+        - Diseñado para hacerse pasar por otra persona
+        - En violación de cualquier ley aplicable
+      termination_heading: Suspensión de cuenta
+      termination_body: Podemos suspender o eliminar cuentas que violen estos términos repetidamente. Intentaremos contactarte primero si la situación lo permite.
+      donations_heading: Donaciones
+      donations_body: Las donaciones en Bitcoin son voluntarias y no reembolsables. Apoyan el costo de mantener el servicio en funcionamiento. Donar no otorga características ni derechos adicionales.
+      warranty_heading: Descargo de garantía
+      warranty_body: Open Bible se proporciona "tal cual" sin garantía de ningún tipo. Hacemos nuestro mejor esfuerzo para mantenerlo funcionando y tu información segura, pero no ofrecemos garantías de disponibilidad, conservación de datos ni idoneidad para ningún propósito en particular.
+      contact_heading: Contacto
+      contact_body_html: '¿Preguntas sobre estos términos? Escríbenos a <a href="mailto:hello@bible-together.org" class="text-accent-700 underline underline-offset-2 hover:text-accent-800 dark:text-accent-400 dark:hover:text-accent-300">hello@bible-together.org</a>.'
+    privacy:
+      title: Política de privacidad
+      summary_heading: La versión corta
+      summary_body: "Recopilamos solo lo necesario para operar el servicio: tu dirección de correo electrónico y el contenido que creas. No te rastreamos, no vendemos tus datos ni mostramos anuncios."
+      collect_heading: Qué recopilamos
+      collect_intro: "Cuando creas una cuenta y usas Open Bible, almacenamos:"
+      collect_items:
+        - Tu dirección de correo electrónico (usada solo para autenticación y restablecimiento de contraseña)
+        - Una copia cifrada de tu contraseña (nunca almacenamos el texto en claro)
+        - Tus resaltados, notas y membresías de grupo
+        - Un nombre público opcional si decides configurarlo
+        - Tu preferencia de idioma e interfaz
+      not_collect_heading: Qué no recopilamos
+      not_collect_body: No usamos servicios de analítica, rastreadores publicitarios, cookies más allá de las necesarias para el inicio de sesión, ni ningún seguimiento de terceros. No recopilamos tu nombre, número de teléfono ni información de pago (las donaciones en Bitcoin van directamente a una dirección de cartera y son de naturaleza seudónima).
+      use_heading: Cómo usamos tu información
+      use_intro: "Tu información se usa únicamente para:"
+      use_items:
+        - Autenticarte cuando inicias sesión
+        - Mostrarte tu contenido y, cuando lo eliges, a otros lectores
+        - Enviar correos transaccionales (restablecimientos de contraseña, invitaciones a grupos) que tú inicias
+      sharing_heading: Compartición con terceros
+      sharing_body: No vendemos, alquilamos ni compartimos tu información personal con terceros. Tus datos se almacenan en servidores operados por Render (nuestro proveedor de alojamiento) en los Estados Unidos. La política de privacidad de Render rige el manejo de los datos a nivel de infraestructura.
+      public_content_heading: Contenido público
+      public_content_body: Las notas que marcas como públicas son visibles para cualquiera que lea el mismo pasaje —con o sin sesión iniciada— y pueden ser indexadas por motores de búsqueda. Tu nombre público (o si no está configurado, la parte local de tu correo) aparece junto a las notas públicas. Puedes cambiar la visibilidad de una nota a privada en cualquier momento, lo que la elimina de la vista pública.
+      deletion_heading: Eliminar tu cuenta
+      deletion_body_html: 'Puedes eliminar tu cuenta en cualquier momento desde <a href="/settings" class="text-accent-700 underline underline-offset-2 hover:text-accent-800 dark:text-accent-400 dark:hover:text-accent-300">Ajustes</a>. La eliminación borra tu dirección de correo, contraseña y todo el contenido privado de forma permanente e irreversible. Las notas públicas que hayas creado pueden permanecer visibles brevemente hasta que los cachés se actualicen.'
+      contact_heading: Preguntas
+      contact_body_html: 'Para preguntas de privacidad o solicitudes de datos, escribe a <a href="mailto:hello@bible-together.org" class="text-accent-700 underline underline-offset-2 hover:text-accent-800 dark:text-accent-400 dark:hover:text-accent-300">hello@bible-together.org</a>.'

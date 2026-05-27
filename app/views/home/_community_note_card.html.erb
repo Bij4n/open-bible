@@ -20,6 +20,6 @@
   </div>
 
   <p class="mt-4 font-ui text-xs font-medium text-surface-600 dark:text-surface-400">
-    — <%= note.user.author_name %>
+    — <%= link_to note.user.author_name, author_path(note.user), class: "transition-colors hover:text-accent-700 dark:hover:text-accent-400" %>
   </p>
 <% end %>

@@ -1,0 +1,56 @@
+<% content_for :title, t("notes.my_notes") %>
+
+<article class="mx-auto max-w-3xl space-y-8">
+  <header class="border-b border-surface-200 pb-6 dark:border-surface-800">
+    <h1 class="font-ui text-4xl font-semibold tracking-tight text-surface-900 dark:text-surface-50 sm:text-5xl">
+      <%= t("notes.my_notes") %>
+    </h1>
+  </header>
+
+  <% if @notes.any? %>
+    <ul class="space-y-3">
+      <% @notes.each do |note| %>
+        <%
+          badge_color = case note.visibility
+          when "public_note"    then "bg-accent-100 text-accent-800 dark:bg-accent-900/40 dark:text-accent-300"
+          when "shared_users"   then "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
+          when "shared_groups"  then "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
+          else                       "bg-surface-100 text-surface-600 dark:bg-surface-800 dark:text-surface-400"
+          end
+        %>
+        <li class="rounded-2xl border border-surface-200 bg-surface-50 p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-surface-900 hover:shadow-[0_12px_32px_-12px_rgba(14,20,17,0.12)] dark:border-surface-800 dark:bg-surface-900 dark:hover:border-surface-50 dark:hover:shadow-[0_16px_40px_-16px_rgba(0,0,0,0.4)] sm:p-6">
+          <div class="flex items-start justify-between gap-4">
+            <div class="min-w-0 flex-1 space-y-2">
+              <% if note.highlights.any? %>
+                <p class="font-mono text-xs uppercase tracking-widest text-surface-500 dark:text-surface-400">
+                  <%= note.highlights.first.osis_ref %>
+                </p>
+              <% end %>
+              <div class="line-clamp-3 font-reading text-sm leading-relaxed text-surface-700 dark:text-surface-300">
+                <%= note.body.to_plain_text.truncate(160) %>
+              </div>
+            </div>
+            <div class="flex shrink-0 flex-col items-end gap-2">
+              <span class="rounded-full px-2.5 py-0.5 font-ui text-xs font-medium <%= badge_color %>">
+                <%= t("notes.badge.#{note.visibility}") %>
+              </span>
+              <%= link_to t("groups.edit"), edit_note_path(note),
+                          class: "font-ui text-xs text-surface-500 transition-colors hover:text-accent-700 dark:text-surface-400 dark:hover:text-accent-400" %>
+            </div>
+          </div>
+          <p class="mt-3 font-ui text-xs text-surface-400 dark:text-surface-500">
+            <%= l(note.updated_at, format: :long) %>
+          </p>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <div class="rounded-2xl border border-dashed border-surface-300 px-8 py-12 text-center dark:border-surface-700">
+      <p class="font-reading italic text-surface-500 dark:text-surface-400">
+        <%= t("notes.empty") %>
+      </p>
+      <%= link_to t("home.cta_public_bible"), bible_entry_path,
+                  class: "mt-4 inline-block font-ui text-sm text-accent-700 underline underline-offset-4 decoration-accent-700/40 hover:text-accent-800 dark:text-accent-400 dark:decoration-accent-400/40 dark:hover:text-accent-300" %>
+    </div>
+  <% end %>
+</article>

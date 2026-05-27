@@ -1,0 +1,71 @@
+<% content_for :title, t("legal.terms.title") %>
+
+<article class="mx-auto max-w-3xl space-y-10 py-8">
+  <header class="border-b border-surface-200 pb-6 dark:border-surface-800">
+    <p class="font-ui text-xs font-medium uppercase tracking-wider text-surface-500 dark:text-surface-400">
+      <%= t("legal.eyebrow") %>
+    </p>
+    <h1 class="mt-2 font-ui text-4xl font-semibold tracking-tight text-surface-900 dark:text-surface-50 sm:text-5xl">
+      <%= t("legal.terms.title") %>
+    </h1>
+    <p class="mt-3 font-ui text-sm text-surface-500 dark:text-surface-400">
+      <%= t("legal.last_updated", date: "May 26, 2026") %>
+    </p>
+  </header>
+
+  <div class="space-y-8 font-reading text-base leading-[1.7] text-surface-700 dark:text-surface-300">
+
+    <section class="space-y-3">
+      <h2 class="font-ui text-lg font-semibold text-surface-900 dark:text-surface-50"><%= t("legal.terms.acceptance_heading") %></h2>
+      <p><%= t("legal.terms.acceptance_body") %></p>
+    </section>
+
+    <section class="space-y-3">
+      <h2 class="font-ui text-lg font-semibold text-surface-900 dark:text-surface-50"><%= t("legal.terms.service_heading") %></h2>
+      <p><%= t("legal.terms.service_body") %></p>
+    </section>
+
+    <section class="space-y-3">
+      <h2 class="font-ui text-lg font-semibold text-surface-900 dark:text-surface-50"><%= t("legal.terms.your_content_heading") %></h2>
+      <p><%= t("legal.terms.your_content_body") %></p>
+    </section>
+
+    <section class="space-y-3">
+      <h2 class="font-ui text-lg font-semibold text-surface-900 dark:text-surface-50"><%= t("legal.terms.conduct_heading") %></h2>
+      <p><%= t("legal.terms.conduct_body") %></p>
+      <ul class="list-disc space-y-1 pl-5">
+        <% t("legal.terms.conduct_items").each do |item| %>
+          <li><%= item %></li>
+        <% end %>
+      </ul>
+    </section>
+
+    <section class="space-y-3">
+      <h2 class="font-ui text-lg font-semibold text-surface-900 dark:text-surface-50"><%= t("legal.terms.termination_heading") %></h2>
+      <p><%= t("legal.terms.termination_body") %></p>
+    </section>
+
+    <section class="space-y-3">
+      <h2 class="font-ui text-lg font-semibold text-surface-900 dark:text-surface-50"><%= t("legal.terms.donations_heading") %></h2>
+      <p><%= t("legal.terms.donations_body") %></p>
+    </section>
+
+    <section class="space-y-3">
+      <h2 class="font-ui text-lg font-semibold text-surface-900 dark:text-surface-50"><%= t("legal.terms.warranty_heading") %></h2>
+      <p><%= t("legal.terms.warranty_body") %></p>
+    </section>
+
+    <section class="space-y-3">
+      <h2 class="font-ui text-lg font-semibold text-surface-900 dark:text-surface-50"><%= t("legal.terms.contact_heading") %></h2>
+      <p><%= t("legal.terms.contact_body_html") %></p>
+    </section>
+
+  </div>
+
+  <div class="flex flex-wrap gap-4 border-t border-surface-200 pt-8 font-ui text-sm dark:border-surface-800">
+    <%= link_to t("legal.privacy.title"), privacy_path,
+                class: "text-accent-700 underline underline-offset-4 decoration-accent-700/40 hover:text-accent-800 dark:text-accent-400 dark:decoration-accent-400/40 dark:hover:text-accent-300" %>
+    <%= link_to t("home.about.heading"), about_path,
+                class: "text-surface-600 transition-colors hover:text-accent-700 dark:text-surface-400 dark:hover:text-accent-400" %>
+  </div>
+</article>

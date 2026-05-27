@@ -1,5 +1,5 @@
 class Group < ApplicationRecord
-  PRIVACIES = { private_group: 0, invite_only: 1 }.freeze
+  PRIVACIES = { private_group: 0, invite_only: 1, open_group: 2 }.freeze
   INVITATION_CODE_FORMAT = /\A[A-Z0-9]{6,8}\z/
 
   enum :privacy, PRIVACIES

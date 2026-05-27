@@ -52,10 +52,11 @@
     <%= render "community_section", section_h2: section_h2 %>
   <% end %>
 
-  <%# Donate CTA — gated on active-address check. %>
+  <%# Donate CTA — gated on active-address check. Mint-tinted bg sets it
+      apart from the neutral card sections without shouting. %>
   <% if donate_link_visible? %>
     <section data-section="donate-cta"
-             class="rounded-2xl border border-surface-200 bg-surface-50 p-8 text-center dark:border-surface-800 dark:bg-surface-900 sm:p-10">
+             class="rounded-2xl border border-accent-700/20 bg-accent-700/5 p-8 text-center dark:border-accent-400/20 dark:bg-accent-400/5 sm:p-10">
       <h2 class="font-ui text-xl font-semibold tracking-tight text-surface-900 dark:text-surface-50 sm:text-2xl">
         <%= t("home.donate_cta.heading") %>
       </h2>
@@ -64,7 +65,7 @@
       </p>
       <div class="mt-6">
         <%= link_to t("home.donate_cta.button"), donate_path,
-                    class: "inline-flex items-center gap-2 rounded-full bg-accent-700 px-7 py-3 font-ui text-base font-medium text-surface-50 transition-colors hover:bg-accent-800 dark:bg-accent-400 dark:text-surface-950 dark:hover:bg-accent-300" %>
+                    class: "inline-flex items-center rounded-full bg-accent-700 px-4 py-1.5 font-ui text-sm font-medium text-surface-50 transition-colors hover:bg-accent-800 dark:bg-accent-400 dark:text-surface-950 dark:hover:bg-accent-300" %>
       </div>
     </section>
   <% end %>

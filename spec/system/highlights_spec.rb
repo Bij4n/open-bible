@@ -496,6 +496,10 @@ RSpec.describe "Highlights", type: :system, js: true do
 
       find("[data-action='highlight#note']", visible: :all).click
 
+      # Toolbar dismisses the moment the pencil fires — no intermediate state
+      # where both toolbar and panel are visible simultaneously.
+      expect(page).to have_css("[data-highlight-target='toolbar']", visible: :hidden)
+
       # Body attribute is set synchronously; note-panel frame loads async.
       expect(page).to have_css("body[data-note-panel-open='true']")
       expect(page).to have_css("trix-editor", visible: :all)

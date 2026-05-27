@@ -35,9 +35,10 @@ RSpec.describe Group, type: :model do
   end
 
   describe "privacy enum" do
-    it "accepts private_group and invite_only" do
+    it "accepts all three privacy levels" do
       expect(build(:group, privacy: "private_group")).to be_valid
       expect(build(:group, privacy: "invite_only")).to be_valid
+      expect(build(:group, privacy: "open_group")).to be_valid
     end
 
     it "rejects unknown privacies" do

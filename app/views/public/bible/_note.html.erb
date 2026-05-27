@@ -12,7 +12,7 @@
       <p class="font-ui text-xs uppercase tracking-wider text-surface-500 dark:text-surface-400">
         <%= note.highlights.map(&:osis_ref).join(", ") %>
         <span class="ml-2 italic normal-case tracking-normal">
-          <%= t("public_bible.by_author", name: note.user.author_name) %>
+          <%= t("public_bible.by_author_html", name: link_to(note.user.author_name, author_path(note.user), class: "transition-colors hover:text-accent-700 dark:hover:text-accent-400")) %>
         </span>
       </p>
       <% if note.featured? %>

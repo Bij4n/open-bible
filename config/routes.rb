@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   patch "/settings", to: "settings#update"
 
   resources :highlights, only: [ :create, :update, :destroy ]
-  resources :notes,      only: [ :new, :create, :update, :destroy, :show, :edit ]
+  resources :notes,      only: [ :index, :new, :create, :update, :destroy, :show, :edit ]
 
   # Sprint 23.2/23.3 — accept-via-token route for email group
   # invitations. The named helper is `accept_group_invitation_path`
@@ -26,6 +26,7 @@ Rails.application.routes.draw do
   resources :groups do
     collection do
       post :join
+      get  :discover
     end
     member do
       delete :leave
@@ -67,7 +68,11 @@ Rails.application.routes.draw do
 
   get "/search", to: "search#index", as: :search
 
+  resources :authors, only: [ :show ]
+
   get  "/about",             to: "about#show",             as: :about
+  get  "/terms",             to: "legal#terms",            as: :terms
+  get  "/privacy",           to: "legal#privacy",          as: :privacy
   get  "/sitemap.xml",       to: "sitemap#show",           as: :sitemap, defaults: { format: :xml }
 
   get  "/donate",            to: "donations#show",         as: :donate

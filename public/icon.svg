@@ -1,12 +1,13 @@
 <svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-  <!-- Open Bible brand glyph: mint accent-700 disc with two concentric
-       outline rings, matching the wordmark-mark CSS in application.css.
-       Mint #0F5C3F per Sprint 16 Echo design tokens. SVG renders
-       identically on light + dark themes (browser/social-card UAs
-       don't honor prefers-color-scheme on icon assets). -->
-  <circle cx="256" cy="256" r="256" fill="#F7F8F5"/>
-  <circle cx="256" cy="256" r="200" fill="none" stroke="#0F5C3F" stroke-width="2" opacity="0.18"/>
-  <circle cx="256" cy="256" r="160" fill="none" stroke="#0F5C3F" stroke-width="2" opacity="0.4"/>
-  <circle cx="256" cy="256" r="112" fill="#0F5C3F"/>
-  <text x="256" y="298" font-family="Georgia, serif" font-style="italic" font-size="128" font-weight="400" fill="#F7F8F5" text-anchor="middle">OB</text>
+  <style>
+    .disc { fill: #0F5C3F; }
+    .ring { stroke: #0F5C3F; }
+    @media (prefers-color-scheme: dark) {
+      .disc { fill: #5DD4A0; }
+      .ring { stroke: #5DD4A0; }
+    }
+  </style>
+  <circle class="ring" cx="256" cy="256" r="200" fill="none" stroke-width="2.5" opacity="0.22"/>
+  <circle class="ring" cx="256" cy="256" r="160" fill="none" stroke-width="2.5" opacity="0.45"/>
+  <circle class="disc" cx="256" cy="256" r="112"/>
 </svg>

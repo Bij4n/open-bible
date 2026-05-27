@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Open Bible — Logo Direction Research</title>
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      src: url('/fonts/InterVariable.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Instrument Serif';
+      src: url('/fonts/InstrumentSerif-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Instrument Serif';
+      src: url('/fonts/InstrumentSerif-Italic.woff2') format('woff2');
+      font-weight: 400;
+      font-style: italic;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #F7F8F5;
+      --bg-card:   #EEEEE9;
+      --bg-card2:  #E4E4DE;
+      --border:    #D4D4CE;
+      --txt:       #1C1B18;
+      --txt-2:     #4A4945;
+      --txt-3:     #7A7970;
+      --accent:    #0F5C3F;
+      --accent-hi: #1A7A55;
+    }
+
+    [data-theme="dark"] {
+      --bg:        #0F0E0C;
+      --bg-card:   #1A1916;
+      --bg-card2:  #252420;
+      --border:    #2E2D29;
+      --txt:       #F7F8F5;
+      --txt-2:     #BFBFB8;
+      --txt-3:     #6E6D65;
+      --accent:    #5DD4A0;
+      --accent-hi: #4BB88A;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--txt);
+      min-height: 100vh;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .page { max-width: 960px; margin: 0 auto; padding: 56px 32px 80px; }
+
+    /* ─── Header ─── */
+    .page-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 56px;
+    }
+    .page-title-eyebrow {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--txt-3);
+      margin-bottom: 8px;
+    }
+    .page-title {
+      font-size: 30px;
+      font-weight: 650;
+      letter-spacing: -0.025em;
+      color: var(--txt);
+      line-height: 1.2;
+    }
+    .page-subtitle {
+      margin-top: 6px;
+      font-size: 14px;
+      color: var(--txt-2);
+    }
+
+    .toggle {
+      display: flex;
+      gap: 3px;
+      padding: 3px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      flex-shrink: 0;
+    }
+    .toggle-btn {
+      padding: 6px 16px;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 500;
+      border: none;
+      background: transparent;
+      color: var(--txt-3);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.1s, color 0.1s;
+    }
+    .toggle-btn.active {
+      background: var(--bg);
+      color: var(--txt);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 0 0 1px var(--border);
+    }
+
+    /* ─── Sections ─── */
+    .section { margin-bottom: 64px; }
+    .section-eyebrow {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--txt-3);
+      margin-bottom: 6px;
+    }
+    .section-heading {
+      font-size: 18px;
+      font-weight: 650;
+      letter-spacing: -0.015em;
+      color: var(--txt);
+      margin-bottom: 6px;
+    }
+    .section-desc {
+      font-size: 13px;
+      color: var(--txt-2);
+      line-height: 1.65;
+      margin-bottom: 24px;
+      max-width: 600px;
+    }
+
+    .divider { height: 1px; background: var(--border); margin: 56px 0; }
+
+    /* ─── Card ─── */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px;
+    }
+    .card-title {
+      font-size: 13px;
+      font-weight: 650;
+      letter-spacing: -0.01em;
+      color: var(--txt);
+      margin-bottom: 4px;
+    }
+    .card-desc {
+      font-size: 12px;
+      color: var(--txt-3);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    /* ─── Split pane (light / dark side by side) ─── */
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .split-light {
+      background: #F7F8F5;
+      padding: 28px 24px;
+    }
+    .split-dark {
+      background: #0F0E0C;
+      padding: 28px 24px;
+      border-left: 1px solid #2E2D29;
+    }
+    .split-label {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .split-light .split-label { color: #7A7970; }
+    .split-dark  .split-label { color: #6E6D65; }
+
+    /* ─── Wordmark demos ─── */
+    .wm-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .wm-size-label {
+      font-size: 10px;
+      color: var(--txt-3);
+      width: 48px;
+      flex-shrink: 0;
+    }
+
+    /* Wordmark A: Serif-sans split */
+    .wm-a-open  { font-family: 'Inter', sans-serif; font-weight: 500; letter-spacing: -0.025em; }
+    .wm-a-bible { font-family: 'Instrument Serif', serif; font-weight: 400; margin-left: 0.15em; font-size: 0.94em; }
+
+    /* Wordmark B: Split-weight Inter */
+    .wm-b-open  { font-family: 'Inter', sans-serif; font-weight: 400; letter-spacing: -0.02em; }
+    .wm-b-bible { font-family: 'Inter', sans-serif; font-weight: 720; letter-spacing: -0.03em; margin-left: 0.1em; }
+
+    /* Current wordmark (for reference) */
+    .wm-current { font-family: 'Inter', sans-serif; font-weight: 600; letter-spacing: -0.025em; }
+
+    /* Light/dark specific text colors for demos */
+    .on-light .wm-a-open  { color: #4A4945; }
+    .on-light .wm-a-bible { color: #1C1B18; }
+    .on-light .wm-b-open  { color: #7A7970; }
+    .on-light .wm-b-bible { color: #1C1B18; }
+    .on-light .wm-current { color: #1C1B18; }
+
+    .on-dark .wm-a-open  { color: #BFBFB8; }
+    .on-dark .wm-a-bible { color: #F7F8F5; }
+    .on-dark .wm-b-open  { color: #6E6D65; }
+    .on-dark .wm-b-bible { color: #F7F8F5; }
+    .on-dark .wm-current { color: #F7F8F5; }
+
+    .on-light .wm-a-bible-accent { color: #0F5C3F; }
+    .on-dark  .wm-a-bible-accent { color: #5DD4A0; }
+
+    /* ─── Marks ─── */
+    .mark-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .mark-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px 16px 20px;
+      text-align: center;
+    }
+    .mark-num {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--txt-3);
+      margin-bottom: 20px;
+    }
+    .mark-sizes {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .mark-size-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .mark-size-label {
+      font-size: 9px;
+      color: var(--txt-3);
+      width: 28px;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+    .mark-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--txt);
+      margin-bottom: 4px;
+    }
+    .mark-desc {
+      font-size: 11px;
+      color: var(--txt-3);
+      line-height: 1.55;
+    }
+
+    /* SVGs inherit color from parent for theme responsiveness */
+    .mint { color: var(--accent); }
+
+    /* ─── Combined systems ─── */
+    .system-list { display: flex; flex-direction: column; gap: 12px; }
+    .system-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+    .system-tag {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--txt-3);
+      width: 72px;
+      flex-shrink: 0;
+    }
+    .system-demo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* ─── Wordmark grid ─── */
+    .wm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .wm-card  {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .wm-card-header {
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .wm-sizes-panel {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .wm-panel {
+      padding: 20px 24px;
+    }
+    .wm-panel + .wm-panel {
+      border-left: 1px solid var(--border);
+    }
+    .panel-label {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--txt-3);
+      margin-bottom: 16px;
+    }
+
+    /* ─── Note ─── */
+    .page-note {
+      font-size: 12px;
+      color: var(--txt-3);
+      line-height: 1.7;
+      padding: 20px 24px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+    .page-note code {
+      font-size: 11px;
+      background: var(--bg-card2);
+      padding: 1px 6px;
+      border-radius: 4px;
+      color: var(--txt-2);
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ─────────────────────────── Header ─────────────────────────── -->
+  <div class="page-header">
+    <div>
+      <div class="page-title-eyebrow">Open Bible</div>
+      <div class="page-title">Logo Direction Research</div>
+      <div class="page-subtitle">4 mark candidates · 2 wordmark treatments · light &amp; dark</div>
+    </div>
+    <div class="toggle">
+      <button class="toggle-btn active" onclick="setTheme('light')">Light</button>
+      <button class="toggle-btn" onclick="setTheme('dark')">Dark</button>
+    </div>
+  </div>
+
+
+  <!-- ─────────────────────────── Current state ─────────────────────────── -->
+  <div class="section">
+    <div class="section-eyebrow">Current state</div>
+    <div class="section-heading">The placeholder disc</div>
+    <div class="section-desc">The existing "OB" in Georgia italic inside a mint disc. Readable in light mode; invisible in dark mode (2.35:1 contrast); the text disappears entirely at favicon scale.</div>
+
+    <div class="split">
+      <div class="split-light on-light">
+        <div class="split-label">Light mode · disc = #0F5C3F · 7.5:1 ✓</div>
+        <div class="wm-row">
+          <svg width="22" height="22" viewBox="0 0 512 512">
+            <circle cx="256" cy="256" r="256" fill="#F7F8F5"/>
+            <circle cx="256" cy="256" r="200" fill="none" stroke="#0F5C3F" stroke-width="2" opacity="0.18"/>
+            <circle cx="256" cy="256" r="160" fill="none" stroke="#0F5C3F" stroke-width="2" opacity="0.4"/>
+            <circle cx="256" cy="256" r="112" fill="#0F5C3F"/>
+            <text x="256" y="298" font-family="Georgia,serif" font-style="italic" font-size="128" fill="#F7F8F5" text-anchor="middle">OB</text>
+          </svg>
+          <span class="wm-current on-light" style="font-size:18px;color:#1C1B18">Open Bible</span>
+        </div>
+      </div>
+      <div class="split-dark on-dark">
+        <div class="split-label">Dark mode · disc = #0F5C3F · 2.4:1 ✗ invisible</div>
+        <div class="wm-row">
+          <svg width="22" height="22" viewBox="0 0 512 512">
+            <circle cx="256" cy="256" r="256" fill="#0F0E0C"/>
+            <circle cx="256" cy="256" r="200" fill="none" stroke="#0F5C3F" stroke-width="2" opacity="0.18"/>
+            <circle cx="256" cy="256" r="160" fill="none" stroke="#0F5C3F" stroke-width="2" opacity="0.4"/>
+            <circle cx="256" cy="256" r="112" fill="#0F5C3F"/>
+            <text x="256" y="298" font-family="Georgia,serif" font-style="italic" font-size="128" fill="#F7F8F5" text-anchor="middle">OB</text>
+          </svg>
+          <span class="wm-current on-dark" style="font-size:18px;color:#F7F8F5">Open Bible</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+
+  <!-- ─────────────────────────── Wordmark treatments ─────────────────────────── -->
+  <div class="section">
+    <div class="section-eyebrow">Wordmark treatments</div>
+    <div class="section-heading">Two directions, both using the existing font stack</div>
+    <div class="section-desc">No new fonts needed. Inter and Instrument Serif are already loaded. Direction A is the primary recommendation — it encodes the product's dual identity (interface wrapping the word) in a single glance.</div>
+
+    <div class="wm-grid">
+
+      <!-- A: Serif-sans -->
+      <div class="wm-card">
+        <div class="wm-card-header">
+          <div class="card-title">A — Serif-sans split <span style="font-size:11px;font-weight:400;color:var(--txt-3);margin-left:6px">recommended</span></div>
+          <div class="card-desc">"Open" Inter 500 · "Bible" Instrument Serif 400. The UI font opens into the reading font. No competitor does this.</div>
+        </div>
+        <div class="wm-sizes-panel">
+          <div class="wm-panel on-light" style="background:#F7F8F5">
+            <div class="panel-label">Light</div>
+            <div class="wm-row">
+              <span class="wm-size-label">32px</span>
+              <span style="font-size:32px"><span class="wm-a-open on-light">Open</span><span class="wm-a-bible on-light">Bible</span></span>
+            </div>
+            <div class="wm-row">
+              <span class="wm-size-label">18px</span>
+              <span style="font-size:18px"><span class="wm-a-open on-light">Open</span><span class="wm-a-bible on-light">Bible</span></span>
+            </div>
+            <div class="wm-row">
+              <span class="wm-size-label">14px</span>
+              <span style="font-size:14px"><span class="wm-a-open on-light">Open</span><span class="wm-a-bible on-light">Bible</span></span>
+            </div>
+            <div class="wm-row" style="margin-top:12px">
+              <span class="wm-size-label" style="color:#7A7970">accent</span>
+              <span style="font-size:18px"><span class="wm-a-open on-light">Open</span><span class="wm-a-bible on-light wm-a-bible-accent">Bible</span></span>
+            </div>
+          </div>
+          <div class="wm-panel on-dark" style="background:#0F0E0C;border-left:1px solid #2E2D29">
+            <div class="panel-label">Dark</div>
+            <div class="wm-row">
+              <span class="wm-size-label" style="color:#6E6D65">32px</span>
+              <span style="font-size:32px"><span class="wm-a-open on-dark">Open</span><span class="wm-a-bible on-dark">Bible</span></span>
+            </div>
+            <div class="wm-row">
+              <span class="wm-size-label" style="color:#6E6D65">18px</span>
+              <span style="font-size:18px"><span class="wm-a-open on-dark">Open</span><span class="wm-a-bible on-dark">Bible</span></span>
+            </div>
+            <div class="wm-row">
+              <span class="wm-size-label" style="color:#6E6D65">14px</span>
+              <span style="font-size:14px"><span class="wm-a-open on-dark">Open</span><span class="wm-a-bible on-dark">Bible</span></span>
+            </div>
+            <div class="wm-row" style="margin-top:12px">
+              <span class="wm-size-label" style="color:#6E6D65">accent</span>
+              <span style="font-size:18px"><span class="wm-a-open on-dark">Open</span><span class="wm-a-bible on-dark wm-a-bible-accent">Bible</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- B: Split-weight -->
+      <div class="wm-card">
+        <div class="wm-card-header">
+          <div class="card-title">B — Split-weight Inter</div>
+          <div class="card-desc">"Open" Inter 400 muted · "Bible" Inter 720. Pure Inter, hierarchy through weight and color. Lower risk, simpler to implement.</div>
+        </div>
+        <div class="wm-sizes-panel">
+          <div class="wm-panel on-light" style="background:#F7F8F5">
+            <div class="panel-label">Light</div>
+            <div class="wm-row">
+              <span class="wm-size-label">32px</span>
+              <span style="font-size:32px"><span class="wm-b-open on-light">Open</span><span class="wm-b-bible on-light">Bible</span></span>
+            </div>
+            <div class="wm-row">
+              <span class="wm-size-label">18px</span>
+              <span style="font-size:18px"><span class="wm-b-open on-light">Open</span><span class="wm-b-bible on-light">Bible</span></span>
+            </div>
+            <div class="wm-row">
+              <span class="wm-size-label">14px</span>
+              <span style="font-size:14px"><span class="wm-b-open on-light">Open</span><span class="wm-b-bible on-light">Bible</span></span>
+            </div>
+          </div>
+          <div class="wm-panel on-dark" style="background:#0F0E0C;border-left:1px solid #2E2D29">
+            <div class="panel-label">Dark</div>
+            <div class="wm-row">
+              <span class="wm-size-label" style="color:#6E6D65">32px</span>
+              <span style="font-size:32px"><span class="wm-b-open on-dark">Open</span><span class="wm-b-bible on-dark">Bible</span></span>
+            </div>
+            <div class="wm-row">
+              <span class="wm-size-label" style="color:#6E6D65">18px</span>
+              <span style="font-size:18px"><span class="wm-b-open on-dark">Open</span><span class="wm-b-bible on-dark">Bible</span></span>
+            </div>
+            <div class="wm-row">
+              <span class="wm-size-label" style="color:#6E6D65">14px</span>
+              <span style="font-size:14px"><span class="wm-b-open on-dark">Open</span><span class="wm-b-bible on-dark">Bible</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+
+  <!-- ─────────────────────────── Mark candidates ─────────────────────────── -->
+  <div class="section">
+    <div class="section-eyebrow">Mark candidates</div>
+    <div class="section-heading">Four directions, four scales</div>
+    <div class="section-desc">Each uses <code style="font-size:11px;background:var(--bg-card);padding:1px 6px;border-radius:4px">currentColor</code> so it responds to the theme toggle. Shown at 80, 48, 24, and 16px.</div>
+
+    <div class="mark-grid">
+
+      <!-- 01: Marginal Mark -->
+      <div class="mark-card">
+        <div class="mark-num">01</div>
+        <div class="mark-sizes mint">
+
+          <div class="mark-size-row">
+            <span class="mark-size-label">80</span>
+            <svg width="80" height="80" viewBox="0 0 24 24" fill="currentColor">
+              <rect x="4.5" y="3" width="3.5" height="18" rx="1.75"/>
+              <rect x="4.5" y="3" width="11" height="3" rx="1.5"/>
+              <rect x="4.5" y="18" width="11" height="3" rx="1.5"/>
+            </svg>
+          </div>
+
+          <div class="mark-size-row">
+            <span class="mark-size-label">48</span>
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
+              <rect x="4.5" y="3" width="3.5" height="18" rx="1.75"/>
+              <rect x="4.5" y="3" width="11" height="3" rx="1.5"/>
+              <rect x="4.5" y="18" width="11" height="3" rx="1.5"/>
+            </svg>
+          </div>
+
+          <div class="mark-size-row">
+            <span class="mark-size-label">24</span>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <rect x="4.5" y="3" width="3.5" height="18" rx="1.75"/>
+              <rect x="4.5" y="3" width="11" height="3" rx="1.5"/>
+              <rect x="4.5" y="18" width="11" height="3" rx="1.5"/>
+            </svg>
+          </div>
+
+          <div class="mark-size-row">
+            <span class="mark-size-label">16</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <rect x="4.5" y="3" width="3.5" height="18" rx="1.75"/>
+              <rect x="4.5" y="3" width="11" height="3" rx="1.5"/>
+              <rect x="4.5" y="18" width="11" height="3" rx="1.5"/>
+            </svg>
+          </div>
+
+        </div>
+        <div class="mark-name">Marginal Mark</div>
+        <div class="mark-desc">The annotation bar. What readers have left in Bible margins for 1,500 years. Encodes what the product does.</div>
+      </div>
+
+      <!-- 02: Anchor -->
+      <div class="mark-card">
+        <div class="mark-num">02</div>
+        <div class="mark-sizes mint">
+
+          <div class="mark-size-row">
+            <span class="mark-size-label">80</span>
+            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="5" r="2.5"/>
+              <line x1="12" y1="7.5" x2="12" y2="20"/>
+              <line x1="4.5" y1="11" x2="19.5" y2="11"/>
+              <path d="M4.5 19.5 Q12 24 19.5 19.5"/>
+            </svg>
+          </div>
+
+          <div class="mark-size-row">
+            <span class="mark-size-label">48</span>
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="5" r="2.5"/>
+              <line x1="12" y1="7.5" x2="12" y2="20"/>
+              <line x1="4.5" y1="11" x2="19.5" y2="11"/>
+              <path d="M4.5 19.5 Q12 24 19.5 19.5"/>
+            </svg>
+          </div>
+
+          <div class="mark-size-row">
+            <span class="mark-size-label">24</span>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="5" r="2.5"/>
+              <line x1="12" y1="7.5" x2="12" y2="20"/>
+              <line x1="4.5" y1="11" x2="19.5" y2="11"/>
+              <path d="M4.5 19.5 Q12 24 19.5 19.5"/>
+            </svg>
+          </div>
+
+          <div class="mark-size-row">
+            <span class="mark-size-label">16</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="5" r="2.5"/>
+              <line x1="12" y1="7.5" x2="12" y2="20"/>
+              <line x1="4.5" y1="11" x2="19.5" y2="11"/>
+              <path d="M4.5 19.5 Q12 24 19.5 19.5"/>
+            </svg>
+          </div>
+
+        </div>
+        <div class="mark-name">Anchor</div>
+        <div class="mark-desc">Roman catacombs, 2nd century. Cross + curved open base. "Hope as an anchor." Almost no modern religious branding saturation.</div>
+      </div>
+
+      <!-- 03: Bet -->
+      <div class="mark-card">
+        <div class="mark-num">03</div>
+        <div class="mark-sizes mint">
+
+          <div class="mark-size-row">
+            <span class="mark-size-label">80</span>
+            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17.5 4.5 L7 4.5 L7 19.5 L17.5 19.5"/>
+            </svg>
+          </div>
+
+          <div class="mark-size-row">
+            <span class="mark-size-label">48</span>
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17.5 4.5 L7 4.5 L7 19.5 L17.5 19.5"/>
+            </svg>
+          </div>
+
+          <div class="mark-size-row">
+            <span class="mark-size-label">24</span>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17.5 4.5 L7 4.5 L7 19.5 L17.5 19.5"/>
+            </svg>
+          </div>
+
+          <div class="mark-size-row">
+            <span class="mark-size-label">16</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17.5 4.5 L7 4.5 L7 19.5 L17.5 19.5"/>
+            </svg>
+          </div>
+
+        </div>
+        <div class="mark-name">Bet (ב)</div>
+        <div class="mark-desc">First letter of written scripture — "Bereshit." Three-sided open form. The opening resonates with "Open" in the product name.</div>
+      </div>
+
+      <!-- 04: Crescent Disc -->
+      <div class="mark-card">
+        <div class="mark-num">04</div>
+        <div class="mark-sizes mint">
+
+          <div class="mark-size-row">
+            <span class="mark-size-label">80</span>
+            <svg width="80" height="80" viewBox="0 0 24 24">
+              <defs>
+                <mask id="cr80">
+                  <rect width="24" height="24" fill="white"/>
+                  <circle cx="9" cy="8.5" r="8" fill="black"/>
+                </mask>
+              </defs>
+              <circle cx="12" cy="12" r="10.5" fill="currentColor" mask="url(#cr80)"/>
+            </svg>
+          </div>
+
+          <div class="mark-size-row">
+            <span class="mark-size-label">48</span>
+            <svg width="48" height="48" viewBox="0 0 24 24">
+              <defs>
+                <mask id="cr48">
+                  <rect width="24" height="24" fill="white"/>
+                  <circle cx="9" cy="8.5" r="8" fill="black"/>
+                </mask>
+              </defs>
+              <circle cx="12" cy="12" r="10.5" fill="currentColor" mask="url(#cr48)"/>
+            </svg>
+          </div>
+
+          <div class="mark-size-row">
+            <span class="mark-size-label">24</span>
+            <svg width="24" height="24" viewBox="0 0 24 24">
+              <defs>
+                <mask id="cr24">
+                  <rect width="24" height="24" fill="white"/>
+                  <circle cx="9" cy="8.5" r="8" fill="black"/>
+                </mask>
+              </defs>
+              <circle cx="12" cy="12" r="10.5" fill="currentColor" mask="url(#cr24)"/>
+            </svg>
+          </div>
+
+          <div class="mark-size-row">
+            <span class="mark-size-label">16</span>
+            <svg width="16" height="16" viewBox="0 0 24 24">
+              <defs>
+                <mask id="cr16">
+                  <rect width="24" height="24" fill="white"/>
+                  <circle cx="9" cy="8.5" r="8" fill="black"/>
+                </mask>
+              </defs>
+              <circle cx="12" cy="12" r="10.5" fill="currentColor" mask="url(#cr16)"/>
+            </svg>
+          </div>
+
+        </div>
+        <div class="mark-name">Crescent Disc</div>
+        <div class="mark-desc">Evolved from the current disc. An offset punch creates a shape in the act of opening — emergence, partial light.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+
+  <!-- ─────────────────────────── Combined systems ─────────────────────────── -->
+  <div class="section">
+    <div class="section-eyebrow">Combined systems</div>
+    <div class="section-heading">Each mark with Wordmark A at nav size</div>
+    <div class="section-desc">What the navbar actually looks like. Theme toggle above applies here too.</div>
+
+    <div class="system-list">
+
+      <div class="system-item">
+        <div class="system-tag">01 · Marginal</div>
+        <div class="system-demo">
+          <svg class="mint" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <rect x="4.5" y="3" width="3.5" height="18" rx="1.75"/>
+            <rect x="4.5" y="3" width="11" height="3" rx="1.5"/>
+            <rect x="4.5" y="18" width="11" height="3" rx="1.5"/>
+          </svg>
+          <span style="font-size:18px"><span class="wm-a-open">Open</span><span class="wm-a-bible">Bible</span></span>
+        </div>
+      </div>
+
+      <div class="system-item">
+        <div class="system-tag">02 · Anchor</div>
+        <div class="system-demo">
+          <svg class="mint" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="5" r="2.5"/>
+            <line x1="12" y1="7.5" x2="12" y2="20"/>
+            <line x1="4.5" y1="11" x2="19.5" y2="11"/>
+            <path d="M4.5 19.5 Q12 24 19.5 19.5"/>
+          </svg>
+          <span style="font-size:18px"><span class="wm-a-open">Open</span><span class="wm-a-bible">Bible</span></span>
+        </div>
+      </div>
+
+      <div class="system-item">
+        <div class="system-tag">03 · Bet</div>
+        <div class="system-demo">
+          <svg class="mint" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17.5 4.5 L7 4.5 L7 19.5 L17.5 19.5"/>
+          </svg>
+          <span style="font-size:18px"><span class="wm-a-open">Open</span><span class="wm-a-bible">Bible</span></span>
+        </div>
+      </div>
+
+      <div class="system-item">
+        <div class="system-tag">04 · Crescent</div>
+        <div class="system-demo">
+          <svg class="mint" width="20" height="20" viewBox="0 0 24 24">
+            <defs>
+              <mask id="crnav">
+                <rect width="24" height="24" fill="white"/>
+                <circle cx="9" cy="8.5" r="8" fill="black"/>
+              </mask>
+            </defs>
+            <circle cx="12" cy="12" r="10.5" fill="currentColor" mask="url(#crnav)"/>
+          </svg>
+          <span style="font-size:18px"><span class="wm-a-open">Open</span><span class="wm-a-bible">Bible</span></span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+
+  <!-- ─────────────────────────── Dark mode fix preview ─────────────────────────── -->
+  <div class="section">
+    <div class="section-eyebrow">Dark mode fix</div>
+    <div class="section-heading">Disc shifts to accent-400 in dark mode</div>
+    <div class="section-desc">The existing CSS already does this for the inline wordmark. The fix extends it to the SVG asset and the icon.svg favicon.</div>
+
+    <div class="split" style="margin-bottom:16px">
+      <div class="split-light on-light">
+        <div class="split-label">Light · #0F5C3F · 7.5:1 ✓</div>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div class="wm-row">
+            <svg width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#0F5C3F"/></svg>
+            <span style="font-family:'Inter',sans-serif;font-size:18px;font-weight:600;letter-spacing:-0.025em;color:#1C1B18">Open Bible</span>
+          </div>
+          <div style="display:flex;gap:8px">
+            <!-- Favicon sim light -->
+            <div style="width:32px;height:32px;border-radius:7px;background:#F7F8F5;border:1px solid #D4D4CE;display:flex;align-items:center;justify-content:center">
+              <svg width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#0F5C3F"/></svg>
+            </div>
+            <div style="font-size:11px;color:#7A7970;line-height:1.4;display:flex;align-items:center">Browser tab favicon (32px)</div>
+          </div>
+        </div>
+      </div>
+      <div class="split-dark on-dark">
+        <div class="split-label">Dark · #5DD4A0 · 8.1:1 ✓</div>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div class="wm-row">
+            <svg width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#5DD4A0"/></svg>
+            <span style="font-family:'Inter',sans-serif;font-size:18px;font-weight:600;letter-spacing:-0.025em;color:#F7F8F5">Open Bible</span>
+          </div>
+          <div style="display:flex;gap:8px">
+            <!-- Favicon sim dark -->
+            <div style="width:32px;height:32px;border-radius:7px;background:#1C1C1E;display:flex;align-items:center;justify-content:center">
+              <svg width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#5DD4A0"/></svg>
+            </div>
+            <div style="font-size:11px;color:#6E6D65;line-height:1.4;display:flex;align-items:center">Browser tab favicon (32px)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ─────────────────────────── Note ─────────────────────────── -->
+  <div class="page-note">
+    <strong style="color:var(--txt-2)">Fonts:</strong> Loaded from <code>/fonts/</code> — view at <code>localhost:3000/logo-preview.html</code> for Inter and Instrument Serif to render correctly. The marks and the theme toggle both work without the server (system fallback fonts will substitute).
+  </div>
+
+</div>
+
+<script>
+  function setTheme(t) {
+    document.documentElement.dataset.theme = t;
+    document.querySelectorAll('.toggle-btn').forEach(function(b) {
+      b.classList.toggle('active', b.textContent.toLowerCase() === t);
+    });
+  }
+
+  // Combined system demo wordmarks need to respond to theme toggle
+  // because they use class-based color rather than inline styles.
+  // The .on-light / .on-dark classes in the section are static;
+  // the "Combined systems" section doesn't have those wrappers.
+  // Wire the toggle to swap the wordmark color on the system rows.
+  function setTheme(t) {
+    document.documentElement.dataset.theme = t;
+    document.querySelectorAll('.toggle-btn').forEach(function(b) {
+      b.classList.toggle('active', b.textContent.toLowerCase() === t);
+    });
+    // Update system demo wordmark colors to match theme
+    var isDark = t === 'dark';
+    document.querySelectorAll('.system-item .wm-a-open').forEach(function(el) {
+      el.style.color = isDark ? '#BFBFB8' : '#4A4945';
+    });
+    document.querySelectorAll('.system-item .wm-a-bible').forEach(function(el) {
+      el.style.color = isDark ? '#F7F8F5' : '#1C1B18';
+    });
+  }
+</script>
+</body>
+</html>

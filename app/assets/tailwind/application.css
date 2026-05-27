@@ -427,6 +427,30 @@
       0 0 0 9px color-mix(in srgb, var(--color-accent-400) 10%, transparent);
   }
 
+  /* Split-weight wordmark. "Open" renders at weight 400 in a muted
+     surface tone so the noun "Bible" at weight 720 reads as primary.
+     Inter variable axis covers 100–900 so 720 is a valid stop.
+     A literal space character sits between the spans so Capybara and
+     screen readers see "Open Bible" as two words; flex collapses it
+     visually. margin-left on .wordmark-bible provides the actual gap. */
+  .wordmark-open {
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    color: var(--color-surface-600);
+  }
+  html[data-theme="dark"] .wordmark-open {
+    color: var(--color-surface-400);
+  }
+  .wordmark-bible {
+    font-weight: 720;
+    letter-spacing: -0.03em;
+    margin-left: 0.18em;
+    color: var(--color-surface-900);
+  }
+  html[data-theme="dark"] .wordmark-bible {
+    color: var(--color-surface-50);
+  }
+
   /* Pulse animation revert path. Uncomment + wire to .wordmark-mark
      animation property to enable.
   @keyframes wordmark-pulse {

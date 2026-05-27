@@ -76,9 +76,9 @@
 
     <header class="site-header" data-controller="site-header">
       <div class="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-        <%= link_to root_path, class: "inline-flex items-center gap-2.5 font-ui text-lg font-semibold tracking-tight text-surface-900 transition-colors hover:text-accent-700 dark:text-surface-50 dark:hover:text-accent-400" do %>
+        <%= link_to root_path, class: "group inline-flex items-center gap-2.5 font-ui text-lg transition-colors" do %>
           <span class="wordmark-mark" aria-hidden="true"></span>
-          <%= t("app.name") %>
+          <span class="wordmark-open transition-colors group-hover:text-accent-700 dark:group-hover:text-accent-400">Open</span> <span class="wordmark-bible transition-colors group-hover:text-accent-700 dark:group-hover:text-accent-400">Bible</span>
         <% end %>
 
         <nav class="flex items-center gap-1 font-ui text-sm" aria-label="<%= t("layout.account") %>">
@@ -196,9 +196,9 @@
       <div class="mx-auto max-w-5xl space-y-6 px-6 py-8 sm:py-10">
         <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div class="space-y-1">
-            <p class="inline-flex items-center gap-2.5 font-ui text-base font-semibold text-surface-900 dark:text-surface-50">
+            <p class="inline-flex items-center gap-2.5 font-ui text-base">
               <span class="wordmark-mark" aria-hidden="true"></span>
-              <%= t("app.name") %>
+              <span class="wordmark-open">Open</span> <span class="wordmark-bible">Bible</span>
             </p>
             <p class="hidden font-reading text-sm text-surface-600 dark:text-surface-400 sm:block">
               <%= t("layout.footer_tagline") %>

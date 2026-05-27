@@ -68,7 +68,7 @@ Rails.application.routes.draw do
 
   get "/search", to: "search#index", as: :search
 
-  resources :authors, only: [:show]
+  resources :authors, only: [ :show ]
 
   get  "/about",             to: "about#show",             as: :about
   get  "/terms",             to: "legal#terms",            as: :terms

@@ -250,7 +250,7 @@
           <div class="flex gap-1" aria-label="<%= t("layout.language_switcher") %>">
             <% User::UI_LOCALES.each do |code| %>
               <% active = I18n.locale.to_s == code %>
-              <% locale_classes = "rounded px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest transition-colors #{active ? "bg-surface-200 text-surface-900 dark:bg-surface-700 dark:text-surface-50" : "text-surface-400 hover:text-surface-600 dark:text-surface-500 dark:hover:text-surface-300"}" %>
+              <% locale_classes = "rounded px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest transition-colors #{active ? "bg-surface-200 text-surface-900 dark:bg-surface-700 dark:text-surface-50" : "text-surface-500 hover:text-surface-700 dark:text-surface-400 dark:hover:text-surface-200"}" %>
               <% if user_signed_in? %>
                 <%= button_to code.upcase, settings_path, method: :patch, params: { user: { ui_locale: code } }, form_class: "inline", class: locale_classes, aria: { label: t("layout.language_#{code}"), current: active ? "true" : nil } %>
               <% else %>

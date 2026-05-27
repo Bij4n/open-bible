@@ -4,7 +4,7 @@ class GroupsController < ApplicationController
   before_action :ensure_group_member, only: %i[show]
   before_action :ensure_group_owner,  only: %i[edit update destroy]
 
-  skip_before_action :authenticate_user!, only: [:discover]
+  skip_before_action :authenticate_user!, only: [ :discover ]
 
   def index
     @groups = current_user.groups.distinct.order(:name)

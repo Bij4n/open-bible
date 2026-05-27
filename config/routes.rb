@@ -68,6 +68,8 @@ Rails.application.routes.draw do
 
   get "/search", to: "search#index", as: :search
 
+  resources :authors, only: [:show]
+
   get  "/about",             to: "about#show",             as: :about
   get  "/sitemap.xml",       to: "sitemap#show",           as: :sitemap, defaults: { format: :xml }
 

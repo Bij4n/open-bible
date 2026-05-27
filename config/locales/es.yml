@@ -269,6 +269,10 @@ es:
       shared_users: Compartir con personas
       shared_groups: Compartir con grupos
       public_note: Pública
+  authors:
+    public_notes_heading: Notas públicas
+    member_since: "Miembro desde %{year}"
+    no_public_notes: Este autor aún no ha publicado notas públicas.
   group_invitations:
     invite_button: Enviar invitación
     pending_heading: Invitaciones pendientes
@@ -317,6 +321,7 @@ es:
     no_notes_yet: Aún no hay notas de la comunidad en este capítulo.
     sign_in_to_add: Inicia sesión para añadir una.
     by_author: "por %{name}"
+    by_author_html: "por %{name}"
     featured: Destacada
     hidden: Oculta
     flag: Reportar

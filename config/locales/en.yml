@@ -276,6 +276,10 @@ en:
       shared_users: Share with people
       shared_groups: Share with groups
       public_note: Public
+  authors:
+    public_notes_heading: Public Notes
+    member_since: "Member since %{year}"
+    no_public_notes: This author hasn't published any public notes yet.
   group_invitations:
     invite_button: Send invitation
     pending_heading: Pending invitations
@@ -324,6 +328,7 @@ en:
     no_notes_yet: No community notes on this chapter yet.
     sign_in_to_add: Sign in to add one.
     by_author: "by %{name}"
+    by_author_html: "by %{name}"
     featured: Featured
     hidden: Hidden
     flag: Flag

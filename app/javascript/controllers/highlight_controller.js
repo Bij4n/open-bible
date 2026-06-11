@@ -37,6 +37,7 @@ export default class extends Controller {
     this.onSelectionChange = this.onSelectionChange.bind(this)
     this.onDocumentPointerdown = this.onDocumentPointerdown.bind(this)
     this.onDocumentPointerup = this.onDocumentPointerup.bind(this)
+    this.onDocumentKeydown = this.onDocumentKeydown.bind(this)
     document.addEventListener("selectionchange", this.onSelectionChange)
     // pointerdown fires for both mouse and touch, so toolbar dismiss
     // works on mobile without separate touchstart handling.
@@ -44,6 +45,9 @@ export default class extends Controller {
     // pointerup detects taps on existing highlight spans so the toolbar
     // opens without requiring a text selection drag.
     document.addEventListener("pointerup", this.onDocumentPointerup)
+    // Readwise-style keyboard verbs: j/k verse focus, h highlight,
+    // n note (design v3).
+    document.addEventListener("keydown", this.onDocumentKeydown)
     if (this.debugValue) this.mountInspector()
   }
 
@@ -51,7 +55,75 @@ export default class extends Controller {
     document.removeEventListener("selectionchange", this.onSelectionChange)
     document.removeEventListener("pointerdown", this.onDocumentPointerdown)
     document.removeEventListener("pointerup", this.onDocumentPointerup)
+    document.removeEventListener("keydown", this.onDocumentKeydown)
     if (this.inspector) this.inspector.remove()
+  }
+
+  // Keyboard verbs. Bare keys only — anything typed into a form
+  // control, Trix, or with a modifier held passes through untouched.
+  onDocumentKeydown(event) {
+    if (event.metaKey || event.ctrlKey || event.altKey) return
+    const t = event.target
+    if (t instanceof Element &&
+        (t.closest("input, textarea, select, trix-editor, [contenteditable='true']") ||
+         t.isContentEditable)) return
+
+    switch (event.key) {
+      case "j": this.moveKbdFocus(1);  event.preventDefault(); break
+      case "k": this.moveKbdFocus(-1); event.preventDefault(); break
+      case "h":
+      case "H": this.kbdHighlight(); break
+      case "n":
+      case "N": this.kbdNote(); break
+      case "Escape": this.clearKbdFocus(); break
+    }
+  }
+
+  kbdVerses() {
+    return this.hasChapterTarget ? Array.from(this.chapterTarget.querySelectorAll(".verse")) : []
+  }
+
+  moveKbdFocus(delta) {
+    const verses = this.kbdVerses()
+    if (verses.length === 0) return
+    const current = verses.indexOf(this.kbdFocusEl)
+    const next = current === -1
+      ? (delta > 0 ? 0 : verses.length - 1)
+      : Math.min(verses.length - 1, Math.max(0, current + delta))
+    this.setKbdFocus(verses[next])
+  }
+
+  setKbdFocus(verseEl) {
+    if (this.kbdFocusEl) this.kbdFocusEl.classList.remove("verse-kbd-focus")
+    this.kbdFocusEl = verseEl
+    if (verseEl) {
+      verseEl.classList.add("verse-kbd-focus")
+      verseEl.scrollIntoView({ block: "center" })
+    }
+  }
+
+  clearKbdFocus() {
+    this.setKbdFocus(null)
+  }
+
+  // h: select the focused verse and run the one-click default-color
+  // path. syncSelection is invoked synchronously so currentRef is set
+  // before the toolbar's default button is clicked — waiting for the
+  // async selectionchange event would race.
+  kbdHighlight() {
+    if (!this.kbdFocusEl) return
+    this.selectVerseContents(this.kbdFocusEl)
+    this.syncSelection()
+    this.toolbarTarget?.querySelector?.("[data-highlight-default]")?.click()
+  }
+
+  // n: select the focused verse and open the note flow (which creates
+  // the backing default-color highlight when none exists).
+  kbdNote() {
+    if (!this.kbdFocusEl) return
+    this.selectVerseContents(this.kbdFocusEl)
+    this.syncSelection()
+    this.note()
   }
 
   onDocumentPointerdown(event) {
@@ -636,8 +708,8 @@ export default class extends Controller {
       }
     }
 
-    // If the user has a selection, first create a gold highlight
-    // (default color), then open the note panel for that new highlight.
+    // If the user has a selection, first create a default-color
+    // highlight, then open the note panel for that new highlight.
     // If no selection (they clicked an existing highlight first), fall
     // through and the note panel loads for the existing highlight ids.
     const existingIds = this.highlightIdsUnderCursor()
@@ -661,7 +733,7 @@ export default class extends Controller {
         "X-CSRF-Token": csrf,
         "Accept": "application/json"
       },
-      body: JSON.stringify({ highlight: { osis_ref: this.currentRef, color: "gold" } })
+      body: JSON.stringify({ highlight: { osis_ref: this.currentRef, color: "yellow" } })
     })
     if (!response.ok) return
     const body = await response.json()

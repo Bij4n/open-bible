@@ -107,6 +107,37 @@ RSpec.describe "Highlights", type: :system, js: true do
     JS
   end
 
+  describe "verse-tap selection on narrow viewports" do
+    after do
+      page.driver.browser.manage.window.resize_to(1400, 1024)
+    end
+
+    it "tapping a verse selects its full text and the Highlight button marks the whole verse" do
+      v16 = Verse.find_by!(osis_ref: "Bible.KJV.John.3.16")
+      page.driver.browser.manage.window.resize_to(390, 844)
+      visit "/bible/kjv/john/3"
+
+      find("[data-verse-id='#{v16.id}']").click
+      expect(page).to have_css("[data-highlight-target='toolbar']:not([hidden])", visible: :all)
+
+      find("[data-highlight-target='toolbar'] [data-highlight-default]", visible: :all).click
+
+      # "For God so loved the world" is 26 chars — the whole verse.
+      saved = Highlight.find_by(user: user, osis_ref: "Bible.KJV.John.3.16!0-Bible.KJV.John.3.16!26")
+      expect(saved).to be_present
+      expect(saved.color).to eq(Highlight::DEFAULT_COLOR)
+    end
+
+    it "clicking inside a verse at desktop width does not open the toolbar" do
+      v16 = Verse.find_by!(osis_ref: "Bible.KJV.John.3.16")
+      visit "/bible/kjv/john/3"
+
+      find("[data-verse-id='#{v16.id}']").click
+
+      expect(page).to have_css("[data-highlight-target='toolbar']", visible: :hidden)
+    end
+  end
+
   it "applies the default color with one click on the Highlight button" do
     v16 = Verse.find_by!(osis_ref: "Bible.KJV.John.3.16")
     visit "/bible/kjv/john/3"

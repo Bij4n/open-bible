@@ -174,7 +174,7 @@ es:
         description: El idioma de la interfaz. Independiente de la traducción de la Biblia que lees.
       theme:
         title: Tema
-        description: Pergamino claro, nogal oscuro, o seguir el ajuste del dispositivo.
+        description: Claro, oscuro, o seguir el ajuste del dispositivo.
         light: Claro
         dark: Oscuro
         system: Predeterminado del sistema

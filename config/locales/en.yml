@@ -181,7 +181,7 @@ en:
         description: The language of the interface. Independent of the Bible translation you read.
       theme:
         title: Theme
-        description: Light parchment, dark walnut, or follow your device setting.
+        description: Light, dark, or follow your device setting.
         light: Light
         dark: Dark
         system: System default

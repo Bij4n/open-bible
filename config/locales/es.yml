@@ -160,6 +160,8 @@ es:
       translation_picker: Traducción
       cross_translation_badge_title: "Has anotado este versículo en %{translation} — haz clic para ir allí."
       dismiss_toolbar: Cerrar
+      highlight_action: Resaltar
+      note_action: Nota
       confirm_remove_with_notes:
         one: "Este resaltado tiene %{count} nota. Quitarlo eliminará la nota. ¿Continuar?"
         other: "Este resaltado tiene %{count} notas. Quitarlo eliminará las notas. ¿Continuar?"
@@ -266,10 +268,11 @@ es:
     public_warning: Cualquiera que lea este pasaje verá esta nota, atribuida a tu nombre público. Esto es permanente hasta que lo cambies.
     confirm_public: Hacerla pública
     cancel_public: Volver
+    post_to: Publicar para
     visibility:
-      private_note: Privada
-      shared_users: Compartir con personas
-      shared_groups: Compartir con grupos
+      private_note: Solo yo
+      shared_users: Personas específicas
+      shared_groups: Mis estudios
       public_note: Pública
   authors:
     public_notes_heading: Notas públicas

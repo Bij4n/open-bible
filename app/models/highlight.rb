@@ -1,9 +1,19 @@
 class Highlight < ApplicationRecord
   include GroupBibleBroadcastable
-  # Muted manuscript-appropriate tones. Specific hex values live in the
-  # CSS (app/assets/tailwind/application.css) so light and dark mode
-  # overlays can be tuned independently.
-  COLORS = %w[gold rose sage lavender sky].freeze
+  # Stored color vocabulary. The enum is integer-backed, so this array
+  # is APPEND-ONLY — reordering or removing entries would re-key
+  # existing rows. gold/sage/lavender/sky are the legacy palette
+  # (pre-design-v3); their rows render-map onto the new colors in CSS
+  # (gold→yellow, sage→green, sky+lavender→blue) with no data
+  # migration. Hex values live in app/assets/tailwind/application.css
+  # so light/dark overlays tune independently.
+  COLORS = %w[gold rose sage lavender sky yellow green blue].freeze
+
+  # What the highlight toolbar actually offers (design v3): four
+  # Readwise-saturation pastels, yellow first because it's the
+  # one-click default.
+  TOOLBAR_COLORS = %w[yellow green blue rose].freeze
+  DEFAULT_COLOR  = "yellow".freeze
 
   enum :color, COLORS.each_with_index.to_h
 

@@ -52,52 +52,6 @@
         <%= f.rich_text_area :body, autofocus: true %>
       </div>
 
-      <fieldset class="font-ui text-sm text-surface-700 dark:text-surface-300">
-        <legend class="<%= eyebrow_classes %>">
-          <%= t("notes.visibility_legend", default: "Visibility") %>
-        </legend>
-
-        <%# All four ACTIVE_VISIBILITIES (Sprint 22.1, public_note now
-            live). public_note carries data-action="change->note-panel
-            #confirmPublic" so the panel controller can fire a confirm
-            dialog on the radio change — making a note public broadcasts
-            it to anyone, friction at choice-time is desirable.
-            touch-target-row gives each label a minimum 44px tap area
-            on mobile via padding so users don't have to hit the 16px
-            radio input itself. %>
-        <% NotesController::ACTIVE_VISIBILITIES.each do |v| %>
-          <label class="touch-target-row flex cursor-pointer items-center gap-2 rounded-md px-1 py-2 -mx-1 hover:bg-surface-100 dark:hover:bg-surface-800">
-            <%= f.radio_button :visibility, v,
-                               checked: (note.visibility || "private_note") == v,
-                               data: (v == "public_note" ? { action: "change->note-panel#confirmPublic" } : {}),
-                               class: "h-4 w-4 accent-accent-700 dark:accent-accent-400" %>
-            <%= t("notes.visibility.#{v}", default: v.humanize) %>
-          </label>
-        <% end %>
-
-        <%# Inline warning replaces window.confirm() for the public option.
-            Shown by confirmPublic(), hidden by cancelPublic/acceptPublic. %>
-        <div data-note-panel-target="publicWarning"
-             hidden
-             class="mt-2 rounded-md border border-amber-200 bg-amber-50 p-3 dark:border-amber-800 dark:bg-amber-950/30">
-          <p class="font-ui text-sm text-amber-800 dark:text-amber-200">
-            <%= t("notes.public_warning") %>
-          </p>
-          <div class="mt-2 flex gap-2">
-            <button type="button"
-                    data-action="note-panel#cancelPublic"
-                    class="rounded-md border border-surface-300 bg-surface-50 px-3 py-1.5 font-ui text-xs font-medium text-surface-700 transition-colors hover:bg-surface-100 dark:border-surface-700 dark:bg-surface-900 dark:text-surface-300 dark:hover:bg-surface-800">
-              <%= t("notes.cancel_public") %>
-            </button>
-            <button type="button"
-                    data-action="note-panel#acceptPublic"
-                    class="rounded-md bg-amber-700 px-3 py-1.5 font-ui text-xs font-medium text-white transition-colors hover:bg-amber-800 dark:bg-amber-600 dark:hover:bg-amber-500">
-              <%= t("notes.confirm_public") %>
-            </button>
-          </div>
-        </div>
-      </fieldset>
-
       <div data-note-panel-target="shareSection" data-visibility-dependent="shared_users">
         <label class="mb-1.5 <%= eyebrow_classes %>">
           <%= t("notes.share_with_users") %>
@@ -126,16 +80,68 @@
         </div>
       </div>
 
-      <div class="flex items-center justify-end gap-3 pt-2">
-        <% if existing %>
-          <%= button_to t("notes.delete"),
-                        note_path(note),
-                        method: :delete,
-                        form_class: "inline",
-                        data: { turbo_confirm: t("notes.confirm_delete"), turbo_frame: "note_panel" },
-                        class: danger_classes %>
-        <% end %>
-        <%= f.submit t("notes.save"), class: submit_classes %>
+      <%# Inline warning replaces window.confirm() for the public option.
+          Shown by confirmPublic(), hidden by cancelPublic/acceptPublic.
+          Lives in the form body (not inside the Post-to menu) so it
+          stays visible after the menu closes on selection. %>
+      <div data-note-panel-target="publicWarning"
+           hidden
+           class="rounded-md border border-amber-200 bg-amber-50 p-3 dark:border-amber-800 dark:bg-amber-950/30">
+        <p class="font-ui text-sm text-amber-800 dark:text-amber-200">
+          <%= t("notes.public_warning") %>
+        </p>
+        <div class="mt-2 flex gap-2">
+          <button type="button"
+                  data-action="note-panel#cancelPublic"
+                  class="rounded-md border border-surface-300 bg-surface-50 px-3 py-1.5 font-ui text-xs font-medium text-surface-700 transition-colors hover:bg-surface-100 dark:border-surface-700 dark:bg-surface-900 dark:text-surface-300 dark:hover:bg-surface-800">
+            <%= t("notes.cancel_public") %>
+          </button>
+          <button type="button"
+                  data-action="note-panel#acceptPublic"
+                  class="rounded-md bg-amber-700 px-3 py-1.5 font-ui text-xs font-medium text-white transition-colors hover:bg-amber-800 dark:bg-amber-600 dark:hover:bg-amber-500">
+            <%= t("notes.confirm_public") %>
+          </button>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+        <%# Hypothes.is pattern: visibility is a property of the act of
+            posting, so it lives on the footer's Post-to control, not in
+            a form section. A native <details> drops up a menu of the
+            four visibility radios — no JS needed for open/close; the
+            note-panel controller closes it after a pick and keeps the
+            summary label in sync. public_note still routes through
+            confirmPublic's inline warning above. %>
+        <details class="relative" data-note-panel-target="postMenu">
+          <summary class="flex cursor-pointer list-none items-center gap-1.5 rounded-full border border-surface-300 px-4 py-2 font-ui text-sm text-surface-700 transition-colors hover:bg-surface-100 hover:text-surface-900 dark:border-surface-700 dark:text-surface-300 dark:hover:bg-surface-800 dark:hover:text-surface-50 [&::-webkit-details-marker]:hidden">
+            <span class="text-surface-500 dark:text-surface-400"><%= t("notes.post_to") %></span>
+            <span class="font-medium" data-note-panel-target="postLabel"><%= t("notes.visibility.#{note.visibility || 'private_note'}") %></span>
+            <span aria-hidden="true" class="text-xs text-surface-500 dark:text-surface-400">&#9662;</span>
+          </summary>
+          <div class="absolute bottom-full left-0 z-10 mb-2 w-60 rounded-xl border border-surface-200 bg-surface-50 p-1 font-ui text-sm text-surface-700 shadow-lg dark:border-surface-800 dark:bg-surface-900 dark:text-surface-300">
+            <% NotesController::ACTIVE_VISIBILITIES.each do |v| %>
+              <label class="touch-target-row flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 hover:bg-surface-100 dark:hover:bg-surface-800">
+                <%= f.radio_button :visibility, v,
+                                   checked: (note.visibility || "private_note") == v,
+                                   data: { label: t("notes.visibility.#{v}") }.merge(v == "public_note" ? { action: "change->note-panel#confirmPublic" } : {}),
+                                   class: "h-4 w-4 accent-accent-700 dark:accent-accent-400" %>
+                <%= t("notes.visibility.#{v}", default: v.humanize) %>
+              </label>
+            <% end %>
+          </div>
+        </details>
+
+        <div class="flex items-center gap-3">
+          <% if existing %>
+            <%= button_to t("notes.delete"),
+                          note_path(note),
+                          method: :delete,
+                          form_class: "inline",
+                          data: { turbo_confirm: t("notes.confirm_delete"), turbo_frame: "note_panel" },
+                          class: danger_classes %>
+          <% end %>
+          <%= f.submit t("notes.save"), class: submit_classes %>
+        </div>
       </div>
     <% end %>
   </section>

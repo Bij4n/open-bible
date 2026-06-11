@@ -130,18 +130,24 @@ stylesheet still demotes it to italic black (mono printers).
 
 ### Highlight colors (user content)
 
-Current five-swatch set, unchanged in R1. Sprint R3 migrates to the four-color
-Readwise-saturation palette (yellow default / green / blue / rose) with old colors
-render-mapped (gold→yellow, sage→green, sky+lavender→blue) — no data migration.
-Other people's highlights will render as dotted underline + count, never fill (R4).
+Four-color Readwise-saturation palette (Sprint R3). Yellow is the one-click default
+on the toolbar's labeled Highlight button. Legacy stored colors render-map with no
+data migration: gold→yellow, sage→green, sky+lavender→blue — in CSS *and* in the
+toolbar's active-swatch matching (a gold highlight marks yellow active and toggles
+off through it). Other people's highlights will render as dotted underline + count,
+never fill (R4).
 
 | Name | Swatch | Overlay (light) | Overlay (dark) |
 |---|---|---|---|
-| Gold | `#e6c784` | 55% | 35% |
-| Rose | `#e8b9b9` | 55% | 35% |
-| Sage | `#b9d4b1` | 55% | 35% |
-| Lavender | `#c6bfe0` | 55% | 35% |
-| Sky | `#a7c6d4` | 55% | 35% |
+| Yellow (default) | `#fbda83` | 45% | 26% |
+| Green | `#a9d9a4` | 40% | 24% |
+| Blue | `#8dbbff` | 35% | 24% |
+| Rose | `#e4938e` | 35% | 24% |
+
+The highlight toolbar is a **dark floating pill in both themes** (tooltip chrome, not
+page chrome): `Highlight | ●●●● | Note ×`. The note composer carries visibility on the
+**Post-to button** (`Post to: Only me ▾` — Only me / Specific people / My studies /
+Public), the Hypothes.is pattern; the amber confirm warning guards Public.
 
 ### Dark mode strategy
 

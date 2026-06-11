@@ -576,27 +576,48 @@
   }
 
   /*
-   * Highlight overlays — tuned for the near-white / near-black surface
-   * palette at 55% alpha light / 35% alpha dark.
+   * Highlight overlays — design-v3 four-color palette ("real
+   * highlighter on paper" saturation). The legacy stored colors
+   * render-map onto the nearest new color with no data migration:
+   * gold→yellow, sage→green, sky+lavender→blue, rose→rose.
+   * Dark mode uses the same hues at lower alpha (overlay, not
+   * lighten).
    */
-  .highlight-gold     { background-color: rgba(230, 199, 132, 0.55); }
-  .highlight-rose     { background-color: rgba(232, 185, 185, 0.55); }
-  .highlight-sage     { background-color: rgba(185, 212, 177, 0.55); }
-  .highlight-lavender { background-color: rgba(198, 191, 224, 0.55); }
-  .highlight-sky      { background-color: rgba(167, 198, 212, 0.55); }
+  .highlight-yellow, .highlight-gold {
+    background-color: rgba(251, 218, 131, 0.45);
+  }
+  .highlight-green, .highlight-sage {
+    background-color: rgba(169, 217, 164, 0.40);
+  }
+  .highlight-blue, .highlight-sky, .highlight-lavender {
+    background-color: rgba(141, 187, 255, 0.35);
+  }
+  .highlight-rose {
+    background-color: rgba(228, 147, 142, 0.35);
+  }
 
-  html[data-theme="dark"] .highlight-gold     { background-color: rgba(212, 165, 116, 0.35); }
-  html[data-theme="dark"] .highlight-rose     { background-color: rgba(184, 138, 138, 0.35); }
-  html[data-theme="dark"] .highlight-sage     { background-color: rgba(138, 160, 126, 0.35); }
-  html[data-theme="dark"] .highlight-lavender { background-color: rgba(138, 138, 184, 0.35); }
-  html[data-theme="dark"] .highlight-sky      { background-color: rgba(126, 160, 176, 0.35); }
+  html[data-theme="dark"] .highlight-yellow,
+  html[data-theme="dark"] .highlight-gold {
+    background-color: rgba(251, 218, 131, 0.26);
+  }
+  html[data-theme="dark"] .highlight-green,
+  html[data-theme="dark"] .highlight-sage {
+    background-color: rgba(169, 217, 164, 0.24);
+  }
+  html[data-theme="dark"] .highlight-blue,
+  html[data-theme="dark"] .highlight-sky,
+  html[data-theme="dark"] .highlight-lavender {
+    background-color: rgba(141, 187, 255, 0.24);
+  }
+  html[data-theme="dark"] .highlight-rose {
+    background-color: rgba(228, 147, 142, 0.24);
+  }
 
   /* Toolbar swatches mirror the highlight colors at full opacity. */
-  .highlight-swatch-gold     { background-color: #e6c784; }
-  .highlight-swatch-rose     { background-color: #e8b9b9; }
-  .highlight-swatch-sage     { background-color: #b9d4b1; }
-  .highlight-swatch-lavender { background-color: #c6bfe0; }
-  .highlight-swatch-sky      { background-color: #a7c6d4; }
+  .highlight-swatch-yellow { background-color: #fbda83; }
+  .highlight-swatch-green  { background-color: #a9d9a4; }
+  .highlight-swatch-blue   { background-color: #8dbbff; }
+  .highlight-swatch-rose   { background-color: #e4938e; }
 
   @media (prefers-reduced-motion: reduce) {
     #note-panel-container { transition: none; }

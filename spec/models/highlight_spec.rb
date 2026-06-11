@@ -7,7 +7,13 @@ RSpec.describe Highlight, type: :model do
   end
 
   describe "color enum" do
-    it "accepts each supported color" do
+    it "accepts each design-v3 toolbar color" do
+      %w[yellow green blue rose].each do |c|
+        expect(build(:highlight, color: c)).to be_valid
+      end
+    end
+
+    it "still accepts every legacy color so existing rows stay valid" do
       %w[gold rose sage lavender sky].each do |c|
         expect(build(:highlight, color: c)).to be_valid
       end
@@ -15,6 +21,11 @@ RSpec.describe Highlight, type: :model do
 
     it "rejects colors outside the enum" do
       expect { build(:highlight, color: "neon") }.to raise_error(ArgumentError)
+    end
+
+    it "exposes the toolbar palette with yellow as the default" do
+      expect(Highlight::TOOLBAR_COLORS).to eq(%w[yellow green blue rose])
+      expect(Highlight::DEFAULT_COLOR).to eq("yellow")
     end
   end
 

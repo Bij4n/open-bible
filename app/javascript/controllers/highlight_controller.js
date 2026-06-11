@@ -21,6 +21,18 @@ export default class extends Controller {
     debug: { type: Boolean, default: false }
   }
 
+  // Legacy stored colors (pre-design-v3) render-map onto the current
+  // four-color palette; the same aliasing applies when matching an
+  // existing highlight's color to a toolbar swatch, so e.g. a "gold"
+  // highlight marks the yellow swatch active and toggles off through
+  // it. Mirrors Highlight::COLORS docs in app/models/highlight.rb.
+  static LEGACY_COLOR_ALIASES = { gold: "yellow", sage: "green", sky: "blue", lavender: "blue" }
+
+  canonicalColor(color) {
+    if (!color) return color
+    return this.constructor.LEGACY_COLOR_ALIASES[color] || color
+  }
+
   connect() {
     this.onSelectionChange = this.onSelectionChange.bind(this)
     this.onDocumentPointerdown = this.onDocumentPointerdown.bind(this)
@@ -50,19 +62,65 @@ export default class extends Controller {
     window.getSelection()?.removeAllRanges()
   }
 
-  // Detects a tap (pointerup with no active text selection) on an
-  // existing highlight span inside the chapter and shows the toolbar
-  // positioned at that span. Stores the tapped span so note() and
-  // removeViaToggle() can operate on it without requiring a selection.
+  // Detects a tap (pointerup with no active text selection) inside the
+  // chapter. A tap on an existing highlight span shows the toolbar at
+  // that span (any viewport; stores tapSpan so note() and
+  // removeViaToggle() work without a selection). On narrow viewports a
+  // tap anywhere else in a verse selects the verse's full text — the
+  // design-v3 mobile primitive (YouVersion-style verse-tap), since
+  // precise long-press drag selection is fiddly on touch. The
+  // programmatic selection flows through the normal selectionchange →
+  // syncSelection pipeline, so the toolbar, OsisRef math, and
+  // highlight/note actions all behave exactly as a manual selection.
   onDocumentPointerup(event) {
     if (!this.hasChapterTarget || !this.chapterTarget.contains(event.target)) return
     const sel = window.getSelection()
     if (sel && !sel.isCollapsed) return  // drag-select; let syncSelection handle it
     const span = event.target.closest("[data-highlight-ids]")
-    if (!span) return
+    if (span) {
+      this.tapSpan = span
+      this.showToolbarAtSpan(span)
+      return
+    }
 
-    this.tapSpan = span
-    this.showToolbarAtSpan(span)
+    // Verse-tap is gated to the bottom-sheet breakpoint (<640px) so a
+    // desktop click inside the text stays a plain caret placement.
+    if (window.innerWidth >= 640) return
+    const verseEl = event.target.closest(".verse")
+    if (verseEl) this.selectVerseContents(verseEl)
+  }
+
+  // Selects a verse's full body text, skipping [data-ignore-selection]
+  // subtrees (verse-number sup, cross-translation badge) by anchoring
+  // on the first and last accepted text nodes — element-boundary
+  // endpoints would not survive computeOffset.
+  selectVerseContents(verseEl) {
+    const walker = document.createTreeWalker(verseEl, NodeFilter.SHOW_TEXT, {
+      acceptNode(n) {
+        let p = n.parentElement
+        while (p && p !== verseEl) {
+          if (p.dataset?.ignoreSelection !== undefined) return NodeFilter.FILTER_REJECT
+          p = p.parentElement
+        }
+        return NodeFilter.FILTER_ACCEPT
+      }
+    })
+
+    let first = null
+    let last = null
+    let n
+    while ((n = walker.nextNode())) {
+      if (!first) first = n
+      last = n
+    }
+    if (!first) return
+
+    const range = document.createRange()
+    range.setStart(first, 0)
+    range.setEnd(last, last.textContent.length)
+    const sel = window.getSelection()
+    sel.removeAllRanges()
+    sel.addRange(range)
   }
 
   showToolbarAtSpan(span) {
@@ -76,8 +134,10 @@ export default class extends Controller {
     const verseEl = span.closest(".verse")
     if (verseEl?.dataset?.verseId) tb.dataset.anchorVerseId = verseEl.dataset.verseId
 
-    const color = Array.from(span.classList).find((c) => c.startsWith("highlight-"))?.replace("highlight-", "")
-    tb.querySelectorAll("button[data-color]").forEach((btn) => {
+    const color = this.canonicalColor(
+      Array.from(span.classList).find((c) => c.startsWith("highlight-"))?.replace("highlight-", "")
+    )
+    tb.querySelectorAll("button[data-color]:not([data-highlight-default])").forEach((btn) => {
       btn.setAttribute("aria-pressed", btn.dataset.color === color ? "true" : "false")
     })
   }
@@ -305,15 +365,15 @@ export default class extends Controller {
   markActiveSwatch(range) {
     if (!this.hasToolbarTarget) return
     const dominant = this.dominantHighlightUnderSelection(range)
-    const activeColor = dominant?.color ?? null
-    this.toolbarTarget.querySelectorAll("button[data-color]").forEach((btn) => {
+    const activeColor = this.canonicalColor(dominant?.color ?? null)
+    this.toolbarTarget.querySelectorAll("button[data-color]:not([data-highlight-default])").forEach((btn) => {
       btn.setAttribute("aria-pressed", btn.dataset.color === activeColor ? "true" : "false")
     })
   }
 
   clearActiveSwatch() {
     if (!this.hasToolbarTarget) return
-    this.toolbarTarget.querySelectorAll("button[data-color]").forEach((btn) => {
+    this.toolbarTarget.querySelectorAll("button[data-color]:not([data-highlight-default])").forEach((btn) => {
       btn.setAttribute("aria-pressed", "false")
     })
   }
@@ -334,7 +394,13 @@ export default class extends Controller {
     const color = swatch.dataset.color
     if (!color) return
 
-    if (swatch.getAttribute("aria-pressed") === "true") {
+    // Toggle-remove fires when the clicked swatch is the active one,
+    // or when the labeled Highlight button (which never carries
+    // pressed state) targets the color that's already active.
+    const activeSwatch = this.hasToolbarTarget &&
+      this.toolbarTarget.querySelector("button[data-color][aria-pressed='true']")
+    if (swatch.getAttribute("aria-pressed") === "true" ||
+        (activeSwatch && activeSwatch.dataset.color === color)) {
       return this.removeViaToggle()
     }
 

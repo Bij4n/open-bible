@@ -80,43 +80,56 @@
         the attribute values automatically when the data: hash is
         used (vs raw inline `data-x="..."` which leaves us responsible
         for the escaping). %>
+    <%# Medium-style dark pill toolbar (design v3): the labeled
+        Highlight button is the one-click happy path (default color,
+        zero decisions); the four swatches are the optional refinement.
+        Dark in BOTH themes — it floats above the text like a tooltip,
+        so it keeps tooltip chrome regardless of page theme. %>
     <%= tag.div data: {
                   highlight_target: "toolbar",
                   confirm_remove_singular: t("bible.reader.confirm_remove_with_notes.one", count: "%{count}"),
                   confirm_remove_plural:   t("bible.reader.confirm_remove_with_notes.other", count: "%{count}")
                 },
                 hidden: true,
-                class: "toolbar-sheet absolute z-20 flex items-center gap-1 rounded-xl border border-surface-200 bg-surface-50 p-1.5 shadow-xl ring-1 ring-surface-900/5 dark:border-surface-800 dark:bg-surface-900 dark:ring-surface-50/10" do %>
-      <% Highlight::COLORS.each do |color| %>
+                class: "toolbar-sheet absolute z-20 flex items-center gap-1 rounded-full bg-surface-900 px-1.5 py-1.5 shadow-lg ring-1 ring-surface-50/10 dark:bg-surface-800" do %>
+      <%# data-highlight-default marks the one-click default action; it
+          shares highlight#apply with the swatches via its data-color. %>
+      <button type="button"
+              data-action="highlight#apply"
+              data-color="<%= Highlight::DEFAULT_COLOR %>"
+              data-highlight-default
+              class="h-7 rounded-full px-3 font-ui text-xs font-medium text-surface-50 transition-colors hover:bg-surface-700 dark:hover:bg-surface-700">
+        <%= t("bible.reader.highlight_action") %>
+      </button>
+      <span class="h-4 w-px bg-surface-50/20" aria-hidden="true"></span>
+      <% Highlight::TOOLBAR_COLORS.each do |color| %>
         <%# aria-pressed flips to "true" on the swatch matching the
             existing highlight color under the current selection (set
-            by highlight#markActiveSwatch). The aria-pressed:ring-*
-            utilities draw an inset ink ring on the active swatch.
-            ring color is surface-900 in BOTH modes — the swatch fills
-            don't theme-flip (PR 1 left them at full opacity, applied
-            identically in both themes), so a near-white dark-mode
-            ring would vanish on the pale pastel fills (verified
-            1.50–1.69:1 across all 5). surface-900 holds 9.45–10.62:1
-            on every swatch. %>
+            by highlight#markActiveSwatch; legacy stored colors alias
+            onto these four). The inset ring stays surface-900 ink —
+            it draws on top of the pale pastel fill (9.4:1+), not on
+            the pill background. %>
         <button type="button"
                 data-action="highlight#apply"
                 data-color="<%= color %>"
                 title="<%= color.capitalize %>"
                 aria-pressed="false"
-                class="h-6 w-6 rounded-full border border-surface-300 transition-transform hover:scale-110 aria-pressed:ring-2 aria-pressed:ring-inset aria-pressed:ring-surface-900 dark:border-surface-700 highlight-swatch-<%= color %>">
+                class="h-6 w-6 rounded-full border border-surface-50/25 transition-transform hover:scale-110 aria-pressed:ring-2 aria-pressed:ring-inset aria-pressed:ring-surface-900 highlight-swatch-<%= color %>">
           <span class="sr-only"><%= color.capitalize %></span>
         </button>
       <% end %>
+      <span class="h-4 w-px bg-surface-50/20" aria-hidden="true"></span>
       <button type="button"
               data-action="highlight#note"
-              title="<%= t("notes.save", default: "Note") %>"
-              class="h-6 rounded-md px-2 font-ui text-xs text-surface-700 transition-colors hover:bg-surface-100 hover:text-surface-900 dark:text-surface-300 dark:hover:bg-surface-800 dark:hover:text-surface-50">
-        &#9998;
+              title="<%= t("bible.reader.note_action") %>"
+              class="h-7 rounded-full px-3 font-ui text-xs text-surface-50 transition-colors hover:bg-surface-700 dark:hover:bg-surface-700">
+        <%= t("bible.reader.note_action") %>
       </button>
       <button type="button"
               data-action="highlight#dismiss"
               title="<%= t("bible.reader.dismiss_toolbar") %>"
-              class="h-6 rounded-md px-2 font-ui text-xs text-surface-700 transition-colors hover:bg-surface-100 hover:text-surface-900 dark:text-surface-300 dark:hover:bg-surface-800 dark:hover:text-surface-50">
+              aria-label="<%= t("bible.reader.dismiss_toolbar") %>"
+              class="h-7 rounded-full px-2 font-ui text-sm text-surface-50/70 transition-colors hover:bg-surface-700 hover:text-surface-50 dark:hover:bg-surface-700">
         &times;
       </button>
     <% end %>

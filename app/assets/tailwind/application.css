@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /*
- * Self-hosted OFL fonts. Inter, Source Serif 4, and JetBrains Mono
+ * Self-hosted OFL fonts. Inter and Source Serif 4
  * .woff2 files live in public/fonts/ and ship with the repo — no
  * Google Fonts or other third-party loader. Variable fonts: one file
  * per roman/italic axis covers every weight we use.
@@ -38,14 +38,6 @@
   font-display: swap;
 }
 
-@font-face {
-  font-family: "JetBrains Mono";
-  src: url("/fonts/JetBrainsMonoVariable.woff2") format("woff2-variations");
-  font-weight: 100 800;
-  font-style: normal;
-  font-display: swap;
-}
-
 /* Dark mode driven by a `data-theme="dark"` attribute on <html> (set by the
    theme Stimulus controller from localStorage / prefers-color-scheme). This
    overrides Tailwind's default media-query based dark variant. */
@@ -60,10 +52,11 @@
      variable optical-size axis renders its Charter-like text cut at
      body sizes. */
   --font-reading: "Source Serif 4", ui-serif, Georgia, serif;
-  /* Mono for verse refs, eyebrow labels, code-like UI metadata.
-     Tracked-out at small sizes (~10–12px) so refs read as labels,
-     not body. */
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  /* Mono is retired from product UI (design v3) — eyebrows and refs
+     are Inter uppercase now. font-mono remains only for genuinely
+     code-like content (bitcoin addresses, invitation codes) on the
+     system mono stack; no mono webfont ships. */
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
   /* Neutral surface palette — Medium-style. Pure white ground with
      soft near-black ink (#242424, never #000) and cool grays between.

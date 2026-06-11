@@ -238,15 +238,10 @@
           </nav>
         </div>
 
-        <%# Attribution row. Translations line stays sans because it
-            carries proper-noun-case content ("Reina-Valera", "English")
-            that loses information under text-transform: uppercase. The
-            meta line ("No tracking. © 2026.") is short, no proper-
-            nouns, and benefits from the deliberate mono-caps trust-
-            signal rhythm — JetBrains Mono finally pays its dues here.
-            text-[10px] compensates for the tracking-widest visual
-            scale-up so the line doesn't outsize the translations
-            line above it. %>
+        <%# Attribution row. The meta line ("No tracking. © 2026.")
+            renders as an Inter-caps eyebrow; text-[10px] compensates
+            for the tracking-widest visual scale-up so it doesn't
+            outsize the translations line above it. %>
         <div class="flex items-end justify-between gap-4 border-t border-surface-200 pt-4 dark:border-surface-800">
           <div class="space-y-1">
             <%# text-balance asks the browser to balance line widths so
@@ -256,7 +251,7 @@
             <p class="font-ui text-xs text-balance text-surface-500 dark:text-surface-400">
               <%= t("layout.footer_attribution_translations") %>
             </p>
-            <p class="font-mono text-[10px] uppercase tracking-widest text-surface-500 dark:text-surface-400">
+            <p class="font-ui text-[10px] uppercase tracking-widest text-surface-500 dark:text-surface-400">
               <%= t("layout.footer_attribution_meta", year: Date.current.year) %>
             </p>
           </div>
@@ -266,7 +261,7 @@
           <div class="flex gap-1" aria-label="<%= t("layout.language_switcher") %>">
             <% User::UI_LOCALES.each do |code| %>
               <% active = I18n.locale.to_s == code %>
-              <% locale_classes = "rounded px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest transition-colors #{active ? "bg-surface-200 text-surface-900 dark:bg-surface-700 dark:text-surface-50" : "text-surface-500 hover:text-surface-700 dark:text-surface-400 dark:hover:text-surface-200"}" %>
+              <% locale_classes = "rounded px-2 py-0.5 font-ui text-[10px] uppercase tracking-widest transition-colors #{active ? "bg-surface-200 text-surface-900 dark:bg-surface-700 dark:text-surface-50" : "text-surface-500 hover:text-surface-700 dark:text-surface-400 dark:hover:text-surface-200"}" %>
               <% if user_signed_in? %>
                 <%= button_to code.upcase, settings_path, method: :patch, params: { user: { ui_locale: code } }, form_class: "inline", class: locale_classes, aria: { label: t("layout.language_#{code}"), current: active ? "true" : nil } %>
               <% else %>

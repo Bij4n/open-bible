@@ -20,7 +20,7 @@
         <% @notes.each do |note| %>
           <li class="rounded-2xl border border-surface-200 bg-surface-50 p-5 dark:border-surface-800 dark:bg-surface-900 sm:p-6">
             <% if note.highlights.any? %>
-              <p class="font-mono text-xs uppercase tracking-widest text-surface-500 dark:text-surface-400">
+              <p class="font-ui text-xs uppercase tracking-widest text-surface-500 dark:text-surface-400">
                 <%= note.highlights.first.osis_ref %>
               </p>
             <% end %>

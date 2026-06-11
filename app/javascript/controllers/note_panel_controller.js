@@ -9,7 +9,7 @@ import { Controller } from "@hotwired/stimulus"
 // naming the radio they belong to; we hide the non-matching sections
 // so only the currently chosen visibility's fields are visible.
 export default class extends Controller {
-  static targets = ["shareSection", "publicWarning"]
+  static targets = ["shareSection", "publicWarning", "postMenu", "postLabel"]
   static values = { open: Boolean }
 
   connect() {
@@ -50,7 +50,11 @@ export default class extends Controller {
   }
 
   onVisibilityChange(event) {
-    if (event.target.name === "note[visibility]") this.syncVisibility()
+    if (event.target.name !== "note[visibility]") return
+    this.syncVisibility()
+    // Picking an option closes the Post-to menu — the summary label
+    // (updated in syncVisibility) now carries the choice.
+    if (this.hasPostMenuTarget) this.postMenuTarget.removeAttribute("open")
   }
 
   // Replaces window.confirm() with an inline warning panel. Showing
@@ -80,11 +84,17 @@ export default class extends Controller {
   }
 
   syncVisibility() {
-    const selected = this.element.querySelector('input[name="note[visibility]"]:checked')?.value
+    const checked = this.element.querySelector('input[name="note[visibility]"]:checked')
+    const selected = checked?.value
     this.shareSectionTargets.forEach((section) => {
       const match = section.dataset.visibilityDependent
       section.hidden = !(selected === match)
     })
+    // Keep the Post-to summary label in sync with the checked radio
+    // (each radio carries its display label in data-label).
+    if (this.hasPostLabelTarget && checked?.dataset?.label) {
+      this.postLabelTarget.textContent = checked.dataset.label
+    }
     // Dismiss the inline warning whenever the user switches away from public.
     if (selected !== "public_note" && this.hasPublicWarningTarget) {
       this.publicWarningTarget.hidden = true

@@ -48,12 +48,13 @@ RSpec.describe "Notes", type: :system, js: true do
     expect(page).to have_css("input[name='note[user_emails]'][inputmode='email']")
   end
 
-  it "renders visibility radio labels as large touch-friendly rows" do
+  it "renders visibility radio labels as large touch-friendly rows inside the Post-to menu" do
     sign_in user
     visit "/notes/#{note.id}/edit"
     # Each label must carry the touch-target class so tapping anywhere
-    # on the row hits the radio — not just the 16px input itself.
-    expect(page).to have_css("label.touch-target-row", minimum: 4)
+    # on the row hits the radio — not just the 16px input itself. The
+    # rows live inside the (closed-by-default) Post-to details menu.
+    expect(page).to have_css("[data-note-panel-target='postMenu'] label.touch-target-row", minimum: 4, visible: :all)
   end
 
   describe "post-save flash", js: true do
@@ -89,31 +90,34 @@ RSpec.describe "Notes", type: :system, js: true do
         document.body.dataset.notePanelOpen = 'true';
         document.getElementById('note_panel').src = '/notes/#{note.id}/edit';
       JS
-      expect(page).to have_css("input[name='note[visibility]'][value='public_note']")
+      expect(page).to have_css("input[name='note[visibility]'][value='public_note']", visible: :all)
     end
 
     it "shows an inline warning when Public is selected instead of a browser confirm dialog" do
       expect(page).to have_css("[data-note-panel-target='publicWarning']", visible: false)
+      find("[data-note-panel-target='postMenu'] summary").click
       choose "Public"
       expect(page).to have_css("[data-note-panel-target='publicWarning']", visible: true)
     end
 
     it "reverts to Private when the user cancels the public warning" do
+      find("[data-note-panel-target='postMenu'] summary").click
       choose "Public"
       expect(page).to have_css("[data-note-panel-target='publicWarning']", visible: true)
 
       click_button "Go back"
 
       expect(page).to have_css("[data-note-panel-target='publicWarning']", visible: false)
-      expect(page).to have_field("note[visibility]", with: "private_note")
+      expect(page).to have_field("note[visibility]", with: "private_note", visible: :all)
     end
 
     it "keeps Public selected when the user confirms" do
+      find("[data-note-panel-target='postMenu'] summary").click
       choose "Public"
       click_button "Make it public"
 
       expect(page).to have_css("[data-note-panel-target='publicWarning']", visible: false)
-      expect(page).to have_field("note[visibility]", with: "public_note")
+      expect(page).to have_field("note[visibility]", with: "public_note", visible: :all)
     end
   end
 end

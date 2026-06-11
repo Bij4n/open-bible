@@ -275,10 +275,11 @@ en:
     public_warning: Anyone reading this passage will see this note, attributed to your display name. This is permanent until you change it.
     confirm_public: Make it public
     cancel_public: Go back
+    post_to: Post to
     visibility:
-      private_note: Private
-      shared_users: Share with people
-      shared_groups: Share with groups
+      private_note: Only me
+      shared_users: Specific people
+      shared_groups: My studies
       public_note: Public
   authors:
     public_notes_heading: Public Notes

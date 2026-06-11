@@ -679,6 +679,14 @@
    * `ch` so the line length stays inside the 50-75ch reading-comfort
    * band regardless of viewport width.
    */
+  /* Verse-per-block "study mode" (reader_prefs controller). Verses are
+     inline spans in continuous prose by default; the toggle stacks
+     them with breathing room for verse-by-verse study. */
+  .chapter-body.verse-blocks .verse {
+    display: block;
+    margin-bottom: 0.9em;
+  }
+
   .chapter-body {
     font-feature-settings: "kern" 1, "liga" 1;
     text-rendering: optimizeLegibility;

@@ -4,7 +4,7 @@
 <% debug_selection = Rails.env.development? || params[:debug] == "1" %>
 
 <article class="relative mx-auto max-w-3xl space-y-8"
-         data-controller="highlight"
+         data-controller="highlight reader-prefs"
          data-highlight-translation-code-value="<%= @translation.code %>"
          data-highlight-book-value="<%= @book.osis_code %>"
          data-highlight-chapter-value="<%= @chapter.number %>"
@@ -53,6 +53,16 @@
         <%= @translation.name %>
       </p>
       <div class="flex items-center gap-2">
+        <%# Verse-view toggle: continuous prose vs one-verse-per-block
+            study mode (reader_prefs controller, localStorage). %>
+        <button type="button"
+                data-action="reader-prefs#toggleVerseBlocks"
+                data-reader-prefs-target="verseToggle"
+                aria-pressed="false"
+                title="<%= t("bible.reader.verse_view") %>"
+                class="rounded-md border border-surface-300 bg-surface-50 px-3 py-1.5 font-ui text-sm text-surface-700 transition-colors hover:bg-surface-100 aria-pressed:border-accent-700/40 aria-pressed:text-accent-700 dark:border-surface-700 dark:bg-surface-900 dark:text-surface-300 dark:hover:bg-surface-800 dark:aria-pressed:border-accent-400/40 dark:aria-pressed:text-accent-400">
+          <%= t("bible.reader.verse_view") %>
+        </button>
         <%= render "bible/reader/layer_switcher",
                    translation: @translation, book: @book, chapter: @chapter,
                    selected_url: bible_chapter_path(translation: @translation.code.downcase, book: @book.osis_code.downcase, chapter: @chapter.number) %>
@@ -73,6 +83,7 @@
   </header>
 
   <div class="chapter-body font-reading text-surface-900 dark:text-surface-100"
+       data-reader-prefs-target="body"
        data-highlight-target="chapter">
     <% @verses.each_with_index do |verse, i| %><%= render partial: "bible/reader/verse", locals: { verse: verse, highlights: @highlights || [], cross_translation_highlights: @cross_translation_highlights, chapter_opener: i == 0 } %><%= " " unless i == @verses.size - 1 %><% end %>
   </div>

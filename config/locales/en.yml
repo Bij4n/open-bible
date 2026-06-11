@@ -161,6 +161,7 @@ en:
       cross_translation_badge_title: "You've annotated this verse in %{translation} — click to jump there."
       dismiss_toolbar: Dismiss
       highlight_action: Highlight
+      verse_view: Verse view
       layer_label: Layer
       layer_mine: My Bible
       layer_community: Community

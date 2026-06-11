@@ -43,8 +43,10 @@ en:
     open_menu: Open menu
     close_menu: Close menu
     account: Account
-    my_notes_link: Notes
-    my_groups_link: Groups
+    my_notes_link: My notes
+    read_link: Read
+    studies_link: Studies
+    community_link: Community
     donate_link: Donate
     how_it_works_link: How it works
     about_link: About
@@ -179,7 +181,7 @@ en:
         description: The language of the interface. Independent of the Bible translation you read.
       theme:
         title: Theme
-        description: Light parchment, dark walnut, or follow your device setting.
+        description: Light, dark, or follow your device setting.
         light: Light
         dark: Dark
         system: System default

@@ -149,7 +149,7 @@ RSpec.describe "Highlights", type: :system, js: true do
     find("[data-highlight-target='toolbar'] [data-color='rose']", visible: :all).click
 
     expect(page).to have_css("span.jesus-words.highlight-rose", text: "loved")
-    # Red-letter context around the highlight should remain italic red.
+    # Red-letter context around the highlight should keep its red class.
     expect(page).to have_css("span.jesus-words", text: /For God so/)
   end
 

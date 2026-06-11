@@ -52,13 +52,13 @@
       <% end %>
     </ul>
   <% else %>
-    <div class="rounded-2xl border border-dashed border-surface-300 px-8 py-12 text-center dark:border-surface-700">
-      <p class="font-reading italic text-surface-500 dark:text-surface-400">
+    <div class="rounded-2xl border border-surface-200 bg-surface-100/60 px-8 py-12 text-center dark:border-surface-800 dark:bg-surface-900/60">
+      <p class="font-ui text-sm text-surface-600 dark:text-surface-400">
         <%= t("groups.discover_empty") %>
       </p>
       <% if user_signed_in? %>
         <%= link_to t("groups.new"), new_group_path,
-                    class: "mt-4 inline-block font-ui text-sm text-accent-700 underline underline-offset-4 decoration-accent-700/40 hover:text-accent-800 dark:text-accent-400 dark:decoration-accent-400/40 dark:hover:text-accent-300" %>
+                    class: "mt-5 inline-block rounded-full bg-accent-700 px-5 py-2 font-ui text-sm font-medium text-surface-50 transition-colors hover:bg-accent-800 dark:bg-accent-400 dark:text-surface-950 dark:hover:bg-accent-300" %>
       <% end %>
     </div>
   <% end %>

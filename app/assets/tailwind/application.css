@@ -65,44 +65,48 @@
      not body. */
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
-  /* Neutral surface palette — warm parchment. Light mode grounds
-     everything on warm near-white (Substack-style cream); dark mode
-     inverts to warm near-black. The faint warm tint reads editorial
-     rather than SaaS-techy without competing with the mint accent. */
-  --color-surface-50:  #f2f2ee;
-  --color-surface-100: #e8e7e2;
-  --color-surface-200: #d4d3ce;
-  --color-surface-300: #bebcb7;
-  --color-surface-400: #969490;
-  /* surface-500 splits per mode: light gets #696765 (~4.8:1 AA on
-     surface-50); dark gets a lighter warm neutral via override below. */
-  --color-surface-500: #696765;
-  --color-surface-600: #535150;
-  --color-surface-700: #3c3b38;
-  --color-surface-800: #252421;
-  --color-surface-900: #181714;
-  --color-surface-950: #0f0e0c;
+  /* Neutral surface palette — Medium-style. Pure white ground with
+     soft near-black ink (#242424, never #000) and cool grays between.
+     Dark mode inverts to a cool near-black. Token names predate the
+     2026-06 redesign; only the values changed (sprint R1), so view
+     markup is untouched. */
+  --color-surface-50:  #ffffff;
+  --color-surface-100: #f6f6f4;
+  --color-surface-200: #e9e9e7;
+  --color-surface-300: #d8d8d5;
+  --color-surface-400: #9a9a98;
+  /* surface-500 splits per mode: light gets #6b6b6b (~5.0:1 AA on
+     white); dark gets a lighter neutral via override below. */
+  --color-surface-500: #6b6b6b;
+  --color-surface-600: #515150;
+  --color-surface-700: #3b3b3a;
+  --color-surface-800: #27282b;
+  --color-surface-900: #242424;
+  --color-surface-950: #101113;
 
-  /* Mint accent — quieter and more devotional than the prior bronze,
-     still distinctive against the SaaS-default blue/teal field.
-     Light mode uses 600-700; dark mode uses 300-400 for contrast
-     against near-black. */
-  --color-accent-300: #8ee1bc;
-  --color-accent-400: #5dd4a0;
-  /* accent-500 (#15a06a): highlight/decorative use only.
-     3.14:1 on light surface — fails AA as text.
+  /* Accent — Medium green, anchored on #1a8917 at the 700 stop (the
+     light-mode interactive shade across the views). One green, used
+     only where it means something; everything else stays gray.
+     50/100/900 exist because views reference them (notes badge,
+     discover hover) — they were silently tree-shaken before R1. */
+  --color-accent-50:  #f1f8f0;
+  --color-accent-100: #dff1dd;
+  --color-accent-300: #7ece79;
+  --color-accent-400: #53c24e;
+  /* accent-500 (#2ca827): highlight/decorative use only.
+     ~3:1 on white — fails AA as text.
      For interactive/text on light, use accent-700.
      For text on dark, use accent-400 or accent-300. */
-  --color-accent-500: #15a06a;
-  --color-accent-600: #0f8056;
-  --color-accent-700: #0f5c3f;
-  --color-accent-800: #0a4530;
+  --color-accent-500: #2ca827;
+  --color-accent-600: #22991e;
+  --color-accent-700: #1a8917;
+  --color-accent-800: #136f10;
+  --color-accent-900: #0e540c;
 
-  /* Jesus's words — tuned for the surface palette. red-800 is WCAG AA
-     on surface-50; red-300 is WCAG AA on surface-950 for the dark
-     variant. */
-  --color-jesus-light: #991b1b;
-  --color-jesus-dark:  #fca5a5;
+  /* Jesus's words — red-letter color tuned for the white/near-black
+     surfaces: 6.6:1 on white, 6.9:1 on surface-950. Both clear AA. */
+  --color-jesus-light: #b42318;
+  --color-jesus-dark:  #f97066;
 }
 
 /* Per-mode token override. Tokens redeclared here win over the @theme
@@ -112,7 +116,7 @@
    values for light vs. dark — the @theme block stays the source of
    truth otherwise. */
 [data-theme="dark"] {
-  --color-surface-500: #8c8a86;
+  --color-surface-500: #a3a3a1;
 }
 
 @layer base {
@@ -152,7 +156,7 @@
   }
 
   /*
-   * Focus indicator uses the mint accent so keyboard-nav affordance
+   * Focus indicator uses the green accent so keyboard-nav affordance
    * picks up the brand color instead of the browser's default blue.
    * :focus-visible (not :focus) so mouse clickers don't see a ring on
    * buttons; keyboard users always do.
@@ -394,7 +398,7 @@
   }
 
   /*
-   * Wordmark mark. The mint disc next to "Open Bible" in the header
+   * Wordmark mark. The accent-green disc next to "Open Bible" in the header
    * and footer is the brand glyph — a 20x20 accent-700 disc with two
    * concentric outline rings (4px @ 25% accent, 9px @ 10% accent)
    * via box-shadow. Rendered as an inline-block on a decorative
@@ -463,7 +467,7 @@
   /*
    * Echo cursor — a thin blinking caret used inside the homepage
    * feature/step demo blocks to suggest live typing. Width 1.5px,
-   * height matches its line, mint-accent color, blinks every 1.1s.
+   * height matches its line, accent-green color, blinks every 1.1s.
    * Decorative — wrapped in aria-hidden parents so screen readers
    * skip it. prefers-reduced-motion at the bottom of this file
    * already disables the animation by zeroing duration globally.
@@ -488,7 +492,7 @@
    * Hero headline em-accent. Ships rendered emphasis on specific words
    * inside the hero h1 — the i18n string carries `<em>` for the words
    * we want lifted (welcome_html in en/es). Em swaps the sans run for
-   * the reading serif's italic in the accent color, breaks the heading's
+   * the reading serif italic in the accent color, breaks the heading's
    * 600 weight back to 400 so the italic axis renders correctly, and
    * tightens letter-spacing slightly for the serif rhythm against the
    * sans surround. Scoped to .hero-emphasis so other em usage on the
@@ -512,7 +516,7 @@
    * registers as a deliberate callout, not just another card. Dark
    * mode: subtle elevation panel (one surface step lighter than the
    * page bg) since a darker-than-dark callout would disappear into
-   * the ground. The radial-gradient ::before adds a soft mint glow
+   * the ground. The radial-gradient ::before adds a soft green glow
    * in the upper-right corner — accent-700 in light mode (sits well
    * over the ink panel), accent-400 in dark mode (visible on the
    * lighter elevation surface). Color palette stays inside the new

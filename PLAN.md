@@ -2,7 +2,15 @@
 
 ## Current sprint
 
-**Sprint 25 closed — mobile highlighting / note-leaving / note-sharing flow (PRs #97–#101), all merged and live.** Next session is owner-directed UI polish and design cleanup. See `HANDOFF.md` for the queue.
+**Redesign planned (2026-06-11).** Owner directed a full visual redesign (Medium/Grammarly
+direction — current font, color, and design are out) plus the social-model completion
+(follows + friends sharing, studies rebrand, public community feed). The full plan —
+browser audit, research synthesis, design system v3, surface-by-surface UX, backend
+changes, and sprint sequencing R1–R9 — lives in `REDESIGN.md`. Read it before starting
+any redesign sprint. Four open questions for the owner are listed at its end (accent
+green, reading face, highlight-palette migration, `/public/bible` merge).
+
+Previously: Sprint 25 closed — mobile highlighting / note-leaving / note-sharing flow (PRs #97–#101), all merged and live. See `HANDOFF.md` for the prior polish queue.
 
 - PR #97 — Firefox/Xvfb workaround; mobile CSS (comment-indent cap, Trix min-height)
 - PR #98 — Citation header in note panel; touch-target-row labels; `inputmode="email"`; `osis_citation` helper

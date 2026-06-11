@@ -29,7 +29,12 @@ module Bible
     #     highest-id (most recent) highlight's color wins; all touching
     #     highlight ids are listed in data-highlight-ids for click
     #     disambiguation.
-    def render_verse_with_highlights(verse, highlights)
+    # style: :fill (default) paints highlight fragments with the
+    # owner's color overlay — your own marks. :underline renders them
+    # as a quiet dotted underline instead (design v3 / Kindle rule:
+    # other people's highlights are never louder than your own) — used
+    # by the community layer.
+    def render_verse_with_highlights(verse, highlights, style: :fill)
       text = verse.body_text.to_s
       return "".html_safe if text.empty?
 
@@ -62,7 +67,7 @@ module Bible
         if active_highlights.any?
           sorted_highlights = active_highlights.sort_by { |r| r[:id] }
           dominant = sorted_highlights.last
-          classes << "highlight-#{dominant[:color]}"
+          classes << (style == :underline ? "community-highlight" : "highlight-#{dominant[:color]}")
           ids = sorted_highlights.map { |r| r[:id] }.join(",")
           # data-note-count is the dominant highlight's note count.
           # Drives the Sprint 16.5 PR C color-toggle removal flow:

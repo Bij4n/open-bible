@@ -35,6 +35,15 @@ RSpec.describe "Public::Bible", type: :request do
       expect(response.body).to include("Community thought")
     end
 
+    it "renders community highlights as dotted underlines, never fills" do
+      public_note!(body: "Community thought")
+      get "/public/bible/kjv/john/3"
+      # Design v3 / Kindle rule: other people's highlights are a quiet
+      # dotted underline; color fills are reserved for your own marks.
+      expect(response.body).to include("community-highlight")
+      expect(response.body).not_to match(/class="[^"]*highlight-(yellow|green|blue|rose|gold|sage|lavender|sky)/)
+    end
+
     it "excludes hidden notes from anonymous view" do
       hidden = public_note!(body: "Bad content")
       hidden.update!(hidden_at: Time.current)

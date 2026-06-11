@@ -679,6 +679,20 @@
    * `ch` so the line length stays inside the 50-75ch reading-comfort
    * band regardless of viewport width.
    */
+  /* Community-layer highlights (design v3 / Kindle rule): other
+     people's marks render as a quiet dotted underline, never a fill —
+     crowd marks must not be louder than your own. */
+  .community-highlight {
+    text-decoration: underline dotted;
+    text-decoration-color: var(--color-surface-400);
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 4px;
+  }
+
+  html[data-theme="dark"] .community-highlight {
+    text-decoration-color: var(--color-surface-500);
+  }
+
   /* Per-verse note-count chip (design v3 margin chips, rendered
      inline at the verse's end). Quiet accent-tinted pill; the count
      is the content. data-ignore-selection keeps it out of the

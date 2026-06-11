@@ -43,8 +43,10 @@ en:
     open_menu: Open menu
     close_menu: Close menu
     account: Account
-    my_notes_link: Notes
-    my_groups_link: Groups
+    my_notes_link: My notes
+    read_link: Read
+    studies_link: Studies
+    community_link: Community
     donate_link: Donate
     how_it_works_link: How it works
     about_link: About

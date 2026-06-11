@@ -43,8 +43,10 @@ es:
     open_menu: Abrir menú
     close_menu: Cerrar menú
     account: Cuenta
-    my_notes_link: Notas
-    my_groups_link: Grupos
+    my_notes_link: Mis notas
+    read_link: Leer
+    studies_link: Estudios
+    community_link: Comunidad
     donate_link: Donar
     how_it_works_link: Cómo funciona
     about_link: Acerca de

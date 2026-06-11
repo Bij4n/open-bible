@@ -81,17 +81,26 @@
         <% end %>
 
         <nav class="flex items-center gap-1 font-ui text-sm" aria-label="<%= t("layout.account") %>">
+          <%# Design-v3 IA: Read · Studies · Community · Search. Reading
+              is the product, so it leads. Studies is the signed-in
+              social backbone; Community is the public-notes layer
+              (currently /public/bible; becomes a reader layer in R7).
+              Rail links hide below sm — the account menu carries
+              mobile equivalents. %>
+          <% rail_idle   = "hidden sm:inline-block rounded-md px-3 py-1.5 transition-colors hover:bg-surface-100 hover:text-surface-900 dark:hover:bg-surface-800 dark:hover:text-surface-50" %>
+          <% rail_active = "text-accent-700 underline underline-offset-4 decoration-accent-700/40 dark:text-accent-400 dark:decoration-accent-400/40" %>
+          <% rail_rest   = "text-surface-700 dark:text-surface-300" %>
+          <%= link_to t("layout.read_link"), bible_entry_path,
+                      class: "#{rail_idle} #{request.path.start_with?("/bible") ? rail_active : rail_rest}" %>
           <% if user_signed_in? %>
-            <%# Notes and Groups are the social backbone — surface them
-                in the top nav so signed-in users always have one tap to
-                their content. Hidden below sm to keep the mobile rail tight. %>
-            <%= link_to t("layout.my_notes_link"), notes_path,
-                        class: "hidden sm:inline-block rounded-md px-3 py-1.5 transition-colors hover:bg-surface-100 hover:text-surface-900 dark:hover:bg-surface-800 dark:hover:text-surface-50 #{nav_active?(notes_path) ? 'text-accent-700 underline underline-offset-4 decoration-accent-700/40 dark:text-accent-400 dark:decoration-accent-400/40' : 'text-surface-700 dark:text-surface-300'}" %>
-            <%= link_to t("layout.my_groups_link"), groups_path,
-                        class: "hidden sm:inline-block rounded-md px-3 py-1.5 transition-colors hover:bg-surface-100 hover:text-surface-900 dark:hover:bg-surface-800 dark:hover:text-surface-50 #{nav_active?(groups_path) ? 'text-accent-700 underline underline-offset-4 decoration-accent-700/40 dark:text-accent-400 dark:decoration-accent-400/40' : 'text-surface-700 dark:text-surface-300'}" %>
-          <% else %>
+            <%= link_to t("layout.studies_link"), groups_path,
+                        class: "#{rail_idle} #{request.path.start_with?("/groups") ? rail_active : rail_rest}" %>
+          <% end %>
+          <%= link_to t("layout.community_link"), "/public/bible",
+                      class: "#{rail_idle} #{request.path.start_with?("/public/bible") ? rail_active : rail_rest}" %>
+          <% unless user_signed_in? %>
             <%= link_to t("layout.how_it_works_link"), how_it_works_path,
-                        class: "hidden sm:inline-block rounded-md px-3 py-1.5 transition-colors hover:bg-surface-100 hover:text-surface-900 dark:hover:bg-surface-800 dark:hover:text-surface-50 #{nav_active?(how_it_works_path) ? 'text-accent-700 underline underline-offset-4 decoration-accent-700/40 dark:text-accent-400 dark:decoration-accent-400/40' : 'text-surface-700 dark:text-surface-300'}" %>
+                        class: "#{rail_idle} #{nav_active?(how_it_works_path) ? rail_active : rail_rest}" %>
           <% end %>
 
           <%# Active-state on the search link uses mint text instead of
@@ -123,7 +132,7 @@
                  class="account-sheet">
 
               <%# Account-menu items share a single base class plus an
-                  idle/active swap. Active uses mint text on the same
+                  idle/active swap. Active uses accent text on the same
                   tinted bg the hover state already paints, so the
                   current route reads as "you are here" without a new
                   visual. %>
@@ -131,11 +140,20 @@
               <% menu_item_idle   = "text-surface-700 dark:text-surface-300" %>
               <% menu_item_active = "bg-surface-100 text-accent-700 dark:bg-surface-800 dark:text-accent-400" %>
 
+              <%# Mobile-only mirrors of the nav rail (the rail hides
+                  below sm). Redundant on desktop, so sm:hidden. %>
+              <%= link_to t("layout.read_link"), bible_entry_path, role: "menuitem", class: "sm:hidden #{menu_item_base} #{menu_item_idle}" %>
+              <% if user_signed_in? %>
+                <%= link_to t("layout.studies_link"), groups_path, role: "menuitem", class: "sm:hidden #{menu_item_base} #{menu_item_idle}" %>
+              <% end %>
+              <%= link_to t("layout.community_link"), "/public/bible", role: "menuitem", class: "sm:hidden #{menu_item_base} #{menu_item_idle}" %>
+
               <% if user_signed_in? %>
                 <div class="px-4 py-2 text-xs uppercase tracking-wide text-surface-500 dark:text-surface-400">
                   <%= current_user.email %>
                 </div>
                 <div class="my-1 border-t border-surface-200 dark:border-surface-800" role="separator"></div>
+                <%= link_to t("layout.my_notes_link"), notes_path, role: "menuitem", class: "#{menu_item_base} #{nav_active?(notes_path) ? menu_item_active : menu_item_idle}" %>
                 <% if current_user.admin? %>
                   <%# Admin link covers all /admin/* pages, not just /admin/notes,
                       so the "you are here" cue stays correct on subroutes like

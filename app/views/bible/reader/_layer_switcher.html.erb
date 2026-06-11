@@ -1,0 +1,20 @@
+<%# Reader layer switcher (design v3): one lens at a time — your own
+    markup, one of your studies' shared layers, or the community layer.
+    Implemented as navigation between the three reader surfaces,
+    preserving translation/book/chapter; Sprint R7 folds the community
+    surface into the reader itself. Signed-out visitors get no
+    switcher — the community view is their only surface.
+    locals: translation, book, chapter, selected_url %>
+<% if user_signed_in? %>
+  <%
+    slug = { translation: translation.code.downcase, book: book.osis_code.downcase, chapter: chapter.number }
+    layer_options =
+      [ [ t("bible.reader.layer_mine"), bible_chapter_path(**slug) ] ] +
+      current_user.groups.distinct.order(:name).map { |g| [ g.name, group_bible_chapter_path(g, **slug) ] } +
+      [ [ t("bible.reader.layer_community"), public_bible_chapter_path(**slug) ] ]
+  %>
+  <%= render "shared/nav_select",
+             options: layer_options,
+             selected_url: selected_url,
+             aria_label: t("bible.reader.layer_label") %>
+<% end %>

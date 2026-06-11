@@ -20,9 +20,14 @@
   </nav>
 
   <header class="space-y-3 border-b border-surface-200 pb-6 dark:border-surface-800">
-    <p class="font-ui text-xs font-medium uppercase tracking-wider text-surface-500 dark:text-surface-400">
-      <%= @translation.name %>
-    </p>
+    <div class="flex items-center justify-between gap-3">
+      <p class="font-ui text-xs font-medium uppercase tracking-wider text-surface-500 dark:text-surface-400">
+        <%= @translation.name %>
+      </p>
+      <%= render "bible/reader/layer_switcher",
+                 translation: @translation, book: @book, chapter: @chapter,
+                 selected_url: group_bible_chapter_path(@group, translation: @translation.code.downcase, book: @book.osis_code.downcase, chapter: @chapter.number) %>
+    </div>
     <h1 class="font-ui text-4xl font-semibold leading-[1.05] tracking-[-0.025em] text-surface-900 dark:text-surface-50 sm:text-5xl md:text-6xl">
       <span class="book-title-text"><%= book_name %> <%= @chapter.number %></span>
     </h1>

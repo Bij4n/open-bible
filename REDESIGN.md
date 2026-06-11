@@ -291,14 +291,15 @@ is the template for R1–R4.
 R1–R4 are sequential (each builds on the last). R5–R6 are sequential with each other
 but independent of R3–R4 after R2. R7/R8 can land in either order.
 
-### Open questions for the owner
+### Owner decisions (2026-06-11) — all four open questions resolved
 
-1. **Accent green:** Medium `#1A8917` is proposed. Want to see swatch alternatives
-   (e.g. Grammarly's brighter `#15C39A` family) on a sample page before R1 commits?
-   A one-page preview is cheap to spin up.
-2. **Reading face:** Source Serif 4 proposed; Charis SIL (literal Charter descendant)
-   and Literata (warmer, bookish) are the runners-up. Same offer — a side-by-side
-   preview page before R1.
-3. **Existing lavender/sage highlights:** migrate data to the new 4-color palette, or
-   render-map old colors without touching rows?
-4. **`/public/bible` vs Community layer:** merge in R7, or keep both surfaces?
+1. **Accent green: Medium `#1A8917`** (scale as specified in §3).
+2. **Reading face: Source Serif 4.**
+3. **Existing highlights: render-map, no data migration.** Old stored color names keep
+   working and render in the nearest new color (gold→yellow, sage→green,
+   sky+lavender→blue, rose→rose). CSS/helper change only; reversible.
+4. **`/public/bible` merges into the reader's Community layer** in R7, with 301
+   redirects from the old URLs. Signed-out visitors land on the reader with the
+   Community layer active.
+
+R1 is unblocked.

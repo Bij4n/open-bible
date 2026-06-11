@@ -1,11 +1,10 @@
 @import "tailwindcss";
 
 /*
- * Self-hosted OFL fonts. Inter, Instrument Serif, and JetBrains Mono
+ * Self-hosted OFL fonts. Inter, Source Serif 4, and JetBrains Mono
  * .woff2 files live in public/fonts/ and ship with the repo — no
  * Google Fonts or other third-party loader. Variable fonts: one file
- * per roman/italic axis covers every weight we use; static fonts ship
- * one file per style.
+ * per roman/italic axis covers every weight we use.
  */
 @font-face {
   font-family: "Inter";
@@ -24,17 +23,17 @@
 }
 
 @font-face {
-  font-family: "Instrument Serif";
-  src: url("/fonts/InstrumentSerif-Regular.woff2") format("woff2");
-  font-weight: 400;
+  font-family: "Source Serif 4";
+  src: url("/fonts/SourceSerif4Variable.woff2") format("woff2-variations");
+  font-weight: 200 900;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "Instrument Serif";
-  src: url("/fonts/InstrumentSerif-Italic.woff2") format("woff2");
-  font-weight: 400;
+  font-family: "Source Serif 4";
+  src: url("/fonts/SourceSerif4Variable-Italic.woff2") format("woff2-variations");
+  font-weight: 200 900;
   font-style: italic;
   font-display: swap;
 }
@@ -57,8 +56,10 @@
   --font-ui: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   /* Reading serif for verse body, note body, long-form, and italic
      emphasis accents in headlines. Serif sustains dwell-reading
-     attention better than sans at this scale. */
-  --font-reading: "Instrument Serif", ui-serif, Georgia, serif;
+     attention better than sans at this scale. Source Serif 4's
+     variable optical-size axis renders its Charter-like text cut at
+     body sizes. */
+  --font-reading: "Source Serif 4", ui-serif, Georgia, serif;
   /* Mono for verse refs, eyebrow labels, code-like UI metadata.
      Tracked-out at small sizes (~10–12px) so refs read as labels,
      not body. */
@@ -487,7 +488,7 @@
    * Hero headline em-accent. Ships rendered emphasis on specific words
    * inside the hero h1 — the i18n string carries `<em>` for the words
    * we want lifted (welcome_html in en/es). Em swaps the sans run for
-   * Instrument Serif italic in the mint accent, breaks the heading's
+   * the reading serif's italic in the accent color, breaks the heading's
    * 600 weight back to 400 so the italic axis renders correctly, and
    * tightens letter-spacing slightly for the serif rhythm against the
    * sans surround. Scoped to .hero-emphasis so other em usage on the

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_04_000000) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_12_034048) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -122,6 +122,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_04_000000) do
     t.index ["resolved_by_id"], name: "index_flags_on_resolved_by_id"
     t.index ["user_id", "flaggable_type", "flaggable_id"], name: "index_flags_uniqueness", unique: true
     t.index ["user_id"], name: "index_flags_on_user_id"
+  end
+
+  create_table "follows", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "followed_id", null: false
+    t.bigint "follower_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["followed_id"], name: "index_follows_on_followed_id"
+    t.index ["follower_id", "followed_id"], name: "index_follows_on_follower_id_and_followed_id", unique: true
+    t.index ["follower_id"], name: "index_follows_on_follower_id"
+    t.check_constraint "follower_id <> followed_id", name: "no_self_follows"
   end
 
   create_table "group_invitations", force: :cascade do |t|
@@ -395,8 +406,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_04_000000) do
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.check_constraint "char_length(display_name::text) <= 60", name: "users_display_name_length_check"
-    t.check_constraint "theme::text = ANY (ARRAY['light'::character varying, 'dark'::character varying, 'system'::character varying]::text[])", name: "users_theme_check"
-    t.check_constraint "ui_locale::text = ANY (ARRAY['en'::character varying, 'es'::character varying]::text[])", name: "users_ui_locale_check"
+    t.check_constraint "theme::text = ANY (ARRAY['light'::character varying::text, 'dark'::character varying::text, 'system'::character varying::text])", name: "users_theme_check"
+    t.check_constraint "ui_locale::text = ANY (ARRAY['en'::character varying::text, 'es'::character varying::text])", name: "users_ui_locale_check"
   end
 
   create_table "verse_embeddings", force: :cascade do |t|
@@ -431,6 +442,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_04_000000) do
   add_foreign_key "comments", "users"
   add_foreign_key "flags", "users"
   add_foreign_key "flags", "users", column: "resolved_by_id"
+  add_foreign_key "follows", "users", column: "followed_id"
+  add_foreign_key "follows", "users", column: "follower_id"
   add_foreign_key "group_invitations", "groups"
   add_foreign_key "group_invitations", "users", column: "invited_by_id"
   add_foreign_key "groups", "users", column: "owner_id"

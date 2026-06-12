@@ -285,6 +285,13 @@ es:
     public_notes_heading: Notas públicas
     member_since: "Miembro desde %{year}"
     no_public_notes: Este autor aún no ha publicado notas públicas.
+    follow: Seguir
+    unfollow: Siguiendo
+    friends_badge: Amistades
+    followers:
+      one: "%{count} seguidor"
+      other: "%{count} seguidores"
+    following_count: "Sigue a %{count}"
   group_invitations:
     invite_button: Enviar invitación
     pending_heading: Invitaciones pendientes

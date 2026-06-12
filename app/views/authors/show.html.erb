@@ -5,9 +5,30 @@
     <p class="font-ui text-xs font-medium uppercase tracking-wider text-surface-500 dark:text-surface-400">
       <%= t("authors.member_since", year: @author.created_at.year) %>
     </p>
-    <h1 class="mt-2 font-ui text-4xl font-semibold tracking-tight text-surface-900 dark:text-surface-50 sm:text-5xl">
-      <%= @author.author_name %>
-    </h1>
+    <div class="mt-2 flex flex-wrap items-center justify-between gap-4">
+      <h1 class="font-ui text-4xl font-semibold tracking-tight text-surface-900 dark:text-surface-50 sm:text-5xl">
+        <%= @author.author_name %>
+      </h1>
+      <% if user_signed_in? && current_user != @author %>
+        <% if current_user.following?(@author) %>
+          <%= button_to t("authors.unfollow"), author_follow_path(@author), method: :delete,
+                        class: "rounded-full border border-surface-300 px-5 py-2 font-ui text-sm font-medium text-surface-700 transition-colors hover:bg-surface-100 hover:text-surface-900 dark:border-surface-700 dark:text-surface-300 dark:hover:bg-surface-800 dark:hover:text-surface-50" %>
+        <% else %>
+          <%= button_to t("authors.follow"), author_follow_path(@author), method: :post,
+                        class: "rounded-full bg-accent-700 px-5 py-2 font-ui text-sm font-medium text-surface-50 transition-colors hover:bg-accent-800 dark:bg-accent-400 dark:text-surface-950 dark:hover:bg-accent-300" %>
+        <% end %>
+      <% end %>
+    </div>
+    <p class="mt-3 font-ui text-sm text-surface-600 dark:text-surface-400">
+      <%= t("authors.followers", count: @author.followers.count) %>
+      <span aria-hidden="true">·</span>
+      <%= t("authors.following_count", count: @author.following.count) %>
+      <% if user_signed_in? && current_user != @author && current_user.friends_with?(@author) %>
+        <span class="ml-2 inline-block rounded-full bg-accent-100 px-2.5 py-0.5 font-ui text-xs font-medium text-accent-800 dark:bg-accent-900/40 dark:text-accent-300">
+          <%= t("authors.friends_badge") %>
+        </span>
+      <% end %>
+    </p>
   </header>
 
   <section>

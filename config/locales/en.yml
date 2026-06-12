@@ -292,6 +292,13 @@ en:
     public_notes_heading: Public Notes
     member_since: "Member since %{year}"
     no_public_notes: This author hasn't published any public notes yet.
+    follow: Follow
+    unfollow: Following
+    friends_badge: Friends
+    followers:
+      one: "%{count} follower"
+      other: "%{count} followers"
+    following_count: "%{count} following"
   group_invitations:
     invite_button: Send invitation
     pending_heading: Pending invitations

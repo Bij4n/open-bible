@@ -13,8 +13,8 @@
         <%
           badge_color = case note.visibility
           when "public_note"    then "bg-accent-100 text-accent-800 dark:bg-accent-900/40 dark:text-accent-300"
-          when "shared_users"   then "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
-          when "shared_groups"  then "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
+          when "friends_note", "shared_users", "shared_groups"
+                                then "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
           else                       "bg-surface-100 text-surface-600 dark:bg-surface-800 dark:text-surface-400"
           end
         %>
@@ -31,7 +31,8 @@
               </div>
             </div>
             <div class="flex shrink-0 flex-col items-end gap-2">
-              <span class="rounded-full px-2.5 py-0.5 font-ui text-xs font-medium <%= badge_color %>">
+              <span class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 font-ui text-xs font-medium <%= badge_color %>">
+                <%= visibility_glyph(note) %>
                 <%= t("notes.badge.#{note.visibility}") %>
               </span>
               <%= link_to t("groups.edit"), edit_note_path(note),

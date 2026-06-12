@@ -4,7 +4,7 @@
       <%# osis_ref eyebrow — Inter uppercase per design v3 (mono is
           retired from product UI). %>
       <p class="font-ui text-xs uppercase tracking-widest text-surface-500 dark:text-surface-400">
-        <%= @note.highlights.map(&:osis_ref).join(", ") %>
+        <%= visibility_glyph(@note) %> <%= @note.highlights.map(&:osis_ref).join(", ") %>
       </p>
     </header>
 

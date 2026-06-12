@@ -260,6 +260,7 @@ en:
     empty: No notes yet. Open the Bible, highlight a verse, and write what it means to you.
     badge:
       private_note: Private
+      friends_note: Friends
       shared_users: Shared
       shared_groups: With groups
       public_note: Public

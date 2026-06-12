@@ -273,6 +273,7 @@ en:
     visibility_legend: Visibility
     confirm_make_public: Make this note public? Anyone reading this verse will see it, attributed to your display name. You can edit or delete it anytime.
     saved: Note saved.
+    saved_friends: Shared with your friends.
     saved_public: Note is now public.
     saved_shared_users:
       one: Shared with 1 person.

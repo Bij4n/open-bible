@@ -156,6 +156,8 @@ class NotesController < ApplicationController
 
   def flash_notice(note)
     case note.visibility
+    when "friends_note"
+      t("notes.saved_friends")
     when "shared_users"
       t("notes.saved_shared_users", count: note.shared_users.count)
     when "shared_groups"

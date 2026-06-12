@@ -62,9 +62,9 @@ RSpec.describe "Note visibility — public", type: :system, js: true do
     expect(page).to have_selector("trix-editor", visible: :all)
   end
 
-  it "renders all four visibility radios (no disabled Sprint-7 stub)" do
+  it "renders all five visibility radios (no disabled Sprint-7 stub)" do
     open_note_panel
-    %w[private_note shared_users shared_groups public_note].each do |v|
+    %w[private_note friends_note shared_users shared_groups public_note].each do |v|
       expect(page).to have_selector(%(input[name="note[visibility]"][value="#{v}"]:not([disabled])), visible: :all)
     end
     expect(page).to have_no_content("Coming in Sprint 7")

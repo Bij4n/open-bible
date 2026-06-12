@@ -56,11 +56,28 @@
         <label class="mb-1.5 <%= eyebrow_classes %>">
           <%= t("notes.share_with_users") %>
         </label>
-        <%# Sprint 4 uses a simple comma-separated email list. Sprint 5 will upgrade to an autocomplete. %>
+        <%# Friend picker (Sprint R6): mutual follows as checkboxes —
+            the primary path. The checked ids ride the existing
+            note[user_ids][] param into sync_shares. %>
+        <% friends = current_user.friends.order(:display_name, :email) %>
+        <% shared_user_ids = note.shared_users.map(&:id) %>
+        <% if friends.any? %>
+          <div class="font-ui text-sm text-surface-700 dark:text-surface-300">
+            <% friends.each do |friend| %>
+              <label class="touch-target-row flex cursor-pointer items-center gap-2 rounded-md px-1 py-2 -mx-1 hover:bg-surface-100 dark:hover:bg-surface-800">
+                <%= check_box_tag "note[user_ids][]", friend.id, shared_user_ids.include?(friend.id), id: "note_user_ids_#{friend.id}", class: "h-4 w-4 accent-accent-700 dark:accent-accent-400" %>
+                <%= friend.author_name %>
+              </label>
+            <% end %>
+          </div>
+          <p class="mt-2 mb-1.5 font-ui text-xs text-surface-500 dark:text-surface-400">
+            <%= t("notes.or_invite_by_email") %>
+          </p>
+        <% end %>
         <input type="text"
                inputmode="email"
                name="note[user_emails]"
-               value="<%= note.shared_users.map(&:email).join(", ") %>"
+               value="<%= note.shared_users.reject { |u| friends.include?(u) }.map(&:email).join(", ") %>"
                placeholder="<%= t("notes.emails_placeholder") %>"
                autocomplete="off"
                class="<%= input_classes %>">

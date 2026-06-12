@@ -42,6 +42,35 @@ RSpec.describe "Notes", type: :system, js: true do
     expect(page).not_to have_content("Bible.KJV.John.3.16!")
   end
 
+  describe "friend picker (Sprint R6)" do
+    let(:friend)   { create(:user, display_name: "Lydia") }
+    let(:stranger) { create(:user, display_name: "Demetrius") }
+
+    before do
+      user.follow!(friend)
+      friend.follow!(user)
+      user.follow!(stranger) # one-way: not a friend, must not appear
+      sign_in user
+    end
+
+    it "lists mutual friends as checkboxes in the Specific people section" do
+      visit "/notes/#{note.id}/edit"
+
+      expect(page).to have_css("input[type='checkbox'][name='note[user_ids][]'][value='#{friend.id}']", visible: :all)
+      expect(page).to have_text("Lydia")
+      expect(page).not_to have_css("input[type='checkbox'][name='note[user_ids][]'][value='#{stranger.id}']", visible: :all)
+      # The email input survives as the invite-by-email fallback.
+      expect(page).to have_css("input[name='note[user_emails]']", visible: :all)
+    end
+
+    it "pre-checks friends the note is already shared with" do
+      create(:note_share, note: note, shareable: friend)
+      visit "/notes/#{note.id}/edit"
+
+      expect(page).to have_css("input[name='note[user_ids][]'][value='#{friend.id}'][checked]", visible: :all)
+    end
+  end
+
   it "renders the email share field with inputmode=email for mobile keyboards" do
     sign_in user
     visit "/notes/#{note.id}/edit"

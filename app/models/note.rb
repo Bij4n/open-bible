@@ -16,11 +16,15 @@ class Note < ApplicationRecord
   # enum methods (note.private? etc). Keeping the stored values as
   # private_note / public_note. The UI still labels them "Private" /
   # "Public".
+  # Integer-backed: append-only — reordering or removing entries would
+  # re-key existing rows. friends_note (Sprint R6) = visible to the
+  # author's mutual follows, zero per-note configuration.
   VISIBILITIES = {
     private_note:  0,
     shared_users:  1,
     shared_groups: 2,
-    public_note:   3
+    public_note:   3,
+    friends_note:  4
   }.freeze
 
   enum :visibility, VISIBILITIES
@@ -80,6 +84,7 @@ class Note < ApplicationRecord
   #   - their own notes, any visibility
   #   - notes shared directly with them via NoteShare (shareable: user)
   #   - notes shared with any group they belong to (shareable: group)
+  #   - friends_note notes whose author is a mutual follow (Sprint R6)
   #   - public notes (Sprint 7 will expose these; the clause is active
   #     now so the public-bible reader can query the same scope)
   scope :visible_to, ->(user) {
@@ -87,7 +92,7 @@ class Note < ApplicationRecord
     next all if user.admin?       # admins see every note for moderation
 
     group_ids = user.groups.ids
-    where(<<~SQL.squish, uid: user.id, gids: group_ids.presence || [ 0 ], public_visibility: visibilities[:public_note])
+    where(<<~SQL.squish, uid: user.id, gids: group_ids.presence || [ 0 ], public_visibility: visibilities[:public_note], friends_visibility: visibilities[:friends_note])
       notes.user_id = :uid
       OR notes.id IN (
         SELECT note_id FROM note_shares
@@ -97,6 +102,12 @@ class Note < ApplicationRecord
         SELECT note_id FROM note_shares
         WHERE shareable_type = 'Group' AND shareable_id IN (:gids)
       )
+      OR (notes.visibility = :friends_visibility AND notes.user_id IN (
+        SELECT f1.followed_id FROM follows f1
+        INNER JOIN follows f2
+          ON f2.follower_id = f1.followed_id AND f2.followed_id = f1.follower_id
+        WHERE f1.follower_id = :uid
+      ))
       OR (notes.visibility = :public_visibility AND notes.hidden_at IS NULL)
     SQL
   }

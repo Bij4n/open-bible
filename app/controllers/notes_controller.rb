@@ -10,7 +10,9 @@ class NotesController < ApplicationController
   # — public_note enabled). The constant remains as the form's
   # canonical list + a bidirectional gate so a future deprecation
   # reverses cleanly.
-  ACTIVE_VISIBILITIES = %w[private_note shared_users shared_groups public_note].freeze
+  # Order is the Post-to menu order: Only me, Friends, Specific people,
+  # My studies, Public.
+  ACTIVE_VISIBILITIES = %w[private_note friends_note shared_users shared_groups public_note].freeze
 
   def show
     respond_to do |format|
@@ -154,6 +156,8 @@ class NotesController < ApplicationController
 
   def flash_notice(note)
     case note.visibility
+    when "friends_note"
+      t("notes.saved_friends")
     when "shared_users"
       t("notes.saved_shared_users", count: note.shared_users.count)
     when "shared_groups"

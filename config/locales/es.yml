@@ -253,6 +253,7 @@ es:
     empty: Aún no hay notas. Abre la Biblia, resalta un versículo y escribe lo que significa para ti.
     badge:
       private_note: Privada
+      friends_note: Amistades
       shared_users: Compartida
       shared_groups: Con grupos
       public_note: Pública
@@ -265,6 +266,7 @@ es:
     visibility_legend: Visibilidad
     confirm_make_public: "¿Hacer esta nota pública? Cualquiera que lea este versículo la verá, atribuida a tu nombre público. Puedes editarla o eliminarla en cualquier momento."
     saved: Nota guardada.
+    saved_friends: Compartida con tus amistades.
     saved_public: La nota ahora es pública.
     saved_shared_users:
       one: Compartida con 1 persona.
@@ -276,8 +278,10 @@ es:
     confirm_public: Hacerla pública
     cancel_public: Volver
     post_to: Publicar para
+    or_invite_by_email: O comparte por correo
     visibility:
       private_note: Solo yo
+      friends_note: Amistades
       shared_users: Personas específicas
       shared_groups: Mis estudios
       public_note: Pública

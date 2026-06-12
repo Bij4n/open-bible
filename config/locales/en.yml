@@ -260,6 +260,7 @@ en:
     empty: No notes yet. Open the Bible, highlight a verse, and write what it means to you.
     badge:
       private_note: Private
+      friends_note: Friends
       shared_users: Shared
       shared_groups: With groups
       public_note: Public
@@ -272,6 +273,7 @@ en:
     visibility_legend: Visibility
     confirm_make_public: Make this note public? Anyone reading this verse will see it, attributed to your display name. You can edit or delete it anytime.
     saved: Note saved.
+    saved_friends: Shared with your friends.
     saved_public: Note is now public.
     saved_shared_users:
       one: Shared with 1 person.
@@ -283,8 +285,10 @@ en:
     confirm_public: Make it public
     cancel_public: Go back
     post_to: Post to
+    or_invite_by_email: Or share by email
     visibility:
       private_note: Only me
+      friends_note: Friends
       shared_users: Specific people
       shared_groups: My studies
       public_note: Public

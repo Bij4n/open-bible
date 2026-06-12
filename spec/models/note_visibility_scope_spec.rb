@@ -38,6 +38,39 @@ RSpec.describe Note, ".visible_to" do
     expect(Note.visible_to(alice)).not_to include(bob_to_other)
   end
 
+  describe "friends_note (Sprint R6)" do
+    let!(:bob_friends_note) { create(:note, user: bob, visibility: :friends_note) }
+
+    it "is visible to mutual follows" do
+      alice.follow!(bob)
+      bob.follow!(alice)
+      expect(Note.visible_to(alice)).to include(bob_friends_note)
+    end
+
+    it "is hidden from one-way followers" do
+      alice.follow!(bob)
+      expect(Note.visible_to(alice)).not_to include(bob_friends_note)
+    end
+
+    it "is hidden from one-way followees" do
+      bob.follow!(alice)
+      expect(Note.visible_to(alice)).not_to include(bob_friends_note)
+    end
+
+    it "is hidden from strangers and anonymous visitors" do
+      expect(Note.visible_to(carol)).not_to include(bob_friends_note)
+      expect(Note.visible_to(nil)).not_to include(bob_friends_note)
+    end
+
+    it "is always visible to its author" do
+      expect(Note.visible_to(bob)).to include(bob_friends_note)
+    end
+
+    it "stays out of the public bucket" do
+      expect(Note.public_visible).not_to include(bob_friends_note)
+    end
+  end
+
   it "includes public notes" do
     expect(Note.visible_to(alice)).to include(public_one)
   end
